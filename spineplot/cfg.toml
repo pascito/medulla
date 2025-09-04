@@ -1,0 +1,42 @@
+
+[[this_includes]]
+file = 'configurations/common/variables.toml'
+
+[[this_includes]]
+file = 'configurations/common/styles.toml'
+
+[samples]
+[samples.nominal]
+key = "events/nominal/muons"
+exposure_type = "pot"
+trees = ['events/nominal/muons']
+
+[samples.onbeam]
+key = "events/onbeam/muons"
+exposure_type = "livetime"
+trees = ['events/onbeam/muons']
+
+[samples.offbeam]
+key = "events/offbeam/muons"
+exposure_type = "livetime"
+trees = ['events/offbeam/muons']
+
+[output]
+path = '/Users/mueller/Downloads/tmp'
+
+[analysis]
+ordinate_sample = 'nominal'
+category_branch = 'category'
+category_assignment = [[0], [1], [2], [3]]
+category_labels = ['Signal', 'Background', 'Cosmic', 'Other']
+category_colors = ['C0', 'C1', 'C3', 'C4']
+category_types = ['histogram', 'histogram', 'histogram', 'histogram']
+
+[[figure]]
+name = 'muon_start_x'
+type = 'SimpleFigure'
+style = 'selected_icarus'
+[[figure.artists]]
+type = 'SpineSpectra1D'
+variable = 'reco_particle_start_x'
+draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = false}

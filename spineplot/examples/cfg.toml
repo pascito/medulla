@@ -1,0 +1,32 @@
+
+[[this_includes]]
+file = '../configurations/common/variables.toml'
+
+[[this_includes]]
+file = '../configurations/common/styles.toml'
+
+[samples]
+[samples.mc]
+key = "nominal"
+exposure_type = "pot"
+trees = ['selected']
+
+[output]
+path = '.'
+
+[analysis]
+ordinate_sample = 'mc'
+category_branch = 'true_category'
+category_assignment = [[0], [1], [2], [3], [4], [5], [6]]
+category_labels = ['1$\mu$1pi', '1$\mu$Npi', '1$\mu$0pi', 'Other CC','NC','Out of FV','Cosmic']
+category_colors = ['C0', 'C1', 'C3','C4', 'C5', 'C6', 'C7']
+category_types = ['histogram', 'histogram', 'histogram','histogram','histogram','histogram','histogram']
+
+[[figure]]
+name = 'true_category'
+type = 'SimpleFigure'
+style = 'selected_icarus'
+[[figure.artists]]
+type = 'SpineSpectra1D'
+variable = 'true_category'
+draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = false}
