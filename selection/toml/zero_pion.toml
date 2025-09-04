@@ -1,16 +1,16 @@
 [general]
-output = "/exp/icarus/data/users/rvizarr/medulla/charged_pion"
+output = "/exp/icarus/data/users/rvizarr/medulla/zero_pion"
 primfn = "default_primary_classification"
 pidfn = "default_pid"
 
-[[category]] # 0 : Fiducial, single muon, single pion
+[[category]] # 0 : Fiducial, single muon, no charged pions
 cuts = [
     { name = "neutrino"        },
     { name = "fiducial_cut"    },
     { name = "no_photons",       parameters = [25.0] },
     { name = "no_electrons",     parameters = [25.0] },
     { name = "single_muon",      parameters = [143.425] },
-    { name = "single_pion",    parameters = [25.0] },
+    { name = "no_charged_pions",    parameters = [25.0] },
 ]
 
 [[category]] # 1 : Single muon, multiple pion
@@ -23,13 +23,13 @@ cuts = [
     { name = "!single_pion",    parameters = [25.0] },
 ]
 
-[[category]] # 2 : Single muon, zero pion
+[[category]] # 2 : Single muon, single pion
 cuts = [
     { name = "neutrino" },
     { name = "no_photons",       parameters = [25.0] },
     { name = "no_electrons",     parameters = [25.0] },
     { name = "single_muon",      parameters = [143.425] },
-    { name = "no_charged_pions", parameters = [25.0] },
+    { name = "single_pion", parameters = [25.0] },
 ]
 
 [[category]] # 3 : Neutrino, charged current
@@ -73,7 +73,7 @@ cut = [
     { name = "no_photons",                type = "reco",  parameters = [25.0] },
     { name = "no_electrons",              type = "reco",  parameters = [25.0] },
     { name = "single_muon",               type = "reco",  parameters = [143.425] },
-    { name = "single_pion",               type = "reco",  parameters = [25.0] },
+    { name = "no_charged_pions",               type = "reco",  parameters = [25.0] },
     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
     { name = "data_quality_cut",          type = "event", decrements_exposure = true },
 ]
@@ -128,7 +128,7 @@ cut = [
     { name = "no_photons",            type = "true",  parameters = [25.0] },
     { name = "no_electrons",          type = "true",  parameters = [25.0] },
     { name = "single_muon",           type = "true",  parameters = [143.425] },
-    { name = "single_pion",           type = "true", parameters = [25.0] },
+    { name = "no_charged_pions",           type = "true", parameters = [25.0] },
     { name = "trigger_emulation_cut", type = "event", decrements_exposure = false },
 ]
 branch = [
