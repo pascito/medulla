@@ -4,7 +4,7 @@
 key = "true_category"
 range = [0, 9]
 nbins = 9
-xlabel = "Cateogry"
+xlabel = "Category"
 
 [variables.true_visible_energy]
 key = "true_visible_energy"
