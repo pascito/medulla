@@ -1,6 +1,6 @@
 
 [output]
-path = "/Users/rvizarreta/Library/CloudStorage/GoogleDrive-rvizarreta14@gmail.com/My Drive/🏛 PhD Repository/🚀 Research/🤖 Experiments&Projects/ICARUS/ICARUS_CC0pi_Selection/ICARUS-NuMI-CC0pi-Selection/spineplot/myAnalysis/plots"
+path = "/Users/rvizarreta/Library/CloudStorage/GoogleDrive-rvizarreta14@gmail.com/My Drive/🏛 PhD Repository/🚀 Research/🤖 Experiments&Projects/ICARUS/ICARUS_CC0pi_Selection/ICARUS-NuMI-CC0pi-Selection/spineplot/myAnalysis/1muNp0pi_N>=2"
 
 [samples.signal]
 key = "nominal"
@@ -12,7 +12,7 @@ no_photons_cut = "reco_photon_multiplicity == 0"
 no_electrons_cut = "reco_electron_multiplicity == 0"
 no_pions_cut = "reco_pion_multiplicity == 0"
 single_muon_cut = "reco_muon_multiplicity == 1"
-multiple_protons_cut = "reco_proton_multiplicity > 0"
+multiple_protons_cut = "reco_proton_multiplicity > 1"
 
 [variables.true_neutrino_energy]
 key = "true_neutrino_energy"
@@ -80,7 +80,7 @@ figsize = [10.0, 6.0]
 type = "SpineEfficiency"
 variable = "true_leading_muon_ke"
 groups = ["1μNp0π Signal"]
-draw_kwargs = {show_option = "differential", percentage = true, show_seqeff = false, show_unseqeff = true, npts = 50000}
+draw_kwargs = {show_option = "differential", percentage = true, show_seqeff = true, show_unseqeff = false, npts = 50000}
 
 [figure.artists.cuts]
 reco_fiducial_cut = "Fiducial"
