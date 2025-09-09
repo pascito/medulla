@@ -1,0 +1,91 @@
+
+[output]
+path = "/Users/rvizarreta/Library/CloudStorage/GoogleDrive-rvizarreta14@gmail.com/My Drive/🏛 PhD Repository/🚀 Research/🤖 Experiments&Projects/ICARUS/ICARUS_CC0pi_Selection/ICARUS-NuMI-CC0pi-Selection/spineplot/myAnalysis/plots"
+
+[samples.signal]
+key = "nominal"
+exposure_type = "pot"
+trees = ["signal"]
+
+[samples.signal.precompute]
+no_photons_cut = "reco_photon_multiplicity == 0"
+no_electrons_cut = "reco_electron_multiplicity == 0"
+no_pions_cut = "reco_pion_multiplicity == 0"
+single_muon_cut = "reco_muon_multiplicity == 1"
+multiple_protons_cut = "reco_proton_multiplicity > 0"
+
+[variables.true_neutrino_energy]
+key = "true_neutrino_energy"
+range = [0.4, 3.0]
+nbins = 15
+binning_scheme = "equal_width"
+xlabel = "True Neutrino Energy [GeV]"
+
+[variables.true_leading_muon_ke]
+key = "true_leading_muon_ke"
+range = [0, 1200]
+nbins = 15
+xlabel = "True muon KE [MeV]"
+
+[[style]]
+name = "icarus_1muNp"
+style_sheet = "/Users/rvizarreta/Library/CloudStorage/GoogleDrive-rvizarreta14@gmail.com/My Drive/🏛 PhD Repository/🚀 Research/🤖 Experiments&Projects/ICARUS/ICARUS_CC0pi_Selection/ICARUS-NuMI-CC0pi-Selection/spineplot/styles/muon2024.mplstyle"
+markers = ["o", "^", "s", "P", "D"]
+default_figsize = [10, 8]
+title = ""
+mark_pot = true
+mark_pot_horizontal = true
+mark_preliminary = "ICARUS Work-in-Progress"
+scilimits = [-3, 3]
+
+[style.plot_kwargs]
+histtype = "barstacked"
+stacked = true
+
+[analysis]
+ordinate_sample = "signal"
+category_branch = "true_category"
+category_assignment = [[0.0]]
+category_labels = ["1μNp0π Signal"]
+category_colors = ["C0"]
+category_types = ["histogram"]
+
+[[figure]]
+name = "icarus_sig_1muNp0pi_efficiency_table"
+type = "SimpleFigure"
+style = "icarus_1muNp"
+figsize = [10.0, 6.0]
+
+[[figure.artists]]
+type = "SpineEfficiency"
+variable = "true_neutrino_energy"
+groups = ["1μNp0π Signal"]
+draw_kwargs = {show_option = "table", percentage = true, show_seqeff = true, show_unseqeff = true, npts = 50000}
+
+[figure.artists.cuts]
+reco_fiducial_cut = "Fiducial"
+single_muon_cut = "Single Muon"
+multiple_protons_cut = "Multiple Protons"
+no_pions_cut = "No Charged Pions"
+no_photons_cut = "No Photons"
+no_electrons_cut = "No Electrons"
+
+[[figure]]
+name = "icarus_sig_1muNp0pi_efficiency_plot"
+type = "SimpleFigure"
+style = "icarus_1muNp"
+figsize = [10.0, 6.0]
+
+[[figure.artists]]
+type = "SpineEfficiency"
+variable = "true_leading_muon_ke"
+groups = ["1μNp0π Signal"]
+draw_kwargs = {show_option = "differential", percentage = true, show_seqeff = false, show_unseqeff = true, npts = 50000}
+
+[figure.artists.cuts]
+reco_fiducial_cut = "Fiducial"
+single_muon_cut = "Single Muon"
+multiple_protons_cut = "Multiple Protons"
+no_pions_cut = "No Charged Pions"
+no_photons_cut = "No Photons"
+no_electrons_cut = "No Electrons"
