@@ -111,7 +111,7 @@ branch = [
     { name = "pn",            type = "both" },
     { name = "pn_lp",         type = "both" },
 
-    # Leading MUON particle-level
+    :q!# Leading MUON particle-level
     { name = "end_x",             type = "both_particle", selector = "leading_muon" },
     { name = "end_y",             type = "both_particle", selector = "leading_muon" },
     { name = "end_z",             type = "both_particle", selector = "leading_muon" },
