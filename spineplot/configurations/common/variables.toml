@@ -30,3 +30,15 @@ key = "reco_dpT"
 range = [0,1200]
 nbins = 25
 xlabel = 'Reconstructed $\delta p_T$ [MeV/c]'
+
+[variables.true_dphiT]
+key = "true_dphiT"
+range = [0,4]
+nbins = 25
+xlabel = 'True $\delta \phi_T$ [MeV/c]'
+
+[variables.reco_dphiT]
+key = "reco_dphiT"
+range = [0,4]
+nbins = 25
+xlabel = 'Reconstructed $\delta \phi_T$ [MeV/c]'

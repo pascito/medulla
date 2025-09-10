@@ -749,6 +749,21 @@ namespace pvars
         return p.momentum[2];
     }
     REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, pz, pz);
+
+    /**
+     * @brief Variable for the momentum magnitude of the particle.
+     * @details The momentum is predicted upstream in the SPINE reconstruction.
+     * @tparam T the type of particle (true or reco).
+     * @param p the particle to apply the variable on.
+     * @return the momentum magnitude of the particle in GeV/c.
+     */
+    template<class T>
+    double momentum(const T & p)
+    {
+        TVector3 mom(p.momentum[0], p.momentum[1], p.momentum[2]);
+	return mom.Mag()/1000.0;
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, momentum, momentum);
     
     /**
      * @brief Variable for the transverse momentum of a particle.

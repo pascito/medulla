@@ -1,91 +1,86 @@
 
-[output]
-path = "/Users/rvizarreta/Library/CloudStorage/GoogleDrive-rvizarreta14@gmail.com/My Drive/🏛 PhD Repository/🚀 Research/🤖 Experiments&Projects/ICARUS/ICARUS_CC0pi_Selection/ICARUS-NuMI-CC0pi-Selection/spineplot/myAnalysis/1muNp0pi_Nge2"
+[[this_includes]]
+file = '../configurations/common/variables.toml'
 
-[samples.signal]
+[[this_includes]]
+file = '../configurations/common/styles.toml'
+
+[samples]
+[samples.mc]
 key = "nominal"
 exposure_type = "pot"
-trees = ["signal"]
+trees = ['selected']
 
-[samples.signal.precompute]
-no_photons_cut = "reco_photon_multiplicity == 0"
-no_electrons_cut = "reco_electron_multiplicity == 0"
-no_pions_cut = "reco_pion_multiplicity == 0"
-single_muon_cut = "reco_muon_multiplicity == 1"
-multiple_protons_cut = "reco_proton_multiplicity > 1"
-
-[variables.true_neutrino_energy]
-key = "true_neutrino_energy"
-range = [0.4, 3.0]
-nbins = 15
-binning_scheme = "equal_width"
-xlabel = "True Neutrino Energy [GeV]"
-
-[variables.true_leading_muon_ke]
-key = "true_leading_muon_ke"
-range = [0, 1200]
-nbins = 15
-xlabel = "True muon KE [MeV]"
-
-[[style]]
-name = "icarus_1muNp"
-style_sheet = "/Users/rvizarreta/Library/CloudStorage/GoogleDrive-rvizarreta14@gmail.com/My Drive/🏛 PhD Repository/🚀 Research/🤖 Experiments&Projects/ICARUS/ICARUS_CC0pi_Selection/ICARUS-NuMI-CC0pi-Selection/spineplot/styles/muon2024.mplstyle"
-markers = ["o", "^", "s", "P", "D"]
-default_figsize = [10, 8]
-title = ""
-mark_pot = true
-mark_pot_horizontal = true
-mark_preliminary = "ICARUS Work-in-Progress"
-scilimits = [-3, 3]
-
-[style.plot_kwargs]
-histtype = "barstacked"
-stacked = true
+[output]
+path = '/Users/rvizarreta/Library/CloudStorage/GoogleDrive-rvizarreta14@gmail.com/My Drive/🏛 PhD Repository/🚀 Research/🤖 Experiments&Projects/ICARUS/ICARUS_CC0pi_Selection/ICARUS-NuMI-CC0pi-Selection/spineplot/myAnalysis/1muNp0pi_Nge1'
 
 [analysis]
-ordinate_sample = "signal"
-category_branch = "true_category"
-category_assignment = [[0.0]]
-category_labels = ["1μNp0π Signal"]
-category_colors = ["C0"]
-category_types = ["histogram"]
+ordinate_sample = 'mc'
+category_branch = 'true_category'
+category_assignment = [[0], [1], [2], [3], [4], [5], [6]]
+category_labels = ['1$\mu Np 0\pi$', '1$\mu 1p0 \pi$', '1$\mu 0p 0\pi$', 'Other CC','NC','Out of FV','Cosmic']
+category_colors = ['C0', 'C1', 'C3','C4', 'C5', 'C6', 'C7']
+category_types = ['histogram', 'histogram', 'histogram','histogram','histogram','histogram','histogram']
 
 [[figure]]
-name = "icarus_sig_1muNp0pi_efficiency_table"
-type = "SimpleFigure"
-style = "icarus_1muNp"
-figsize = [10.0, 6.0]
-
+name = 'true_category'
+type = 'SimpleFigure'
+style = 'selected_icarus_1muNp0pi_N>=1'
 [[figure.artists]]
-type = "SpineEfficiency"
-variable = "true_neutrino_energy"
-groups = ["1μNp0π Signal"]
-draw_kwargs = {show_option = "table", percentage = true, show_seqeff = true, show_unseqeff = true, npts = 50000}
-
-[figure.artists.cuts]
-reco_fiducial_cut = "Fiducial"
-single_muon_cut = "Single Muon"
-multiple_protons_cut = "Multiple Protons"
-no_pions_cut = "No Charged Pions"
-no_photons_cut = "No Photons"
-no_electrons_cut = "No Electrons"
+type = 'SpineSpectra1D'
+variable = 'true_category'
+draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = false}
 
 [[figure]]
-name = "icarus_sig_1muNp0pi_efficiency_plot"
-type = "SimpleFigure"
-style = "icarus_1muNp"
-figsize = [10.0, 6.0]
-
+name = 'true_visible_energy'
+type = 'SimpleFigure'
+style = 'selected_icarus_1muNp0pi_N>=1'
 [[figure.artists]]
-type = "SpineEfficiency"
-variable = "true_leading_muon_ke"
-groups = ["1μNp0π Signal"]
-draw_kwargs = {show_option = "differential", percentage = true, show_seqeff = true, show_unseqeff = false, npts = 50000}
+type = 'SpineSpectra1D'
+variable = 'true_visible_energy'
+draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = false}
 
-[figure.artists.cuts]
-reco_fiducial_cut = "Fiducial"
-single_muon_cut = "Single Muon"
-multiple_protons_cut = "Multiple Protons"
-no_pions_cut = "No Charged Pions"
-no_photons_cut = "No Photons"
-no_electrons_cut = "No Electrons"
+[[figure]]
+name = 'reco_visible_energy'
+type = 'SimpleFigure'
+style = 'selected_icarus_1muNp0pi_N>=1'
+[[figure.artists]]
+type = 'SpineSpectra1D'
+variable = 'reco_visible_energy'
+draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = false}
+
+[[figure]]
+name = 'true_dpT'
+type = 'SimpleFigure'
+style = 'selected_icarus_1muNp0pi_N>=1'
+[[figure.artists]]
+type = 'SpineSpectra1D'
+variable = 'true_dpT'
+draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = false}
+
+[[figure]]
+name = 'reco_dpT'
+type = 'SimpleFigure'
+style = 'selected_icarus_1muNp0pi_N>=1'
+[[figure.artists]]
+type = 'SpineSpectra1D'
+variable = 'reco_dpT'
+draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = false}
+
+[[figure]]
+name = 'reco_dphiT'
+type = 'SimpleFigure'
+style = 'selected_icarus_1muNp0pi_N>=1'
+[[figure.artists]]
+type = 'SpineSpectra1D'
+variable = 'reco_dphiT'
+draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = false}
+
+[[figure]]
+name = 'true_dphiT'
+type = 'SimpleFigure'
+style = 'selected_icarus_1muNp0pi_N>=1'
+[[figure.artists]]
+type = 'SpineSpectra1D'
+variable = 'true_dphiT'
+draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = false}

@@ -1,5 +1,5 @@
 [general]
-output = "/exp/icarus/data/users/rvizarr/medulla/1muNp0pi_N>=2"
+output = "/exp/icarus/data/users/rvizarr/medulla/1muNp0pi_Nge2"
 primfn = "default_primary_classification"
 pidfn = "default_pid"
 
@@ -86,6 +86,7 @@ branch = [
     # Interaction-level truth/reco branches
     { name = "neutrino_id",             type = "true"    },
     { name = "baseline",                type = "mctruth" },
+    { name = "containment_cut",        type = "both"    },
     { name = "cc",                      type = "mctruth" },
     { name = "pdg",                     type = "mctruth" },
     { name = "interaction_type",        type = "mctruth" },
@@ -111,13 +112,24 @@ branch = [
     { name = "pn",            type = "both" },
     { name = "pn_lp",         type = "both" },
 
-    :q!# Leading MUON particle-level
+    # Fundamental kinematic variables
+    { name = "Q2",            type = "both" },
+    { name = "W",             type = "both" },
+
+    # Leading MUON particle-level
+    {name = "momentum",           type = "both_particle", selector = "leading_muon"},
+    {name = "mass",               type = "both_particle", selector = "leading_muon"},
+    {name = "csda_ke",            type = "both_particle", selector = "leading_muon"},
+    {name = "containment",        type = "both_particle", selector = "leading_muon"},
+    {name = "mcs_ke",             type = "both_particle", selector = "leading_muon"},
+    {name = "energy",             type = "both_particle", selector = "leading_muon"},
+    {name = "length",             type = "both_particle", selector = "leading_muon"},
+    {name = "dpT",                type = "both_particle", selector = "leading_muon"},
     { name = "end_x",             type = "both_particle", selector = "leading_muon" },
     { name = "end_y",             type = "both_particle", selector = "leading_muon" },
     { name = "end_z",             type = "both_particle", selector = "leading_muon" },
     { name = "ke",                type = "both_particle", selector = "leading_muon" },
     { name = "length",            type = "both_particle", selector = "leading_muon" },
-    { name = "dpT",               type = "both_particle", selector = "leading_muon" },
     { name = "polar_angle",       type = "both_particle", selector = "leading_muon" },
     { name = "azimuthal_angle",   type = "both_particle", selector = "leading_muon" },
 
@@ -128,7 +140,6 @@ branch = [
     { name = "flash_time",       type = "reco" },
     { name = "flash_total_pe",   type = "reco" },
     { name = "flash_hypothesis", type = "reco" },
-    { name = "containment",      type = "reco" },
     { name = "fiducial",         type = "reco" },
 ]
 
@@ -182,13 +193,24 @@ branch = [
     { name = "pn",            type = "both" },
     { name = "pn_lp",         type = "both" },
 
+    # Fundamental kinematic variables
+    { name = "Q2",            type = "both" },
+    { name = "W",             type = "both" },
+
     # Leading MUON particle-level
+    {name = "momentum",           type = "both_particle", selector = "leading_muon"},
+    {name = "mass",               type = "both_particle", selector = "leading_muon"},
+    {name = "csda_ke",            type = "both_particle", selector = "leading_muon"},
+    {name = "containment",        type = "both_particle", selector = "leading_muon"},
+    {name = "mcs_ke",             type = "both_particle", selector = "leading_muon"},
+    {name = "energy",             type = "both_particle", selector = "leading_muon"},
+    {name = "length",             type = "both_particle", selector = "leading_muon"},
+    {name = "dpT",                type = "both_particle", selector = "leading_muon"},
     { name = "end_x",             type = "both_particle", selector = "leading_muon" },
     { name = "end_y",             type = "both_particle", selector = "leading_muon" },
     { name = "end_z",             type = "both_particle", selector = "leading_muon" },
     { name = "ke",                type = "both_particle", selector = "leading_muon" },
     { name = "length",            type = "both_particle", selector = "leading_muon" },
-    { name = "dpT",               type = "both_particle", selector = "leading_muon" },
     { name = "polar_angle",       type = "both_particle", selector = "leading_muon" },
     { name = "azimuthal_angle",   type = "both_particle", selector = "leading_muon" },
 

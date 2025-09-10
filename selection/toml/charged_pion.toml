@@ -81,6 +81,7 @@ branch = [
     # Interaction-level truth/reco branches
     { name = "neutrino_id",             type = "true"    },
     { name = "baseline",                type = "mctruth" },
+    { name = "containment_cut",        type = "both"    },
     { name = "cc",                      type = "mctruth" },
     { name = "pdg",                     type = "mctruth" },
     { name = "interaction_type",        type = "mctruth" },
@@ -105,6 +106,17 @@ branch = [
     { name = "dpL_lp",        type = "both" },
     { name = "pn",            type = "both" },
     { name = "pn_lp",         type = "both" },
+    { name = "opening_angle", type = "both" },
+
+    # Muon observables
+    {name = "momentum", type = "both_particle", selector = "leading_muon"},
+    {name = "mass", type = "both_particle", selector = "leading_muon"},
+    {name = "csda_ke", type = "both_particle", selector = "leading_muon"},
+    {name = "containment", type = "both_particle", selector = "leading_muon"},
+    {name = "mcs_ke", type = "both_particle", selector = "leading_muon"},
+    {name = "energy", type = "both_particle", selector = "leading_muon"},
+    {name = "length", type = "both_particle", selector = "leading_muon"},
+    {name = "dpT", type = "both_particle", selector = "leading_muon"},
 
     # Vertex & flash
     { name = "vertex_x",         type = "both" },
@@ -113,7 +125,6 @@ branch = [
     { name = "flash_time",       type = "reco" },
     { name = "flash_total_pe",   type = "reco" },
     { name = "flash_hypothesis", type = "reco" },
-    { name = "containment",      type = "reco" },
     { name = "fiducial",         type = "reco" },
 ]
 
@@ -164,6 +175,16 @@ branch = [
     { name = "dpL_lp",        type = "both" },
     { name = "pn",            type = "both" },
     { name = "pn_lp",         type = "both" },
+
+    # Muon observables
+    {name = "momentum",       type = "both_particle", selector = "leading_muon"},
+    {name = "mass",           type = "both_particle", selector = "leading_muon"},
+    {name = "csda_ke",        type = "both_particle", selector = "leading_muon"},
+    {name = "containment",    type = "both_particle", selector = "leading_muon"},
+    {name = "mcs_ke",         type = "both_particle", selector = "leading_muon"},
+    {name = "energy",         type = "both_particle", selector = "leading_muon"},
+    {name = "length",         type = "both_particle", selector = "leading_muon"},
+    {name = "dpT",            type = "both_particle", selector = "leading_muon"},
 
     # True-vertex
     { name = "vertex_x", type = "true" },
