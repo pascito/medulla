@@ -17,6 +17,7 @@
 
 #include "include/particle_utilities.h"
 #include "scorers.h"
+#include <TVector3.h>
 
 /**
  * @namespace pvars
@@ -764,6 +765,29 @@ namespace pvars
 	return mom.Mag()/1000.0;
     }
     REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, momentum, momentum);
+
+    /**
+     * @brief Variable for angle (cosine) between the particle and beam.
+     * @details This variable is calculated using particle momentum and beam direction.
+     * @tparam T the type of particle (true or reco).
+     * @param p the particle to apply the variable on.
+     * @return the cosine of the angle between the particle and the beam.
+     */
+    template<class T>
+    double beam_costheta(const T & p)
+    {
+        // Particle momentum
+        TVector3 mom(px(p), py(p), pz(p));
+	mom = mom.Unit();
+
+	TVector3 beamdir(0, 0, 1);
+	//if(BEAM_IS_NUMI)
+	//{
+	  // TO DO
+	//}
+	return mom.Dot(beamdir);
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, beam_costheta, beam_costheta);
     
     /**
      * @brief Variable for the transverse momentum of a particle.
