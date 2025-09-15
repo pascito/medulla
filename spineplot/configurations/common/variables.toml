@@ -41,4 +41,28 @@ xlabel = 'True $\delta \phi_T$ [MeV/c]'
 key = "reco_dphiT"
 range = [0,4]
 nbins = 25
-xlabel = 'Reconstructed $\delta \phi_T$ [MeV/c]'
+xlabel = 'Reconstructed $\delta \phi_T$ [rad]'
+
+[variables.reco_dalphaT]
+key = "reco_dalphaT"
+range = [0,4]
+nbins = 25
+xlabel = 'Reconstructed $\delta \alpha_T$ [rad]'
+
+[variables.reco_opening_angle]
+key = "reco_opening_angle"
+range = [0,4]
+nbins = 25
+xlabel = 'Reconstructed $\theta_{\mu p}$ [rad]'
+
+[variables.reco_leading_muon_momentum]
+key = "reco_leading_muon_momentum"
+range = [0,10]
+nbins = 25
+xlabel = 'Reconstructed Leading Muon Momentum [GeV/c]'
+
+[variables.reco_leading_muon_ke]
+key = "reco_leading_muon_ke"
+range = [0,10000]
+nbins = 25
+xlabel = 'Reconstructed Leading Muon Ke [MeV/c]'
