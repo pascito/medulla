@@ -487,6 +487,17 @@ namespace vars
     REGISTER_VAR_SCOPE(RegistrationScope::Both, dphiT, dphiT);
 
     /**
+     * @brief Variable for dphi_T of the interaction in degrees.
+     * @details Same as dphiT but converted to degrees for easier interpretation.
+     */
+    template<class T>
+    double dphiT_deg(const T & obj)
+    {
+        return dphiT(obj) * 180.0 / M_PI;
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::Both, dphiT_deg, dphiT_deg);
+
+    /**
      * @brief Variable for dalpha_T of the interaction.
      * @details dalpha_T is a transverse kinematic imbalance variable defined
      * using the transverse momentum of the total hadronic system and the
@@ -522,6 +533,17 @@ namespace vars
         return std::acos(-1 * utilities::dot_product(total_pt, lepton_pt) / (utilities::magnitude(total_pt) * utilities::magnitude(lepton_pt)));
     }
     REGISTER_VAR_SCOPE(RegistrationScope::Both, dalphaT, dalphaT);
+
+    /**
+     * @brief Variable for dalpha_T of the interaction in degrees.
+     * @details Same as dalphaT but converted to degrees for easier interpretation.
+     */
+    template<class T>
+    double dalphaT_deg(const T & obj)
+    {
+        return dalphaT(obj) * 180.0 / M_PI;
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::Both, dalphaT_deg, dalphaT_deg);
 
     /**
      * @brief Variable for the missing longitudinal momentum of the
@@ -665,6 +687,27 @@ namespace vars
         }
     }
     REGISTER_VAR_SCOPE(RegistrationScope::Both, opening_angle, opening_angle);
+
+    /**
+     * @brief Variable for the opening angle between leading muon and proton in degrees.
+     * @details Same as opening_angle but converted to degrees for easier interpretation.
+     * The leading muon and proton are defined as the particles with the
+     * highest kinetic energy. The opening angle is defined as the arccosine of
+     * the dot product of the momentum vectors of the leading muon and proton.
+     * @tparam T the type of interaction (true or reco).
+     * @param obj the interaction to apply the variable on.
+     * @return the opening angle between the leading muon and proton in degrees.
+     */
+    template<class T>
+    double opening_angle_deg(const T & obj)
+    {
+        double angle_rad = opening_angle(obj);
+        if(std::isnan(angle_rad))
+            return kNoMatchValue; // No leading muon or proton found.
+        else
+            return angle_rad * 180.0 / M_PI;
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::Both, opening_angle_deg, opening_angle_deg);
 
     /**
      * @brief Variable for the (primary) photon multiplicity of the

@@ -1,5 +1,5 @@
 [general]
-output = "/exp/icarus/data/users/rvizarr/medulla/1muNp0pi_Nge1"
+output = "/exp/icarus/data/users/rvizarr/medulla/1muNp0pi_Nge1_contained"
 primfn = "default_primary_classification"
 pidfn = "default_pid"
 
@@ -101,11 +101,11 @@ branch = [
     { name = "proton_multiplicity",     type = "both",    parameters = [50.0,]},
 
     # Kinematic imbalance & angles
-    { name = "opening_angle", type = "both" },
+    { name = "opening_angle_deg", type = "both" },
     { name = "dpT",           type = "both" },
     { name = "dpT_lp",        type = "both" },
-    { name = "dphiT",         type = "both" },
-    { name = "dalphaT",       type = "both" },
+    { name = "dphiT_deg",         type = "both" },
+    { name = "dalphaT_deg",       type = "both" },
     { name = "dpL",           type = "both" },
     { name = "dpL_lp",        type = "both" },
     { name = "pn",            type = "both" },
@@ -182,11 +182,11 @@ branch = [
     { name = "flash_time",            type = "reco" },
 
     # Kinematic imbalance & angles
-    { name = "opening_angle", type = "both" },
+    { name = "opening_angle_deg", type = "both" },
     { name = "dpT",           type = "both" },
     { name = "dpT_lp",        type = "both" },
-    { name = "dphiT",         type = "both" },
-    { name = "dalphaT",       type = "both" },
+    { name = "dphiT_deg",         type = "both" },
+    { name = "dalphaT_deg",       type = "both" },
     { name = "dpL",           type = "both" },
     { name = "dpL_lp",        type = "both" },
     { name = "pn",            type = "both" },

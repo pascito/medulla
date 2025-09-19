@@ -1,5 +1,5 @@
 [general]
-output = "/exp/icarus/data/users/rvizarr/medulla/1muNp0pi_Nge2"
+output = "/exp/icarus/data/users/rvizarr/medulla/1muNp0pi_Nge2_contained"
 primfn = "default_primary_classification"
 pidfn = "default_pid"
 
