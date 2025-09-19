@@ -198,10 +198,16 @@ class SpineSpectra1D(SpineSpectra):
         -------
         None.
         """
-        ax.set_xlabel(self._variable._xlabel if self._xtitle is None else self._xtitle)
-        ax.set_ylabel('Candidates')
+        ax.set_xlabel(self._variable._xlabel if self._xtitle is None else self._xtitle, fontsize=12, weight='bold')
+        ax.set_ylabel('Candidates', fontsize=12, weight='bold')
         ax.set_xlim(*self._variable._range if self._xrange is None else self._xrange)
         ax.set_title(self._title)
+
+        # Set tick mark size and tick label font size
+        ax.tick_params(axis='both', which='major',
+                       labelsize=12,  # Font size of tick labels
+                       size=8,  # Length of major tick marks
+                       width=2)  # Width/thickness of tick marks
 
         if self._plotdata is not None:
             labels, data = zip(*self._plotdata.items())
@@ -260,13 +266,13 @@ class SpineSpectra1D(SpineSpectra):
                 l.append(systs[0].label)
                 ax.legend(h[-2::-1]+h[-1:], l[-2::-1]+l[-1:])
             else:
-                ax.legend(h[::-1], l[::-1])
+                ax.legend(h[::-1], l[::-1], fontsize=10)
         else:
             h, l = ax.get_legend_handles_labels()
             if draw_error:
                 h.append(plt.Rectangle((0, 0), 1, 1, fc='gray', alpha=0.5, hatch='///'))
                 l.append(systs[0].label)
-            ax.legend(h, l)
+            ax.legend(h, l, fontsize=10)
 
         if isinstance(self._yrange, (tuple, list)):
             ax.set_ylim(*self._yrange)

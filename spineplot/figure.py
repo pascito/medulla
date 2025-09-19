@@ -75,12 +75,7 @@ class SpineFigure:
         -------
         None.
         """
-        # Make figure background transparent
-        self._figure.patch.set_alpha(0.0)
         # Keep axes background solid
-        for ax in self._axs:
-            ax.patch.set_facecolor("white")  # or another color
-            ax.patch.set_alpha(1.0)
         with self._style as style:
             for axi, ax in enumerate(self._axs):
                 self._artists[axi].draw(ax, **self._draw_kwargs[axi], style=style)

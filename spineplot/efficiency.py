@@ -198,8 +198,8 @@ class SpineEfficiency(SpineArtist):
                 results.rename(columns={cumu_key : 'Efficiency [%]' if percentage else 'Efficiency'}, inplace=True)
             
             table_data = [results.columns.to_list()] + results.values.tolist()
-            table = ax.table(cellText=table_data, colLabels=None, loc='center', cellLoc='center', edges='T')
-            table.scale(1, 2.75)
+            table = ax.table(cellText=table_data, colLabels=None, loc='center', cellLoc='left', edges='T')
+            table.scale(1, 1.75)
             for i in range(2, len(table_data)):
                 if i == len(table_data) - 1:
                     for j in range(len(table_data[i])):
@@ -225,10 +225,12 @@ class SpineEfficiency(SpineArtist):
                 print(f'Warning: Table with title `{self._title}` is too large to fit on the figure (scale = {scale:.2f}). Consider extending the figure vertically.')
 
             # Mark the POT and preliminary information on the plot.
+            '''
             if style.mark_pot:
                 mark_pot(ax, self._exposure, style.mark_pot_horizontal, vadj=0.1)
             if style.mark_preliminary is not None:
                 mark_preliminary(ax, style.mark_preliminary, vadj=0.1)
+            '''
 
         elif show_option == 'differential':
             # Lambda formatter to round the values to two decimal
@@ -281,8 +283,8 @@ class SpineEfficiency(SpineArtist):
                                     fmt=style.get_marker(ci), color=style.get_color(gi),
                                     label=f'{group} : {cutname}')
 
-            ax.set_xlabel(self._variable._xlabel if self._xtitle is None else self._xtitle)
-            ax.set_ylabel('Efficiency [%]' if percentage else 'Efficiency')
+            ax.set_xlabel(self._variable._xlabel if self._xtitle is None else self._xtitle, fontsize=12, weight='bold')
+            ax.set_ylabel('Efficiency [%]' if percentage else 'Efficiency', fontsize=12, weight='bold')
             ax.set_xlim(self._variable._range if self._xrange is None else self._xrange)
             if yrange is not None:
                 ax.set_ylim(yrange)
@@ -302,7 +304,13 @@ class SpineEfficiency(SpineArtist):
             if logy:
                 ax.set_yscale('log')
 
-            ax.legend()
+            ax.legend(fontsize=10)
+
+            # Set tick mark size and tick label font size
+            ax.tick_params(axis='both', which='major',
+                           labelsize=12,  # Font size of tick labels
+                           size=8,  # Length of major tick marks
+                           width=2)  # Width/thickness of tick marks
 
             # Mark the POT and preliminary information on the plot.
             if style.scilimits:

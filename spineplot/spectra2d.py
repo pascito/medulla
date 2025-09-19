@@ -169,11 +169,7 @@ class SpineSpectra2D(SpineSpectra):
                 self._plotdata[self._categories[category]] = np.zeros((self._variables[0]._nbins, self._variables[1]._nbins))
             xr = self._variables[0]._range if self._xrange is None else self._xrange
             yr = self._variables[1]._range if self._yrange is None else self._yrange
-            # Use either uniform bins or customized bins
-            h = np.histogram2d(values[0], values[1], 
-                bins=[self._variables[0]._nbins if self._variables[0]._custom_bins is None else self._variables[0]._custom_bins,
-                self._variables[1]._nbins if self._variables[1]._custom_bins is None else self._variables[1]._custom_bins], 
-                range=(xr, yr), weights=weights[category])
+            h = np.histogram2d(values[0], values[1], bins=(self._variables[0]._nbins, self._variables[1]._nbins), range=(xr, yr), weights=weights[category])
             self._plotdata[self._categories[category]] += h[0]
             self._binedges[self._categories[category]] = h[1]
 
@@ -181,10 +177,7 @@ class SpineSpectra2D(SpineSpectra):
                 self._plotdata_diagonal[self._categories[category]] = np.zeros(self._variables[0]._nbins)
             diag = np.divide(values[1] - values[0], values[0])
             xr = (-1, 1) if self._xrange is None else self._xrange
-            # Use either uniform bins or customized bins
-            h = np.histogram(diag, 
-                bins=self._variables[0]._nbins if self._variables[0]._custom_bins is None else self._variables[0]._custom_bins, 
-                range=xr, weights=weights[category])
+            h = np.histogram(diag, bins=self._variables[0]._nbins, range=xr, weights=weights[category])
             self._plotdata_diagonal[self._categories[category]] += h[0]
             self._binedges_diagonal[self._categories[category]] = h[1]
 
@@ -239,6 +232,7 @@ class SpineSpectra2D(SpineSpectra):
         None.
         """
         ax.set_title(self._title)
+        
         if show_option == '2d' and self._plotdata is not None:
             values = np.sum([v for v in self._plotdata.values()], axis=0)
             binedges = self._binedges[list(self._plotdata.keys())[0]]
@@ -251,21 +245,17 @@ class SpineSpectra2D(SpineSpectra):
             max_power = max([max_power, 2])
             ln = LogNorm(vmin=1, vmax=10**max_power)
 
-            if (self._variables[0]._custom_bins is None) and (self._variables[1]._custom_bins is None):
-                # Draw uniform bins histogram using imshow
-                ax.imshow(values.T, extent=(binedges[0], binedges[-1], binedges[0], binedges[-1]),
-                        aspect='auto', origin='lower', norm=ln if logz else None)
-                mesh = None
-            else:
-                # Draw non-uniform bins histogram using pcolormesh
-                mesh = ax.pcolormesh(
-                        self._variables[0]._bin_edges[list(self._plotdata.keys())[0]] if self._variables[0]._custom_bins is None else self._variables[0]._custom_bins, # x bin edges 
-                        self._variables[1]._bin_edges[list(self._plotdata.keys())[0]] if self._variables[1]._custom_bins is None else self._variables[1]._custom_bins, # y bin edges
-                        values.T, shading='auto', norm=ln if logz else None
-                    )
-            ax.set_xlabel(self._variables[0]._xlabel if self._xtitle is None else self._xtitle)
-            ax.set_ylabel(self._variables[1]._xlabel)
+            ax.imshow(values.T, extent=(binedges[0], binedges[-1], binedges[0], binedges[-1]),
+                      aspect='auto', origin='lower', norm=ln if logz else None)
+            ax.set_xlabel(self._variables[0]._xlabel if self._xtitle is None else self._xtitle, fontsize=12, weight='bold')
+            ax.set_ylabel(self._variables[1]._xlabel, fontsize=12, weight='bold')
             ax.set_aspect('equal')
+
+            # Set tick mark size and tick label font size
+            ax.tick_params(axis='both', which='major',
+                           labelsize=12,  # Font size of tick labels
+                           size=8,  # Length of major tick marks
+                           width=2)  # Width/thickness of tick marks
             
             # Draw the identity line. This must span the full range
             # of the plot, so we need to find the minimum and maximum
@@ -278,8 +268,9 @@ class SpineSpectra2D(SpineSpectra):
             # Draw the colorbar if requested. The color axis may also
             # be logarithmic if requested.
             if draw_colorbar:
-                cbar = plt.colorbar(ax.images[0] if mesh is None else mesh,  ax=ax)
-                cbar.set_label('Entries')
+                cbar = plt.colorbar(ax.images[0], ax=ax)
+                cbar.set_label('Entries', fontsize=12, weight='bold')
+                cbar.ax.tick_params(labelsize=12, size=6, width=1.5)
 
         if show_option == 'smearing' and self._plotdata is not None:
             values = np.sum([v for v in self._plotdata.values()], axis=0)
@@ -340,10 +331,26 @@ class SpineSpectra2D(SpineSpectra):
                            size=8,  # Length of major tick marks
                            width=2)  # Width/thickness of tick marks
 
+            # Ensure the maximum values appear as ticks
+            x_min, x_max = extent[0], extent[1]
+            y_min, y_max = extent[2], extent[3]
+
+            # Get current ticks and add max values if not already present
+            x_ticks = list(ax.get_xticks())
+            y_ticks = list(ax.get_yticks())
+
+            if x_max not in x_ticks:
+                x_ticks.append(x_max)
+            if y_max not in y_ticks:
+                y_ticks.append(y_max)
+
+            ax.set_xticks(x_ticks)
+            ax.set_yticks(y_ticks)
+
             # Add colorbar
             if draw_colorbar:
                 cbar = plt.colorbar(im, ax=ax)
-                cbar.set_label('Column normalized fraction', fontsize=12, weight='bold')
+                cbar.set_label('Column Normalized Fraction', fontsize=12, weight='bold')
                 cbar.ax.tick_params(labelsize=12, size=6, width=1.5)
 
         if show_option == 'projection' and self._plotdata_diagonal is not None:
@@ -351,14 +358,18 @@ class SpineSpectra2D(SpineSpectra):
             colors = [self._colors[label] for label in labels]
             bincenters = [self._binedges_diagonal[l][:-1] + np.diff(self._binedges_diagonal[l]) / 2 for l in labels]
 
-            # Use either uniform bins or customized bins 
-            ax.hist(bincenters, weights=data, 
-                    bins=self._variables[0]._nbins if self._variables[0]._custom_bins is None else self._variables[0]._custom_bins,
+            ax.hist(bincenters, weights=data, bins=self._variables[0]._nbins,
                     range=(-1,1) if self._xrange is None else self._xrange,
                     histtype='barstacked', label=labels, color=colors, stacked=True)
-            ax.set_xlabel('(Y-X)/X' if self._xtitle is None else self._xtitle)
-            ax.set_ylabel('Entries')
+            ax.set_xlabel('(Y-X)/X' if self._xtitle is None else self._xtitle, fontsize=14, weight='bold')
+            ax.set_ylabel('Entries', fontsize=12, weight='bold')
             ax.set_xlim(-1, 1) if self._xrange is None else ax.set_xlim(self._xrange)
+
+            # Set tick mark size and tick label font size
+            ax.tick_params(axis='both', which='major',
+                           labelsize=12,  # Font size of tick labels
+                           size=8,  # Length of major tick marks
+                           width=2)  # Width/thickness of tick marks
 
             if fit_type is not None:
                 super().fit_with_function(ax, bincenters[0], np.sum(data, axis=0), self._binedges_diagonal[labels[0]], fit_type, range=(-1,1) if self._xrange is None else self._xrange)
@@ -375,13 +386,13 @@ class SpineSpectra2D(SpineSpectra):
                 if draw_stat_error:
                     h.append(plt.Rectangle((0, 0), 1, 1, fc='gray', alpha=0.5, hatch='///'))
                     l.append('MC Statistical Uncertainty')
-                ax.legend(h[-2::-1]+h[-1:], l[-2::-1]+l[-1:])
+                ax.legend(h[-2::-1]+h[-1:], l[-2::-1]+l[-1:], fontsize=10)
             else:
                 h, l = ax.get_legend_handles_labels()
                 if draw_stat_error:
                     h.append(plt.Rectangle((0, 0), 1, 1, fc='gray', alpha=0.5, hatch='///'))
                     l.append('MC Statistical Uncertainty')
-                ax.legend(h, l)
+                ax.legend(h, l, fontsize=10)
         
         if style.scilimits and not logy:
             ax.ticklabel_format(axis='y', scilimits=style.scilimits)

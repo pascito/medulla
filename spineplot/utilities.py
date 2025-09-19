@@ -29,17 +29,17 @@ def mark_pot(ax, exposure, horizontal=False, vadj=0) -> None:
     """
     mag = int(np.floor(np.log10(exposure)))
     usepot = exposure/10**mag
-    s = f'{usepot:.2f}'+f'$\\times 10^{{{mag}}}$ POT'
+    s = f'NuMI {usepot:.2f}'+f'$\\times 10^{{{mag}}}$ POT'
     xrange = ax.get_xlim()
     yrange = ax.get_ylim()
     if horizontal:
         usey = yrange[1] + 0.01*(yrange[1] - yrange[0]) + vadj*(yrange[1] - yrange[0])
         usex = xrange[1] - 0.02*(xrange[1] - xrange[0])
-        ax.text(x=usex, y=usey, s=s, fontsize=13, color='black', horizontalalignment='right')
+        ax.text(x=usex, y=usey, s=s, fontsize=10, color='black', horizontalalignment='right')
     else:
         usey = yrange[1] + 0.02*(yrange[1] - yrange[0])
         usex = xrange[0] - 0.12*(xrange[1] - xrange[0])
-        ax.text(x=usex, y=usey, s=s, fontsize=13, color='black', verticalalignment='top', rotation=90)
+        ax.text(x=usex, y=usey, s=s, fontsize=10, color='black', verticalalignment='top', rotation=90)
 
 def mark_preliminary(ax, label, vadj=0, hadj=0) -> None:
     """

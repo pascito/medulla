@@ -1,0 +1,225 @@
+[variables]
+
+### Original Toml ------------------------
+
+[variables.true_category]
+key = "true_category"
+range = [0, 9]
+nbins = 9
+xlabel = "Category"
+
+[variables.true_visible_energy]
+key = "true_visible_energy"
+range = [0, 3]
+nbins = 25
+xlabel = "True Visible Energy [GeV]"
+
+[variables.reco_visible_energy]
+key = "reco_visible_energy"
+range = [0, 3]
+nbins = 25
+xlabel = "Reco Visible Energy [GeV]"
+
+### dpT ------------------------------------
+
+[variables.true_dpT]
+key = "true_dpT"
+range = [0,1200]
+nbins = 25
+xlabel = 'True $\delta p_T$ [MeV/c]'
+
+[variables.reco_dpT]
+key = "reco_dpT"
+range = [0,1200]
+nbins = 25
+xlabel = 'Reco $\delta p_T$ [MeV/c]'
+
+[variables.reco_dpT_residual]
+key = "reco_dpT"
+range = [0,1200]
+nbins = 200
+xlabel = 'Reco $\delta p_T$ [MeV/c]'
+
+[variables.true_dpT_residual]
+key = "true_dpT"
+range = [0,1200]
+nbins = 200
+xlabel = 'True $\delta p_T$ [MeV/c]'
+
+[variables.reco_dpT_smearing]
+key = "reco_dpT"
+range = [0,1000]
+nbins = 10
+xlabel = 'Reco $\delta p_T$ [MeV/c]'
+
+[variables.true_dpT_smearing]
+key = "true_dpT"
+range = [0,1000]
+nbins = 10
+xlabel = 'True $\delta p_T$ [MeV/c]'
+
+### dalphaT ------------------------------------
+
+[variables.true_dalphaT]
+key = "true_dalphaT_deg"
+range = [0,180]
+nbins = 25
+xlabel = 'True $\delta \alpha_T$ [degrees]'
+
+[variables.reco_dalphaT]
+key = "reco_dalphaT_deg"
+range = [0,180]
+nbins = 25
+xlabel = 'Reco $\delta \alpha_T$ [degrees]'
+
+[variables.reco_dalphaT_residual]
+key = "reco_dalphaT_deg"
+range = [0,180]
+nbins = 200
+xlabel = 'Reco $\delta \alpha_T$ [degrees]'
+
+[variables.true_dalphaT_residual]
+key = "true_dalphaT_deg"
+range = [0,180]
+nbins = 200
+xlabel = 'True $\delta \alpha_T$ [degrees]'
+
+[variables.reco_dalphaT_smearing]
+key = "reco_dalphaT_deg"
+range = [0,180]
+nbins = 10
+xlabel = 'Reco $\delta \alpha_T$ [degrees]'
+
+[variables.true_dalphaT_smearing]
+key = "true_dalphaT_deg"
+range = [0,180]
+nbins = 10
+xlabel = 'True $\delta \alpha_T$ [degrees]'
+
+### leading_muon_momentum ------------------------------------
+
+[variables.true_leading_muon_momentum]
+key = "true_leading_muon_momentum"
+range = [0,3]
+nbins = 25
+xlabel = 'True Leading Muon Momentum [GeV/c]'
+
+[variables.reco_leading_muon_momentum]
+key = "reco_leading_muon_momentum"
+range = [0,3]
+nbins = 25
+xlabel = 'Reco Leading Muon Momentum [GeV/c]'
+
+[variables.reco_leading_muon_momentum_residual]
+key = "reco_leading_muon_momentum"
+range = [0,3]
+nbins = 200
+xlabel = 'Reco Leading Muon Momentum [GeV/c]'
+
+[variables.true_leading_muon_momentum_residual]
+key = "true_leading_muon_momentum"
+range = [0,3]
+nbins = 200
+xlabel = 'True Leading Muon Momentum [GeV/c]'
+
+[variables.reco_leading_muon_momentum_smearing]
+key = "reco_leading_muon_momentum"
+range = [0,3]
+nbins = 10
+xlabel = 'Reco Leading Muon Momentum [GeV/c]'
+
+[variables.true_leading_muon_momentum_smearing]
+key = "true_leading_muon_momentum"
+range = [0,3]
+nbins = 10
+xlabel = 'True Leading Muon Momentum [GeV/c]'
+
+### opening_angle ------------------------------------
+
+[variables.true_opening_angle]
+key = "true_opening_angle_deg"
+range = [0,180]
+nbins = 25
+xlabel = 'True $\theta_{\mu p}$ [degrees]'
+
+[variables.reco_opening_angle]
+key = "reco_opening_angle_deg"
+range = [0,180]
+nbins = 25
+xlabel = 'Reco $\theta_{\mu p}$ [degrees]'
+
+[variables.reco_opening_angle_residual]
+key = "reco_opening_angle_deg"
+range = [0,180]
+nbins = 200
+xlabel = 'Reco $\theta_{\mu p}$ [degrees]'
+
+[variables.true_opening_angle_residual]
+key = "true_opening_angle_deg"
+range = [0,180]
+nbins = 200
+xlabel = 'True $\theta_{\mu p}$ [degrees]'
+
+[variables.reco_opening_angle_smearing]
+key = "reco_opening_angle_deg"
+range = [0,180]
+nbins = 10
+xlabel = 'Reco $\theta_{\mu p}$ [degrees]'
+
+[variables.true_opening_angle_smearing]
+key = "true_opening_angle_deg"
+range = [0,180]
+nbins = 10
+xlabel = 'True $\theta_{\mu p}$ [degrees]'
+
+
+
+[variables.true_dphiT]
+key = "true_dphiT_deg"
+range = [0,180]
+nbins = 25
+xlabel = 'True $\delta \phi_T$ [MeV/c]'
+
+[variables.reco_dphiT]
+key = "reco_dphiT_deg"
+range = [0,180]
+nbins = 25
+xlabel = 'Reconstructed $\delta \phi_T$ [degrees]'
+
+
+
+[variables.reco_leading_muon_ke]
+key = "reco_leading_muon_ke"
+range = [0,2000]
+nbins = 25
+xlabel = 'Reconstructed Leading Muon Ke [MeV/c]'
+
+[variables.true_leading_muon_ke]
+key = "true_leading_muon_ke"
+range = [0,2000]
+nbins = 25
+xlabel = 'True Leading Muon Ke [MeV/c]'
+
+[variables.reco_leading_muon_ke_residual]
+key = "reco_leading_muon_ke"
+range = [0,2000]
+nbins = 200
+xlabel = 'Reconstructed Leading Muon Ke [MeV/c]'
+
+[variables.true_leading_muon_ke_residual]
+key = "true_leading_muon_ke"
+range = [0,2000]
+nbins = 200
+xlabel = 'True Leading Muon Ke [MeV/c]'
+
+[variables.reco_leading_muon_ke_smearing]
+key = "reco_leading_muon_ke"
+range = [0,2000]
+nbins = 10
+xlabel = 'Reconstructed Leading Muon Ke [MeV/c]'
+
+[variables.true_leading_muon_ke_smearing]
+key = "true_leading_muon_ke"
+range = [0,2000]
+nbins = 10
+xlabel = 'True Leading Muon Ke [MeV/c]'
