@@ -7,7 +7,7 @@ pidfn = "default_pid"
 cuts = [
     { name = "neutrino"        },
     { name = "fiducial_cut"    },
-    { name = "containment_cut" },
+    { name = "contained_muons_only" },
     { name = "no_photons",       parameters = [25.0] },
     { name = "no_electrons",     parameters = [25.0] },
     { name = "single_muon",      parameters = [143.425] },
@@ -71,7 +71,7 @@ add_exposure = true
 mode = "reco"
 cut = [
     { name = "fiducial_cut",              type = "reco" },
-    { name = "containment_cut",           type = "reco" },
+    { name = "contained_muons_only",      type = "reco" },
     { name = "flash_cut",                 type = "reco",  parameters = [-0.5, 9.6] },
     { name = "no_photons",                type = "reco",  parameters = [25.0] },
     { name = "no_electrons",              type = "reco",  parameters = [25.0] },
@@ -85,7 +85,7 @@ branch = [
     # Interaction-level truth/reco branches
     { name = "neutrino_id",             type = "true"    },
     { name = "baseline",                type = "mctruth" },
-    { name = "containment_cut",        type = "both"    },
+    { name = "contained_muons_only",    type = "both"    },
     { name = "cc",                      type = "mctruth" },
     { name = "pdg",                     type = "mctruth" },
     { name = "interaction_type",        type = "mctruth" },
@@ -132,6 +132,15 @@ branch = [
     { name = "polar_angle",       type = "both_particle", selector = "leading_muon" },
     { name = "azimuthal_angle",   type = "both_particle", selector = "leading_muon" },
 
+    # Leading PROTON particle-level
+    {name = "momentum",           type = "both_particle", selector = "leading_proton"},
+    {name = "mass",               type = "both_particle", selector = "leading_proton"},
+    {name = "csda_ke",            type = "both_particle", selector = "leading_proton"},
+    {name = "containment",        type = "both_particle", selector = "leading_proton"},
+    {name = "mcs_ke",             type = "both_particle", selector = "leading_proton"},
+    {name = "energy",             type = "both_particle", selector = "leading_proton"},
+    {name = "length",             type = "both_particle", selector = "leading_proton"},
+
     # Vertex & flash
     { name = "vertex_x",         type = "both" },
     { name = "vertex_y",         type = "both" },
@@ -150,7 +159,7 @@ mode = "true"
 cut = [
     { name = "neutrino",              type = "true" },
     { name = "fiducial_cut",          type = "true" },
-    { name = "containment_cut",       type = "true" },
+    { name = "contained_muons_only",  type = "true" },
     { name = "no_photons",            type = "true",  parameters = [25.0] },
     { name = "no_electrons",          type = "true",  parameters = [25.0] },
     { name = "single_muon",           type = "true",  parameters = [143.425] },
@@ -161,7 +170,7 @@ cut = [
 branch = [
     # Interaction-level truth branches
     { name = "neutrino_id",            type = "true"    },
-    { name = "containment_cut",        type = "both"    },
+    { name = "contained_muons_only",   type = "both"    },
     { name = "fiducial_cut",           type = "both"    },
     { name = "baseline",               type = "mctruth" },
     { name = "cc",                     type = "mctruth" },
