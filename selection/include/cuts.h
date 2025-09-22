@@ -549,7 +549,7 @@ namespace cuts
     }
     REGISTER_CUT_SCOPE(RegistrationScope::Both, single_michel, single_michel);
 
-    /**
+/**
      * @brief Cut to select interactions with contained muons only.
      * @details This function applies a cut to select interactions where all
      * muons above the energy threshold are contained within the detector
@@ -577,7 +577,7 @@ namespace cuts
                pvars::ke(p) >= params[0])
             {
                 // If we find a muon above threshold, check if it's contained
-                if(!pcuts::containment_cut(p))
+                if(p.is_contained != 1)
                 {
                     return false; // Found an uncontained muon, fail the cut
                 }
