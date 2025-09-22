@@ -3,7 +3,7 @@ output = "/exp/icarus/data/users/rvizarr/medulla/1muNp0pi_Nge1_contained"
 primfn = "default_primary_classification"
 pidfn = "default_pid"
 
-[[category]] # 0 : Fiducial, single muon, N protons (N>=1), no charged pions
+[[category]] # 0 : Fiducial, single contained muon, N protons (N>=1), no charged pions
 cuts = [
     { name = "neutrino"        },
     { name = "fiducial_cut"    },
