@@ -8,6 +8,7 @@ from figure import SpineFigure, SimpleFigure
 from spectra1d import SpineSpectra1D
 from spectra2d import SpineSpectra2D
 from efficiency import SpineEfficiency
+from purity import SpinePurity
 from confusion import ConfusionMatrix
 from roc import ROCCurve
 from ternary import Ternary
@@ -158,6 +159,27 @@ class Analysis:
                             art = SpineEfficiency(self._variables[x['variable']], restrict_categories,
                                                   x['cuts'], x.get('title', None), x.get('xrange', None),
                                                   x.get('xtitle', None), show_option, npts)
+                            self._figures[fig['name']].register_spine_artist(art, draw_kwargs=x.get('draw_kwargs', {}))
+                            self._artists.append(art)
+
+                        elif x['type'] == 'SpinePurity':
+                            # Check if the variable is present in all samples
+                            if not all(self._variables[x['variable']]._validity_check.values()):
+                                missing_samples = [k for k, v in self._variables[x['variable']]._validity_check.items()
+                                                   if not v]
+                                raise ConfigException(
+                                    f"Variable '{x['variable']}' not found in all samples ({' '.join(missing_samples)}).")
+
+                            # Grab artist settings
+                            show_option = x.get('draw_kwargs', {}).get('show_option', 'table')
+                            npts = x.get('draw_kwargs', {}).get('npts', 1e6)
+                            signal_categories = x.get('signal_categories',
+                                                      self._config.get('analysis', {}).get('signal_categories', [0.0]))
+
+                            # Create the artist
+                            art = SpinePurity(self._variables[x['variable']], restrict_categories,
+                                              x['cuts'], x.get('title', None), x.get('xrange', None),
+                                              x.get('xtitle', None), show_option, signal_categories, npts)
                             self._figures[fig['name']].register_spine_artist(art, draw_kwargs=x.get('draw_kwargs', {}))
                             self._artists.append(art)
 
