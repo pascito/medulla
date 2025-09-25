@@ -59,8 +59,8 @@ cuts = [
 
 [[sample]]
 name = "nominal"
-path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_07.root"
-#path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_0*.root"
+#path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_07.root"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_0*.root"
 ismc = true
 disable = false
 
@@ -106,6 +106,8 @@ branch = [
     { name = "dpT_lp",        type = "both" },
     { name = "dphiT_deg",         type = "both" },
     { name = "dalphaT_deg",       type = "both" },
+    { name = "dphiT",             type = "both" },
+    { name = "dalphaT",           type = "both" },
     { name = "dpL",           type = "both" },
     { name = "dpL_lp",        type = "both" },
     { name = "pn",            type = "both" },

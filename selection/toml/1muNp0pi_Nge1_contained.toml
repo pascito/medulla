@@ -105,6 +105,8 @@ branch = [
     { name = "dpT_lp",        type = "both" },
     { name = "dphiT_deg",         type = "both" },
     { name = "dalphaT_deg",       type = "both" },
+    { name = "dphiT",         type = "both" },
+    { name = "dalphaT",       type = "both" },
     { name = "dpL",           type = "both" },
     { name = "dpL_lp",        type = "both" },
     { name = "pn",            type = "both" },
