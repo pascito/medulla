@@ -3,64 +3,85 @@ output = "/exp/icarus/data/users/rvizarr/medulla/1muNp0pi_Nge1_contained"
 primfn = "default_primary_classification"
 pidfn = "default_pid"
 
-[[category]] # 0 : Fiducial, single contained muon, N protons (N>=1), no charged pions
+[[category]] # 0 : Contained muon, fiducial, single muon, single proton
 cuts = [
     { name = "neutrino"        },
     { name = "fiducial_cut"    },
     { name = "contained_muons_only",    parameters = [143.425]},
-    { name = "no_photons",       parameters = [25.0] },
-    { name = "no_electrons",     parameters = [25.0] },
-    { name = "single_muon",      parameters = [143.425] },
-    { name = '!no_protons',       parameters = [50.0] },
-    { name = "no_charged_pions",    parameters = [25.0] },
+    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
+    { name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
+    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
+    { name = "single_proton",           parameters = [ "@proton_threshold"   ] },
 ]
 
-[[category]] # 1 : Single muon, single proton, no charged pions
+[[category]] # 1 : Single muon, single proton
 cuts = [
     { name = "neutrino" },
-    { name = "no_photons",       parameters = [25.0] },
-    { name = "no_electrons",     parameters = [25.0] },
-    { name = "single_muon",      parameters = [143.425] },
-    { name = "no_charged_pions", parameters = [25.0] },
+    { name = "no_photons",       parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",     parameters = [ "@electron_threshold" ] },
+    { name = "no_charged_pions", parameters = [ "@pion_threshold"     ] },
+    { name = "single_muon",      parameters = [ "@muon_threshold"     ] },
+    { name = "single_proton",    parameters = [ "@proton_threshold"   ] },
 ]
 
-[[category]] # 2 : Single muon, no protons, no charged pions
+[[category]] # 2 : Contained muon, fiducial, single muon, multiple protons
+cuts = [
+    { name = "neutrino"        },
+    { name = "fiducial_cut"    },
+    { name = "contained_muons_only",    parameters = [143.425]},
+    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
+    { name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
+    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
+    { name = "!no_protons",             parameters = [ "@proton_threshold"   ] },
+]
+
+[[category]] # 3 : Single muon, multiple protons
 cuts = [
     { name = "neutrino" },
-    { name = "no_photons",       parameters = [25.0] },
-    { name = "no_electrons",     parameters = [25.0] },
-    { name = "single_muon",      parameters = [143.425] },
-    { name = 'no_protons',      parameters = [50.0] },
-    { name = "no_charged_pions", parameters = [25.0] },
+    { name = "no_photons",       parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",     parameters = [ "@electron_threshold" ] },
+    { name = "no_charged_pions", parameters = [ "@pion_threshold"     ] },
+    { name = "single_muon",      parameters = [ "@muon_threshold"     ] },
+    { name = "!no_protons",      parameters = [ "@proton_threshold"   ] },
 ]
 
-[[category]] # 3 : Neutrino, charged current
+[[category]] # 4 : Contained muon, fiducial, single muon
+cuts = [
+    { name = "neutrino"        },
+    { name = "fiducial_cut"    },
+    { name = "contained_muons_only",    parameters = [143.425]},
+    { name = "single_muon",             parameters = [ "@muon_threshold" ] },
+]
+
+[[category]] # 5 : Single muon
+cuts = [
+    { name = "neutrino" },
+    { name = "single_muon", parameters = [ "@muon_threshold" ] },
+]
+
+[[category]] # 6 : Neutrino, charged current
 cuts = [
     { name = "neutrino" },
     { name = "iscc"     },
 ]
 
-[[category]] # 4 : Neutrino, neutral current
+[[category]] # 7 : Neutrino, neutral current
 cuts = [
     { name = "neutrino" },
     { name = "!iscc"    },
 ]
 
-[[category]] # 5 : Out of FV
-cuts = [
-    { name = "!fiducial_cut" },
-    { name = "neutrino" },
-]
-
-[[category]] # 6 : Cosmic
+[[category]] # 8 : Cosmic
 cuts = [
     { name = "!neutrino" },
 ]
 
 [[sample]]
 name = "nominal"
-path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_07.root"
-#path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_0*.root"
+#path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_07.root"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_0*.root"
 ismc = true
 disable = false
 
@@ -160,13 +181,13 @@ mode = "true"
 cut = [
     { name = "neutrino",              type = "true" },
     { name = "fiducial_cut",          type = "true" },
-    { name = "contained_muons_only",    type = "true",    parameters = [143.425]},
-    { name = "no_photons",            type = "true",  parameters = [25.0] },
-    { name = "no_electrons",          type = "true",  parameters = [25.0] },
-    { name = "single_muon",           type = "true",  parameters = [143.425] },
-    { name = "no_charged_pions",           type = "true", parameters = [25.0] },
-    { name = "!no_protons",               type = "true",  parameters = [50.0] },
-    { name = "trigger_emulation_cut", type = "event", decrements_exposure = false },
+    { name = "contained_muons_only",  type = "true",    parameters = [143.425]},
+    { name = "no_photons",            type = "true",    parameters = [25.0] },
+    { name = "no_electrons",          type = "true",    parameters = [25.0] },
+    { name = "single_muon",           type = "true",    parameters = [143.425] },
+    { name = "no_charged_pions",      type = "true",    parameters = [25.0] },
+    { name = "!no_protons",           type = "true",    parameters = [50.0] },
+    { name = "trigger_emulation_cut", type = "event",   decrements_exposure = false },
 ]
 branch = [
     # Interaction-level truth branches
@@ -191,15 +212,15 @@ branch = [
     { name = "flash_time",            type = "reco" },
 
     # Kinematic imbalance & angles
-    { name = "opening_angle_deg", type = "both" },
-    { name = "dpT",           type = "both" },
-    { name = "dpT_lp",        type = "both" },
-    { name = "dphiT_deg",         type = "both" },
-    { name = "dalphaT_deg",       type = "both" },
-    { name = "dpL",           type = "both" },
-    { name = "dpL_lp",        type = "both" },
-    { name = "pn",            type = "both" },
-    { name = "pn_lp",         type = "both" },
+    { name = "opening_angle_deg",   type = "both" },
+    { name = "dpT",                 type = "both" },
+    { name = "dpT_lp",              type = "both" },
+    { name = "dphiT_deg",           type = "both" },
+    { name = "dalphaT_deg",         type = "both" },
+    { name = "dpL",                 type = "both" },
+    { name = "dpL_lp",              type = "both" },
+    { name = "pn",                  type = "both" },
+    { name = "pn_lp",               type = "both" },
 
     # Fundamental kinematic variables
     { name = "Q2",            type = "both" },
@@ -214,13 +235,13 @@ branch = [
     { name = "energy",             type = "both_particle", selector = "leading_muon"},
     { name = "length",             type = "both_particle", selector = "leading_muon"},
     { name = "dpT",                type = "both_particle", selector = "leading_muon"},
-    { name = "end_x",             type = "both_particle", selector = "leading_muon" },
-    { name = "end_y",             type = "both_particle", selector = "leading_muon" },
-    { name = "end_z",             type = "both_particle", selector = "leading_muon" },
-    { name = "ke",                type = "both_particle", selector = "leading_muon" },
-    { name = "length",            type = "both_particle", selector = "leading_muon" },
-    { name = "polar_angle",       type = "both_particle", selector = "leading_muon" },
-    { name = "azimuthal_angle",   type = "both_particle", selector = "leading_muon" },
+    { name = "end_x",              type = "both_particle", selector = "leading_muon" },
+    { name = "end_y",              type = "both_particle", selector = "leading_muon" },
+    { name = "end_z",              type = "both_particle", selector = "leading_muon" },
+    { name = "ke",                 type = "both_particle", selector = "leading_muon" },
+    { name = "length",             type = "both_particle", selector = "leading_muon" },
+    { name = "polar_angle",        type = "both_particle", selector = "leading_muon" },
+    { name = "azimuthal_angle",    type = "both_particle", selector = "leading_muon" },
 
     # Leading PROTON particle-level
     { name = "momentum",           type = "both_particle", selector = "leading_proton"},
