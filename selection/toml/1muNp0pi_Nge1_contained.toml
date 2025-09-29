@@ -89,8 +89,8 @@ cuts = [
 
 [[sample]]
 name = "nominal"
-#path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_07.root"
-path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_0*.root"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_07.root"
+#path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_0*.root"
 ismc = true
 disable = false
 
@@ -188,17 +188,26 @@ sim_only = true
 add_exposure = true
 mode = "true"
 cut = [
-    { name = "neutrino",              type = "true" },
-    { name = "fiducial_cut",          type = "true" },
+    { name = "neutrino",                  type = "true" },
+    { name = "fiducial_cut",              type = "true" },
     { name = "contained_muons_only",      type = "reco",  parameters = [ "@muon_threshold"     ] },
     { name = "no_photons",                type = "reco",  parameters = [ "@photon_threshold"   ] },
     { name = "no_electrons",              type = "reco",  parameters = [ "@electron_threshold" ] },
     { name = "single_muon",               type = "reco",  parameters = [ "@muon_threshold"     ] },
     { name = "no_charged_pions",          type = "reco",  parameters = [ "@pion_threshold"     ] },
     { name = "!no_protons",               type = "reco",  parameters = [ "@proton_threshold"   ] },
-    { name = "trigger_emulation_cut", type = "event",   decrements_exposure = false },
+    { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
 ]
 branch = [
+
+    # Cuts applied
+    { name = "contained_muons_only",      type = "reco",  parameters = [ "@muon_threshold"     ] },
+    { name = "no_photons",                type = "reco",  parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",              type = "reco",  parameters = [ "@electron_threshold" ] },
+    { name = "single_muon",               type = "reco",  parameters = [ "@muon_threshold"     ] },
+    { name = "no_charged_pions",          type = "reco",  parameters = [ "@pion_threshold"     ] },
+    { name = "!no_protons",               type = "reco",  parameters = [ "@proton_threshold"   ] },
+
     # Interaction-level truth branches
     { name = "neutrino_id",            type = "true"    },
     { name = "fiducial_cut",           type = "both"    },
