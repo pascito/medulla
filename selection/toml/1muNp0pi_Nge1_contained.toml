@@ -10,7 +10,7 @@ muon_threshold = 143.425
 pion_threshold = 25.0
 proton_threshold = 50.0
 flash_low_t = -0.5
-flash_high_t = 1.6
+flash_high_t = 9.6
 
 [[category]] # 0 : Contained muon, fiducial, single muon, single proton
 cuts = [
