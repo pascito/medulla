@@ -710,6 +710,34 @@ namespace vars
     REGISTER_VAR_SCOPE(RegistrationScope::Both, opening_angle_deg, opening_angle_deg);
 
     /**
+     * @brief Variable for the cosine of the opening angle between leading muon and proton.
+     * @details The leading muon and proton are defined as the particles with the
+     * highest kinetic energy. This variable returns the cosine of the opening angle,
+     * which is simply the dot product of the direction vectors of the leading muon
+     * and proton (assuming normalized direction vectors).
+     * @tparam T the type of interaction (true or reco).
+     * @param obj the interaction to apply the variable on.
+     * @return the cosine of the opening angle between the leading muon and proton.
+     */
+    template<class T>
+    double opening_angle_cos(const T & obj)
+    {
+        size_t mi = selectors::leading_muon(obj);
+        size_t pi = selectors::leading_proton(obj);
+        if(mi == kNoMatch || pi == kNoMatch)
+            return kNoMatchValue; // No leading muon or proton found.
+        else
+        {
+            auto & m(obj.particles[mi]);
+            auto & p(obj.particles[pi]);
+            return m.start_dir[0] * p.start_dir[0] +
+                   m.start_dir[1] * p.start_dir[1] +
+                   m.start_dir[2] * p.start_dir[2];
+        }
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::Both, opening_angle_cos, opening_angle_cos);
+
+    /**
      * @brief Variable for the (primary) photon multiplicity of the
      * interaction.
      * @details This function calculates the multiplicity of primary

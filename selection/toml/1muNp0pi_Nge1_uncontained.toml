@@ -132,6 +132,7 @@ branch = [
 
     # Kinematic imbalance & angles
     { name = "opening_angle_deg", type = "both" },
+    { name = "opening_angle_cos",   type = "both" },
     { name = "dpT",               type = "both" },
     { name = "dpT_lp",            type = "both" },
     { name = "dphiT_deg",         type = "both" },
@@ -224,6 +225,7 @@ branch = [
 
     # Kinematic imbalance & angles
     { name = "opening_angle_deg", type = "both" },
+    { name = "opening_angle_cos", type = "both" },
     { name = "dpT",               type = "both" },
     { name = "dpT_lp",            type = "both" },
     { name = "dphiT_deg",         type = "both" },
