@@ -270,7 +270,7 @@ branch = [
     { name = "vertex_z", type = "true" },
 ]
 
-[samples.mc_nu]
+[samples.mc]
 key = "full"
 exposure_type = "pot"
 trees = ['selected']
@@ -303,7 +303,7 @@ pattern = '\\bvar(01|02|03|04|05)\\b'
 [[systematic_recipe]]
 name = 'stats'
 label = 'MC Statistical Uncertainty'
-pattern = '(mc_nu)_statistical'
+pattern = '(mc)_statistical'
 #pattern = '(mc|offbeam)_statistical'
 
 [[systematic_recipe]]
