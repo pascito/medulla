@@ -199,8 +199,11 @@ class Systematic:
                 np.add.at(histogram, bin_indices, 1)
 
                 self._covariances[f'{self._name}_{name}'] = np.diag(histogram)
-                self._std = np.sqrt(histogram.sum())
-                self._std /= histogram.sum()
+                histogram_sum = histogram.sum()
+                if histogram_sum > 0:
+                    self._std = np.sqrt(histogram_sum) / histogram_sum
+                else:
+                    self._std = 0.0
 
     def get_covariance(self, variable) -> np.ndarray:
         """
