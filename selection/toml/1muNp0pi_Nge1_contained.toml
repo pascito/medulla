@@ -88,14 +88,12 @@ cuts = [
 ]
 
 # SIMULATION ONLY
-'''
 [[sample]]
 name = "nominal"
 #path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_07.root"
 path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_0*.root"
 ismc = true
 disable = false
-'''
 
 # INCLUDE DATA
 [[sample]]
@@ -279,46 +277,3 @@ branch = [
     { name = "vertex_y", type = "true" },
     { name = "vertex_z", type = "true" },
 ]
-
-[samples.mc]
-key = "full"
-exposure_type = "pot"
-trees = ['selected']
-print_sys = true
-systematics = ['variationTree','multisimTree','multisigmaTree','NuMIfluxsim']
-
-[[systematic_recipe]]
-name = 'flux'
-label = 'Flux Systematics'
-#pattern = '_Flux'
-pattern = 'hysyst*'
-
-#[[systematic_recipe]]
-#name = 'hpc'
-#label = 'hpc Systematics'
-#pattern = '_Flux'
-#pattern = 'hpc*'
-
-[[systematic_recipe]]
-name = 'xsec'
-label = 'Interaction Systematics'
-pattern = '\\bGENIEReWeight_SBN_v1_multisigma_\\w+\\b'
-#pattern = 'GENIEReWeight_SBN_v1_multisim'
-
-[[systematic_recipe]]
-name = 'detsys'
-label = 'Detector Systematics'
-pattern = '\\bvar(01|02|03|04|05)\\b'
-
-[[systematic_recipe]]
-name = 'stats'
-label = 'MC Statistical Uncertainty'
-pattern = '(mc)_statistical'
-#pattern = '(mc|offbeam)_statistical'
-
-[[systematic_recipe]]
-name = 'MC_stats'
-label = 'MC Uncertainty'
-#pattern = 'mc_statistical'
-#pattern = 'mc_nu_statistical'
-pattern = '(flux|xsec|stats|detsys)'
