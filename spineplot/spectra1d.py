@@ -144,10 +144,7 @@ class SpineSpectra1D(SpineSpectra):
                 self._plotdata[self._categories[category]] = np.zeros(self._variable._nbins)
                 self._onebincount[self._categories[category]] = 0
             xr = self._variable._range if self._xrange is None else self._xrange
-            # Use either uniform bins or customized bins
-            h = np.histogram(values, 
-                bins=self._variable._nbins if self._variable._custom_bins is None else self._variable._custom_bins ,
-                range=xr, weights=weights[category])
+            h = np.histogram(values, bins=self._variable._nbins, range=xr, weights=weights[category])
             self._onebincount[self._categories[category]] += np.sum(weights[category])
             self._plotdata[self._categories[category]] += h[0]
             self._binedges[self._categories[category]] = h[1]
@@ -240,10 +237,14 @@ class SpineSpectra1D(SpineSpectra):
                 reduce = lambda x : [x[i] for i in histogram_mask]
             
             scale = 1.0 if not normalize else 1.0 / np.sum(reduce(data))
-            # Use either uniform bins or customized bins
-            ax.hist(reduce(bincenters), weights=[scale*x for x in reduce(data)], 
-                    bins=self._variable._nbins if self._variable._custom_bins is None else self._variable._custom_bins,
-                    range=xr, label=reduce(labels), color=reduce(colors), **style.plot_kwargs)
+            ax.hist(reduce(bincenters), weights=[scale*x for x in reduce(data)], bins=self._variable._nbins, range=xr, label=reduce(labels), color=reduce(colors), **style.plot_kwargs)
+            # Add prediction line (sum of all MC components)
+            total_prediction = scale * np.sum(reduce(data), axis=0)
+            total_events = np.sum(reduce(data))  # Sum all events in histogram categories
+            first_hist_category = list(self._plotdata.keys())[histogram_mask[0]]
+            bin_edges = self._binedges[first_hist_category]
+            ax.step(bin_edges, np.append(total_prediction, total_prediction[-1]),
+                    where='post', color='black', linewidth=1, label=f'Prediction ({total_events:.1f} events)')
             if draw_error:
                 systs = [s[draw_error] for s in self._systematics.values() if draw_error in s]
                 cov = np.sum(s.get_covariance(self._variable._key) for s in systs)
@@ -253,27 +254,44 @@ class SpineSpectra1D(SpineSpectra):
                 scov = Systematic.transform_as(cov, scale if not normalize else np.sum(reduce(data), axis=0))
                 yerr = np.sqrt(np.diag(scov))
 
-                draw_error_boxes(ax, x, y, xerr, yerr, facecolor='gray', edgecolor='none', alpha=0.5, hatch='///')
+                draw_error_boxes(ax, x, y, xerr, yerr, facecolor='lightgray', edgecolor='gray', alpha=0.8, hatch='xxx', linewidth=1.0)
 
             reduce = lambda x : [x[i] for i in scatter_mask]
             for i, label in enumerate(reduce(labels)):
-                scale = 1.0 if not normalize else 1.0 / np.sum(data[scatter_mask[i]])
-                ax.errorbar(bincenters[scatter_mask[i]], scale*data[scatter_mask[i]], yerr=scale*np.sqrt(data[scatter_mask[i]]), fmt='o', label=label, color=colors[scatter_mask[i]])
-        
+                idx = scatter_mask[i]  # Get the actual index in the original arrays
+                scale = 1.0 if not normalize else 1.0 / np.sum(data[idx])
+                xerr_data = [x / 2 for x in binwidths[idx]]  # Get bin widths for this category
+                ax.errorbar(bincenters[scatter_mask[i]], scale * data[scatter_mask[i]],
+                            xerr=xerr_data,
+                            yerr=scale * np.sqrt(data[scatter_mask[i]]),
+                            fmt='o',  # Circle markers
+                            markersize=6,  # Marker size
+                            markerfacecolor='black',  # Filled black
+                            markeredgecolor='black',  # Black edge
+                            color='black',  # Error bar color
+                            capsize=3,  # Horizontal cap size
+                            capthick=1.5,  # Cap thickness
+                            elinewidth=1.5,  # Error bar line width
+                            label=label)
         if invert_stack_order:
             h, l = ax.get_legend_handles_labels()
             if draw_error:
-                h.append(plt.Rectangle((0, 0), 1, 1, fc='gray', alpha=0.5, hatch='///'))
+                h.append(plt.Rectangle((0, 0), 1, 1, fc='lightgray', ec='gray', alpha=0.6, hatch='xxx', linewidth=0.8))
                 l.append(systs[0].label)
-                ax.legend(h[-2::-1]+h[-1:], l[-2::-1]+l[-1:])
+                ax.legend(h[-2::-1]+h[-1:], l[-2::-1]+l[-1:], fontsize=8)
             else:
-                ax.legend(h[::-1], l[::-1], fontsize=10)
+                ax.legend(h[::-1], l[::-1], fontsize=8)
         else:
             h, l = ax.get_legend_handles_labels()
             if draw_error:
-                h.append(plt.Rectangle((0, 0), 1, 1, fc='gray', alpha=0.5, hatch='///'))
+                h.append(plt.Rectangle((0, 0), 1, 1, fc='lightgray', ec='gray', alpha=0.6, hatch='xxx', linewidth=0.8))
                 l.append(systs[0].label)
-            ax.legend(h, l, fontsize=10)
+            ax.legend(h, l, fontsize=8)
+
+        # Automatically extend y-axis by 35% to make room for legend
+        #if self._yrange is None:
+        #    current_ylim = ax.get_ylim()
+        #    ax.set_ylim(current_ylim[0], current_ylim[1] * 1.35)
 
         if isinstance(self._yrange, (tuple, list)):
             ax.set_ylim(*self._yrange)

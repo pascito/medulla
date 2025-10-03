@@ -33,7 +33,7 @@ def mark_pot(ax, exposure, horizontal=False, vadj=0) -> None:
     xrange = ax.get_xlim()
     yrange = ax.get_ylim()
     if horizontal:
-        usey = yrange[1] + 0.01*(yrange[1] - yrange[0]) + vadj*(yrange[1] - yrange[0])
+        usey = yrange[1] + 0.025*(yrange[1] - yrange[0]) + vadj*(yrange[1] - yrange[0])
         usex = xrange[1] - 0.02*(xrange[1] - xrange[0])
         ax.text(x=usex, y=usey, s=s, fontsize=10, color='black', horizontalalignment='right')
     else:
@@ -64,7 +64,7 @@ def mark_preliminary(ax, label, vadj=0, hadj=0) -> None:
     None.
     """
     yrange = ax.get_ylim()
-    usey = yrange[1] + 0.01*(yrange[1] - yrange[0]) + vadj*(yrange[1] - yrange[0])
+    usey = yrange[1] + 0.025*(yrange[1] - yrange[0]) + vadj*(yrange[1] - yrange[0])
     xrange = ax.get_xlim()
     usex = xrange[0] + 0.025*(xrange[1] - xrange[0]) + hadj*(xrange[1] - xrange[0])
     ax.text(x=usex, y=usey, s=label, fontsize=12, color='blue')
