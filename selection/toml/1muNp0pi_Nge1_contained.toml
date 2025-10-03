@@ -113,7 +113,7 @@ mode = "reco"
 cut = [
     { name = "fiducial_cut",              type = "reco" },
     #{ name = "contained_muons_only",      type = "reco",  parameters = [ "@muon_threshold"               ] },
-    { name = "containment_cut" },
+    { name = "containment_cut",           type = "reco" },
     { name = "flash_cut",                 type = "reco",  parameters = [ "@flash_low_t", "@flash_high_t" ] },
     { name = "no_photons",                type = "reco",  parameters = [ "@photon_threshold"             ] },
     { name = "no_electrons",              type = "reco",  parameters = [ "@electron_threshold"           ] },
@@ -203,8 +203,8 @@ mode = "true"
 cut = [
     { name = "neutrino",                  type = "true" },
     { name = "fiducial_cut",              type = "true" },
-    #{ name = "contained_muons_only",      type = "true",  parameters = [ "@muon_threshold"     ] },
-    { name = "containment_cut" },
+    #{ name = "contained_muons_only",     type = "true",  parameters = [ "@muon_threshold"     ] },
+    { name = "containment_cut",           type = "true" },
     { name = "no_photons",                type = "true",  parameters = [ "@photon_threshold"   ] },
     { name = "no_electrons",              type = "true",  parameters = [ "@electron_threshold" ] },
     { name = "single_muon",               type = "true",  parameters = [ "@muon_threshold"     ] },
