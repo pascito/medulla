@@ -362,7 +362,7 @@ class SpineSpectra1D(SpineSpectra):
             ax_ratio.set_ylabel('MC/Data', fontsize=10, weight='bold')
             ax_ratio.set_xlabel(self._variable._xlabel if self._xtitle is None else self._xtitle,
                                 fontsize=12, weight='bold')
-            ax_ratio.set_ylim(0.5, 1.5)
+            ax_ratio.set_ylim(0.0, 2.0)
             ax_ratio.grid(True, alpha=0.3, axis='y')
             ax_ratio.tick_params(axis='both', which='major', labelsize=10)
             ax_ratio.set_xlim(*self._variable._range if self._xrange is None else self._xrange)

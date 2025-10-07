@@ -1,0 +1,77 @@
+[[this_includes]]
+file = '../configurations/common/variables_uncontained.toml'
+
+[[this_includes]]
+file = '../configurations/common/styles.toml'
+
+# SIMULATION SAMPLE
+[samples]
+[samples.mc]
+key = "nominal"
+exposure_type = "pot"
+trees = ['selected']
+
+# DATA SAMPLE
+[samples.onbeam]
+key = "onbeam"
+exposure_type = "pot"
+override_category = -100
+trees = ['selected']
+
+[output]
+path = '/Users/rvizarreta/Library/CloudStorage/GoogleDrive-rvizarreta14@gmail.com/My Drive/🏛 PhD Repository/🚀 Research/🤖 Experiments&Projects/ICARUS/ICARUS_CC0pi_Selection/ICARUS-NuMI-CC0pi-Selection/spineplot/myAnalysis/1muNp0pi_Nge1_uncontained/leading_muon_momentum'
+
+[analysis]
+#ordinate_sample = 'mc'
+ordinate_sample = 'onbeam'
+category_branch = 'true_category'
+category_assignment = [[0,2], [4,5,6], [7], [1,3], [8], [-100]]
+category_labels = ['Signal', 'Other CC', '$\nu$ NC', 'OOFV', 'Cosmic', 'Data']
+category_colors = ['C0', 'C1', 'C3','C5', 'C4', 'black']
+category_types = ['histogram', 'histogram', 'histogram','histogram','histogram','scatter']
+
+[[systematic_recipe]]
+name = 'stats'
+label = 'MC Statistical Uncertainty'
+pattern = 'mc_statistical'
+
+[[figure]]
+name = 'leading_muon_momentum_reco'
+type = 'SimpleFigure'
+style = 'selected_icarus_1muNp0pi_N>=1'
+[[figure.artists]]
+type = 'SpineSpectra1D'
+variable = 'reco_leading_muon_momentum'
+draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = true, 'normalize' = true, 'draw_error' = 'stats', 'draw_ratio'='True'}
+
+[[figure]]
+name = 'leading_muon_momentum_fractional_residual'
+type = 'SimpleFigure'
+style = 'selected_icarus_1muNp0pi_N>=1'
+[[figure.artists]]
+type = 'SpineSpectra2D'
+yvariable = 'reco_leading_muon_momentum_residual'
+xvariable = 'true_leading_muon_momentum_residual'
+xrange = [-2,2]
+xtitle = '$\frac{p_{\mu,\mathrm{reco}} - p_{\mu,\mathrm{true}}}{p_{\mu,\mathrm{true}}}$'
+draw_kwargs = {'show_option' = 'projection', 'draw_identity' = true, 'draw_colorbar' = true, 'logz' = true}
+
+[[figure]]
+name = 'leading_muon_momentum_2d_correlation'
+type = 'SimpleFigure'
+style = 'selected_icarus_1muNp0pi_N>=1'
+[[figure.artists]]
+type = 'SpineSpectra2D'
+xvariable = 'true_leading_muon_momentum'
+yvariable = 'reco_leading_muon_momentum'
+draw_kwargs = {'show_option' = '2d', 'draw_identity' = true, 'draw_colorbar' = true, 'logz' = true}
+
+[[figure]]
+name = 'leading_muon_momentum_smearing_matrix_normalized'
+type = 'SimpleFigure'
+style = 'selected_icarus_1muNp0pi_N>=1'
+[[figure.artists]]
+type = 'SpineSpectra2D'
+xvariable = 'true_leading_muon_momentum_smearing'
+yvariable = 'reco_leading_muon_momentum_smearing'
+draw_kwargs = {show_option = 'smearing', draw_colorbar = true}

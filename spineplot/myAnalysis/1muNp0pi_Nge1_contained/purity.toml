@@ -1,0 +1,48 @@
+[output]
+path = "/Users/rvizarreta/Library/CloudStorage/GoogleDrive-rvizarreta14@gmail.com/My Drive/🏛 PhD Repository/🚀 Research/🤖 Experiments&Projects/ICARUS/ICARUS_CC0pi_Selection/ICARUS-NuMI-CC0pi-Selection/spineplot/myAnalysis/1muNp0pi_Nge1_contained"
+
+[[this_includes]]
+file = '../configurations/common/styles.toml'
+
+# Use signal tree to show the actual cut progression
+[samples.signal]
+key = "nominal"
+exposure_type = "pot"
+trees = ["signal"]  # Use signal tree which has events before final cuts
+
+[analysis]
+ordinate_sample = "signal"
+category_branch = "true_category"
+
+category_assignment = [
+    [0.0, 1.0, 3.0, 4.0]  # All events together
+]
+category_labels = ["All Signal-like Events"]
+category_colors = ["C0"]
+category_types = ["histogram"]
+
+### Variables ###
+[variables.true_neutrino_energy]
+key = "true_neutrino_energy"
+range = [0.4, 3.0]
+nbins = 15
+binning_scheme = "equal_width"
+xlabel = "True Neutrino Energy [GeV]"
+
+### Purity progression table ###
+[[figure]]
+name = "icarus_sig_1muNp0pi_purity_progression"
+type = "SimpleFigure"
+style = 'selected_icarus_1muNp0pi_N>=1'
+figsize = [12.0, 8.0]
+title = "ICARUS 1μNp0π Selection Purity Progression"
+
+[[figure.artists]]
+type = "SpinePurity"
+variable = "true_neutrino_energy"
+groups = ["All Signal-like Events"]
+signal_categories = [0.0]
+draw_kwargs = {show_option = "table", percentage = true}
+
+# No cuts needed - the two-tree comparison will show progression
+[figure.artists.cuts]

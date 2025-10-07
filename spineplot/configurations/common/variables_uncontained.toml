@@ -4,7 +4,7 @@
 
 [variables.true_category]
 key = "true_category"
-range = [0, 8]
+range = [0, 9]
 nbins = 9
 xlabel = "Category"
 
@@ -25,13 +25,13 @@ xlabel = "Reco Visible Energy [GeV]"
 [variables.reco_dpT_residual]
 key = "reco_dpT"
 range = [0,1200]
-nbins = 200
+nbins = 100
 xlabel = 'Reco $\delta p_T$ [MeV/c]'
 
 [variables.true_dpT_residual]
 key = "true_dpT"
 range = [0,1200]
-nbins = 200
+nbins = 100
 xlabel = 'True $\delta p_T$ [MeV/c]'
 
 [variables.reco_dpT_smearing]
@@ -49,14 +49,52 @@ xlabel = 'True $\delta p_T$ [MeV/c]'
 [variables.true_dpT]
 key = "true_dpT"
 range = [0,1200]
-nbins = 25
+nbins = 80
 xlabel = 'True $\delta p_T$ [MeV/c]'
 
 [variables.reco_dpT]
 key = "reco_dpT"
 range = [0,1200]
-nbins = 25
+nbins = 80
 xlabel = 'Reco $\delta p_T$ [MeV/c]'
+
+### dalphaT ------------------------------------
+
+[variables.reco_dalphaT_residual]
+key = "reco_dalphaT_deg"
+range = [0,180]
+nbins = 200
+xlabel = 'Reco $\delta \alpha_T$ [degrees]'
+
+[variables.true_dalphaT_residual]
+key = "true_dalphaT_deg"
+range = [0,180]
+nbins = 200
+xlabel = 'True $\delta \alpha_T$ [degrees]'
+
+[variables.reco_dalphaT_smearing]
+key = "reco_dalphaT_deg"
+range = [0,180]
+nbins = 20
+xlabel = 'Reco $\delta \alpha_T$ [degrees]'
+
+[variables.true_dalphaT_smearing]
+key = "true_dalphaT_deg"
+range = [0,180]
+nbins = 10
+xlabel = 'True $\delta \alpha_T$ [degrees]'
+
+[variables.true_dalphaT]
+key = "true_dalphaT_deg"
+range = [0,180]
+nbins = 25
+xlabel = 'True $\delta \alpha_T$ [degrees]'
+
+[variables.reco_dalphaT]
+key = "reco_dalphaT_deg"
+range = [0,180]
+nbins = 25
+xlabel = 'Reco $\delta \alpha_T$ [degrees]'
 
 ### dphiT ------------------------------------
 
@@ -96,43 +134,6 @@ range = [0,180]
 nbins = 25
 xlabel = 'Reco $\delta \phi_T$ [degrees]'
 
-### dalphaT ------------------------------------
-
-[variables.reco_dalphaT_residual]
-key = "reco_dalphaT_deg"
-range = [0,180]
-nbins = 200
-xlabel = 'Reco $\delta \alpha_T$ [degrees]'
-
-[variables.true_dalphaT_residual]
-key = "true_dalphaT_deg"
-range = [0,180]
-nbins = 200
-xlabel = 'True $\delta \alpha_T$ [degrees]'
-
-[variables.reco_dalphaT_smearing]
-key = "reco_dalphaT_deg"
-range = [0,180]
-nbins = 20
-xlabel = 'Reco $\delta \alpha_T$ [degrees]'
-
-[variables.true_dalphaT_smearing]
-key = "true_dalphaT_deg"
-range = [0,180]
-nbins = 10
-xlabel = 'True $\delta \alpha_T$ [degrees]'
-
-[variables.true_dalphaT]
-key = "true_dalphaT_deg"
-range = [0,180]
-nbins = 25
-xlabel = 'True $\delta \alpha_T$ [degrees]'
-
-[variables.reco_dalphaT]
-key = "reco_dalphaT_deg"
-range = [0,180]
-nbins = 25
-xlabel = 'Reco $\delta \alpha_T$ [degrees]'
 
 ### leading_muon_momentum ------------------------------------
 
@@ -399,5 +400,3 @@ key = "true_vertex_z"
 range = [-1000,1000]
 nbins = 75
 xlabel = 'True Vertex Z [cm]'
-
-
