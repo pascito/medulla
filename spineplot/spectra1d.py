@@ -152,7 +152,7 @@ class SpineSpectra1D(SpineSpectra):
     def draw(self, ax, style, show_component_number=False,
              show_component_percentage=False, invert_stack_order=False,
              fit_type=None, logx=False, logy=False, normalize=False,
-             draw_error=None) -> None:
+             draw_error=None, draw_ratio=False) -> None:
         """
         Plots the data for the SpineSpectra1D object.
 
@@ -195,6 +195,18 @@ class SpineSpectra1D(SpineSpectra):
         -------
         None.
         """
+        # Handle ratio plot setup
+        if draw_ratio:
+            # Split the current axes into two subplots
+            fig = ax.figure
+            gs = fig.add_gridspec(2, 1, height_ratios=[3, 1], hspace=0.0)
+            ax.remove()  # Remove the original axis
+            ax_main = fig.add_subplot(gs[0])
+            ax_ratio = fig.add_subplot(gs[1], sharex=ax_main)
+            ax = ax_main  # Use ax_main for the rest of the drawing
+        else:
+            ax_ratio = None
+
         ax.set_xlabel(self._variable._xlabel if self._xtitle is None else self._xtitle, fontsize=12, weight='bold')
         ax.set_ylabel('Candidates', fontsize=12, weight='bold')
         ax.set_xlim(*self._variable._range if self._xrange is None else self._xrange)
@@ -237,6 +249,10 @@ class SpineSpectra1D(SpineSpectra):
                 reduce = lambda x : [x[i] for i in histogram_mask]
             
             scale = 1.0 if not normalize else 1.0 / np.sum(reduce(data))
+
+            # SAVE MC prediction for ratio plot BEFORE reduce() is redefined
+            mc_sum_for_ratio = np.sum(reduce(data), axis=0)
+
             ax.hist(reduce(bincenters), weights=[scale*x for x in reduce(data)], bins=self._variable._nbins, range=xr, label=reduce(labels), color=reduce(colors), **style.plot_kwargs)
             # Add prediction line (sum of all MC components)
             total_prediction = scale * np.sum(reduce(data), axis=0)
@@ -298,6 +314,61 @@ class SpineSpectra1D(SpineSpectra):
         elif isinstance(self._yrange, (int, float)):
             yl = ax.get_ylim()[1]
             ax.set_ylim(None, yl * self._yrange)
+
+        if draw_ratio and ax_ratio is not None and scatter_mask:
+            # Get data from self._plotdata directly
+            data_values = self._plotdata['Data']
+            data_centers = bincenters[scatter_mask[0]]
+
+            # Use saved MC prediction
+            mc_prediction_ratio = mc_sum_for_ratio
+
+            # Calculate ratio
+            with np.errstate(divide='ignore', invalid='ignore'):
+                ratio = np.where(data_values > 0, mc_prediction_ratio / data_values, 0)
+
+            # Calculate uncertainties
+            mc_err = np.zeros_like(mc_prediction_ratio)
+            if draw_error:
+                systs_ratio = [s[draw_error] for s in self._systematics.values() if draw_error in s]
+                if systs_ratio:
+                    cov_ratio = np.sum(s.get_covariance(self._variable._key) for s in systs_ratio)
+                    scov_ratio = Systematic.transform_as(cov_ratio, 1.0)
+                    mc_err = np.sqrt(np.diag(scov_ratio))
+
+            data_err = np.sqrt(data_values)
+
+            with np.errstate(divide='ignore', invalid='ignore'):
+                ratio_err = np.where(data_values > 0,
+                                     ratio * np.sqrt((mc_err / np.maximum(mc_prediction_ratio, 1e-10)) ** 2 +
+                                                     (data_err / data_values) ** 2), 0)
+
+            # Draw ratio plot
+            ax_ratio.axhline(y=1.0, color='black', linestyle='--', linewidth=1, alpha=0.5)
+
+            if draw_error and np.any(mc_err > 0):
+                with np.errstate(divide='ignore', invalid='ignore'):
+                    band_err = np.where(data_values > 0, mc_err / data_values, 0)
+                xerr_ratio = [x / 2 for x in binwidths[scatter_mask[0]]]
+                draw_error_boxes(ax_ratio, data_centers, ratio, xerr_ratio, band_err,
+                                 facecolor='lightgray', edgecolor='gray', alpha=0.4,
+                                 hatch='xxx', linewidth=0.8)
+
+            ax_ratio.errorbar(data_centers, ratio, xerr=[x / 2 for x in binwidths[scatter_mask[0]]], yerr=ratio_err,
+                              fmt='o', markersize=4,
+                              markerfacecolor='black', markeredgecolor='black',
+                              color='black', capsize=2, elinewidth=1)
+
+            ax_ratio.set_ylabel('MC/Data', fontsize=10, weight='bold')
+            ax_ratio.set_xlabel(self._variable._xlabel if self._xtitle is None else self._xtitle,
+                                fontsize=12, weight='bold')
+            ax_ratio.set_ylim(0.5, 1.5)
+            ax_ratio.grid(True, alpha=0.3, axis='y')
+            ax_ratio.tick_params(axis='both', which='major', labelsize=10)
+            ax_ratio.set_xlim(*self._variable._range if self._xrange is None else self._xrange)
+
+            ax.set_xlabel('')
+            ax.tick_params(labelbottom=False)
 
         # Set the axis to be logarithmic if requested.
         if logx:

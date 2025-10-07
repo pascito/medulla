@@ -145,19 +145,19 @@ namespace pvars
         {
             switch(int(pvars::pid(p)))
             {
-                case pvars::kPhoton:
+                case 0:
                     mass = 0;
                     break;
-                case pvars::kElectron:
+                case 1:
                     mass = ELECTRON_MASS;
                     break;
-                case pvars::kMuon:
+                case 2:
                     mass = MUON_MASS;
                     break;
-                case pvars::kPion:
+                case 3:
                     mass = PION_MASS;
                     break;
-                case pvars::kProton:
+                case 4:
                     mass = PROTON_MASS;
                     break;
                 default:
@@ -424,21 +424,6 @@ namespace pvars
     REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, start_x, start_x);
 
     /**
-     * @brief Variable for the x-coordinate of the particle starting position.
-     * @details The starting position is the point at which the particle is
-     * created and is predicted upstream in the SPINE reconstruction.
-     * @tparam T the type of particle (true or reco).
-     * @param p the particle to apply the variable on.
-     * @return the x-coordinate of the particle starting position.
-     */
-    template<class T>
-    double start_position_x(const T & p)
-    {
-        return p.position[0];
-    }
-    REGISTER_VAR_SCOPE(RegistrationScope::TrueParticle, start_position_x, start_position_x);
-    
-    /**
      * @brief Variable for the y-coordinate of the particle starting point.
      * @details The starting point is the point at which the particle is created
      * and is predicted upstream in the SPINE reconstruction.
@@ -452,21 +437,6 @@ namespace pvars
         return p.start_point[1];
     }
     REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, start_y, start_y);
-
-    /**
-     * @brief Variable for the y-coordinate of the particle starting position.
-     * @details The starting position is the point at which the particle is created
-     * and is predicted upstream in the SPINE reconstruction.
-     * @tparam T the type of particle (true or reco).
-     * @param p the particle to apply the variable on.
-     * @return the y-coordinate of the particle starting position.
-     */
-    template<class T>
-    double start_position_y(const T & p)
-    {
-        return p.position[1];
-    }
-    REGISTER_VAR_SCOPE(RegistrationScope::TrueParticle, start_position_y, start_position_y);
 
     /**
      * @brief Variable for the z-coordinate of the particle starting point.
@@ -484,21 +454,6 @@ namespace pvars
     REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, start_z, start_z);
 
     /**
-     * @brief Variable for the z-coordinate of the particle starting position.
-     * @details The starting position is the point at which the particle is created
-     * and is predicted upstream in the SPINE reconstruction.
-     * @tparam T the type of particle (true or reco).
-     * @param p the particle to apply the variable on.
-     * @return the z-coordinate of the particle starting position.
-     */
-    template<class T>
-    double start_position_z(const T & p)
-    {
-        return p.position[2];
-    }
-    REGISTER_VAR_SCOPE(RegistrationScope::TrueParticle, start_position_z, start_position_z);
-
-    /**
      * @brief Variable for the x-coordinate of the particle end point.
      * @details The end point is predicted upstream in the SPINE reconstruction.
      * @tparam T the type of particle (true or reco).
@@ -513,21 +468,6 @@ namespace pvars
     REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, end_x, end_x);
 
     /**
-     * @brief Variable for the x-coordinate of the particle end position.
-     * @details The end position is the point at which the particle ends
-     * and is predicted upstream in the SPINE reconstruction.
-     * @tparam T the type of particle (true or reco).
-     * @param p the particle to apply the variable on.
-     * @return the x-coordinate of the particle end position.
-     */
-    template<class T>
-    double end_position_x(const T & p)
-    {
-        return p.end_position[0];
-    }
-    REGISTER_VAR_SCOPE(RegistrationScope::TrueParticle, end_position_x, end_position_x);
-
-    /**
      * @brief Variable for the y-coordinate of the particle end point.
      * @details The end point is predicted upstream in the SPINE reconstruction.
      * @tparam T the type of particle (true or reco).
@@ -540,21 +480,6 @@ namespace pvars
         return std::isinf(p.end_point[1]) ? PLACEHOLDERVALUE : (double)p.end_point[1];
     }
     REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, end_y, end_y);
-
-    /**
-     * @brief Variable for the y-coordinate of the particle end position.
-     * @details The end position is the point at which the particle ends
-     * and is predicted upstream in the SPINE reconstruction.
-     * @tparam T the type of particle (true or reco).
-     * @param p the particle to apply the variable on.
-     * @return the y-coordinate of the particle end position.
-     */
-    template<class T>
-    double end_position_y(const T & p)
-    {
-        return p.end_position[1];
-    }
-    REGISTER_VAR_SCOPE(RegistrationScope::TrueParticle, end_position_y, end_position_y);
     
     /**
      * @brief Variable for the z-coordinate of the particle end point.
@@ -571,21 +496,6 @@ namespace pvars
     REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, end_z, end_z);
 
     /**
-     * @brief Variable for the z-coordinate of the particle end position.
-     * @details The end position is the point at which the particle ends
-     * and is predicted upstream in the SPINE reconstruction.
-     * @tparam T the type of particle (true or reco).
-     * @param p the particle to apply the variable on.
-     * @return the z-coordinate of the particle end position.
-     */
-    template<class T>
-    double end_position_z(const T & p)
-    {
-        return p.end_position[2];
-    }
-    REGISTER_VAR_SCOPE(RegistrationScope::TrueParticle, end_position_z, end_position_z);
-
-    /**
      * @brief Variable for the x-component of the particle start direction.
      * @details The start direction is predicted upstream in the SPINE
      * reconstruction.
@@ -596,7 +506,7 @@ namespace pvars
     template<class T>
     double start_dir_x(const T & p)
     {
-        return std::isinf(p.start_dir[0]) ? PLACEHOLDERVALUE : (double)p.start_dir[0];
+        return p.start_dir[0];
     }
     REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, start_dir_x, start_dir_x);
     
@@ -611,7 +521,7 @@ namespace pvars
     template<class T>
     double start_dir_y(const T & p)
     {
-        return std::isinf(p.start_dir[1]) ? PLACEHOLDERVALUE : (double)p.start_dir[1];
+        return p.start_dir[1];
     }
     REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, start_dir_y, start_dir_y);
 
@@ -626,7 +536,7 @@ namespace pvars
     template<class T>
     double start_dir_z(const T & p)
     {
-        return std::isinf(p.start_dir[2]) ? PLACEHOLDERVALUE : (double)p.start_dir[2];
+        return p.start_dir[2];
     }
     REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, start_dir_z, start_dir_z);
 
@@ -641,7 +551,7 @@ namespace pvars
     template<class T>
     double end_dir_x(const T & p)
     {
-        return std::isinf(p.end_dir[0]) ? PLACEHOLDERVALUE : (double)p.end_dir[0];
+        return p.end_dir[0];
     }
     REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, end_dir_x, end_dir_x);
 
@@ -656,7 +566,7 @@ namespace pvars
     template<class T>
     double end_dir_y(const T & p)
     {
-        return std::isinf(p.end_dir[1]) ? PLACEHOLDERVALUE : (double)p.end_dir[1];
+        return p.end_dir[1];
     }
     REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, end_dir_y, end_dir_y);
 
@@ -671,45 +581,13 @@ namespace pvars
     template<class T>
     double end_dir_z(const T & p)
     {
-        return std::isinf(p.end_dir[2]) ? PLACEHOLDERVALUE : (double)p.end_dir[2];
+        return p.end_dir[2];
     }
     REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, end_dir_z, end_dir_z);
 
     /**
-     * @brief Variable for the offset of the particle from the cathode.
-     * @details The cathode offset represents the offset due to out-of-timeness
-     * of the particle. A negative offset indicates that the particle's t0 is
-     * before t=0.
-     * @tparam T the type of particle (true or reco).
-     * @param p the particle to apply the variable on.
-     * @return the offset of the particle from the cathode.
-     */
-    template<class T>
-    double cathode_offset(const T & p)
-    {
-        return (std::isinf(p.cathode_offset) ? PLACEHOLDERVALUE : (double)p.cathode_offset);
-    }
-    REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, cathode_offset, cathode_offset);
-
-    /**
-     * @brief Variable for the magnitude of the particle momentum.
-     * @details The momentum is calculated upstream in the SPINE reconstruction
-     * using the kinetic energy and mass of the particle.
-     * @tparam T the type of particle (true or reco).
-     * @param p the particle to apply the variable on.
-     * @return the magnitude of the particle momentum.
-     */
-    template<class T>
-    double p(const T & p)
-    {
-        return p.p;
-    }
-    REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, p, p);
-
-    /**
      * @brief Variable for the x-component of the particle momentum.
-     * @details The momentum is calculated upstream in the SPINE reconstruction
-     * using the kinetic energy and mass of the particle.
+     * @details The momentum is predicted upstream in the SPINE reconstruction.
      * @tparam T the type of particle (true or reco).
      * @param p the particle to apply the variable on.
      * @return the x-component of the particle momentum.
@@ -723,8 +601,7 @@ namespace pvars
     
     /**
      * @brief Variable for the y-component of the particle momentum.
-     * @details The momentum is calculated upstream in the SPINE reconstruction
-     * using the kinetic energy and mass of the particle.
+     * @details The momentum is predicted upstream in the SPINE reconstruction.
      * @tparam T the type of particle (true or reco).
      * @param p the particle to apply the variable on.
      * @return the x-component of the particle momentum.
@@ -738,8 +615,7 @@ namespace pvars
 
     /**
      * @brief Variable for the z-component of the particle momentum.
-     * @details The momentum is calculated upstream in the SPINE reconstruction
-     * using the kinetic energy and mass of the particle.
+     * @details The momentum is predicted upstream in the SPINE reconstruction.
      * @tparam T the type of particle (true or reco).
      * @param p the particle to apply the variable on.
      * @return the z-component of the particle momentum.
@@ -828,10 +704,28 @@ namespace pvars
     REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, polar_angle, polar_angle);
 
     /**
-     * @brief Variable for the azimuthal angle of the particle.
-     * @details The azimuthal angle is defined as the arctangent of the y- and
-     * x-components of the momentum vector. That is, the angle in the x-y plane
-     * from the x-axis.
+     * @brief Variable for the cosine of the polar angle (w.r.t the z-axis) of the particle.
+     * @details The cosine of the polar angle is simply the z-component of the
+     * momentum direction vector. This variable is useful for identifying particles
+     * which are produced transversely to the beam. Values close to ±1 indicate
+     * particles traveling parallel/antiparallel to the beam axis, while values
+     * near 0 indicate transverse production.
+     * @tparam T the type of particle (true or reco).
+     * @param p the particle to apply the variable on.
+     * @return the cosine of the polar angle of the particle.
+     */
+    template<class T>
+    double polar_angle_cos(const T & p)
+    {
+        return p.start_dir[2];
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, polar_angle_cos, polar_angle_cos);
+
+    /**
+     * @brief Variable for the azimuthal angle (w.r.t the z-axis) of the particle.
+     * @details The azimuthal angle is defined as the arccosine of the x-component
+     * of the momentum vector divided by the square root of the sum of the squares
+     * of the x and y components of the momentum vector.
      * @tparam T the type of particle (true or reco).
      * @param p the particle to apply the variable on.
      * @return the azimuthal angle of the particle.
@@ -842,88 +736,6 @@ namespace pvars
         return std::atan2(p.start_dir[1], p.start_dir[0]);
     }
     REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, azimuthal_angle, azimuthal_angle);
-
-    /**
-     * @brief Variable for the start dE/dx of the particle.
-     * @details The start dE/dx is calculated upstream in the SPINE
-     * reconstruction using the segment of the track near the start point.
-     * @tparam T the type of particle (true or reco).
-     * @param p the particle to apply the variable on.
-     * @return the start dE/dx of the particle.
-     */
-    template<class T>
-    double start_dedx(const T & p)
-    {
-        return p.start_dedx;
-    }
-    REGISTER_VAR_SCOPE(RegistrationScope::RecoParticle, start_dedx, start_dedx);
-
-    /**
-     * @brief Variable for the "straightness" of the particle near the start.
-     * @details The start straightness is calculated upstream in the SPINE as 
-     * the principal explained variance ratio (PCA) of the 3D coordinates for
-     * points within distance r from the start point.
-     * @tparam T the type of particle (true or reco).
-     * @param p the particle to apply the variable on.
-     * @return the start straightness of the particle.
-     */
-    template<class T>
-    double start_straightness(const T & p)
-    {
-        return std::isinf(p.start_straightness) ? PLACEHOLDERVALUE : (double)p.start_straightness;
-    }
-    REGISTER_VAR_SCOPE(RegistrationScope::RecoParticle, start_straightness, start_straightness);
-
-    /**
-     * @brief Variable for the "axial spread" of the particle.
-     * @details The axial spread is calculated upstream in the SPINE as the 
-     * measure of correlation between the transverse coordinate of each point
-     * and the longitudinal coordinate along the particle axis.
-     * @tparam T the type of particle (true or reco).
-     * @param p the particle to apply the variable on.
-     * @return the axial spread of the particle.
-     */
-    template<class T>
-    double axial_spread(const T & p)
-    {
-        return std::isinf(p.axial_spread) ? PLACEHOLDERVALUE : (double)p.axial_spread;
-    }
-    REGISTER_VAR_SCOPE(RegistrationScope::RecoParticle, axial_spread, axial_spread);
-
-    /**
-     * @brief Variable for the "directional spread" of the particle.
-     * @details The directional spread is calculated upstream in the SPINE as a
-     * measure of the spread of unit vectors pointing from the start to each 
-     * point in the particle. 
-     * @tparam T the type of particle (true or reco).
-     * @param p the particle to apply the variable on.
-     * @return the directional spread of the particle.
-     */
-    template<class T>
-    double directional_spread(const T & p)
-    {
-        return std::isinf(p.directional_spread) ? PLACEHOLDERVALUE : (double)p.directional_spread;
-    }
-    REGISTER_VAR_SCOPE(RegistrationScope::RecoParticle, directional_spread, directional_spread);
-
-    /**
-     * @brief Variable for the distance of the particle start point from the
-     * parent interaction vertex.
-     * @details The vertex distance is calculated upstream in the SPINE as the
-     * Euclidean distance between the start point of the particle and the 
-     * interaction vertex. It is intended to be a handle on the shower
-     * conversion distance and can be used to discriminate between electron
-     * and photon induced showers.
-     * @tparam T the type of particle (true or reco).
-     * @param p the particle to apply the variable on.
-     * @return the vertex distance of the particle.
-     */
-    template<class T>
-    double vertex_distance(const T & p)
-    {
-        return std::isinf(p.vertex_distance) ? PLACEHOLDERVALUE : (double)p.vertex_distance;
-    }
-    REGISTER_VAR_SCOPE(RegistrationScope::RecoParticle, vertex_distance, vertex_distance);
 
     /**
      * @brief Variable for the photon softmax score of the particle.
@@ -937,7 +749,7 @@ namespace pvars
     template<class T>
     double photon_softmax(const caf::SRParticleDLPProxy & p)
     {
-        return p.pid_scores[pvars::kPhoton];
+        return p.pid_scores[0];
     }
     REGISTER_VAR_SCOPE(RegistrationScope::RecoParticle, photon_softmax, photon_softmax);
 
@@ -953,7 +765,7 @@ namespace pvars
     template<class T>
     double electron_softmax(const caf::SRParticleDLPProxy & p)
     {
-        return p.pid_scores[pvars::kElectron];
+        return p.pid_scores[1];
     }
     REGISTER_VAR_SCOPE(RegistrationScope::RecoParticle, electron_softmax, electron_softmax);
     
@@ -969,7 +781,7 @@ namespace pvars
     template<class T>
     double muon_softmax(const caf::SRParticleDLPProxy & p)
     {
-        return p.pid_scores[pvars::kMuon];
+        return p.pid_scores[2];
     }
     REGISTER_VAR_SCOPE(RegistrationScope::RecoParticle, muon_softmax, muon_softmax);
 
@@ -985,7 +797,7 @@ namespace pvars
     template<class T>
     double pion_softmax(const caf::SRParticleDLPProxy & p)
     {
-        return p.pid_scores[pvars::kPion];
+        return p.pid_scores[3];
     }
     REGISTER_VAR_SCOPE(RegistrationScope::RecoParticle, pion_softmax, pion_softmax);
 
@@ -1001,7 +813,7 @@ namespace pvars
     template<class T>
     double proton_softmax(const caf::SRParticleDLPProxy & p)
     {
-        return p.pid_scores[pvars::kProton];
+        return p.pid_scores[4];
     }
     REGISTER_VAR_SCOPE(RegistrationScope::RecoParticle, proton_softmax, proton_softmax);
 
@@ -1017,7 +829,7 @@ namespace pvars
     template<class T>
     double mip_softmax(const caf::SRParticleDLPProxy & p)
     {
-        return p.pid_scores[pvars::kMuon] + p.pid_scores[pvars::kPion];
+        return p.pid_scores[2] + p.pid_scores[3];
     }
     REGISTER_VAR_SCOPE(RegistrationScope::RecoParticle, mip_softmax, mip_softmax);
 
@@ -1033,7 +845,7 @@ namespace pvars
     template<class T>
     double hadron_softmax(const caf::SRParticleDLPProxy & p)
     {
-        return p.pid_scores[pvars::kPion] + p.pid_scores[pvars::kProton];
+        return p.pid_scores[3] + p.pid_scores[4];
     }
     REGISTER_VAR_SCOPE(RegistrationScope::RecoParticle, hadron_softmax, hadron_softmax);
 
