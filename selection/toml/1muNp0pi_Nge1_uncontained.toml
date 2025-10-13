@@ -130,7 +130,6 @@ add_exposure = true
 mode = "reco"
 cut = [
     { name = "fiducial_cut",              type = "reco" },
-    #{ name = "!contained_muons_only",     type = "reco",  parameters = [ "@muon_threshold"               ] },
     { name = "flash_cut",                 type = "reco",  parameters = [ "@flash_low_t", "@flash_high_t" ] },
     { name = "no_photons",                type = "reco",  parameters = [ "@photon_threshold"             ] },
     { name = "no_electrons",              type = "reco",  parameters = [ "@electron_threshold"           ] },

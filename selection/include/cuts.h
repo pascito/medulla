@@ -604,7 +604,7 @@ namespace cuts
      * https://code-doc.larsoft.org/docs/latest/html/MCNeutrino_8h_source.html
      */
     template<class T>
-    bool is_qe(const T & obj) { return obj.genie_mode == 0; }
+    bool is_qe(const T & obj) { return obj.truth.genie_mode == 0; }
     REGISTER_CUT_SCOPE(RegistrationScope::True, is_qe, is_qe);
 
     /**
@@ -625,7 +625,7 @@ namespace cuts
      * https://code-doc.larsoft.org/docs/latest/html/MCNeutrino_8h_source.html
      */
     template<class T>
-    bool is_res(const T & obj) { return obj.genie_mode == 1; }
+    bool is_res(const T & obj) { return obj.truth.genie_mode == 1; }
     REGISTER_CUT_SCOPE(RegistrationScope::True, is_res, is_res);
 
     /**
@@ -647,7 +647,7 @@ namespace cuts
      * https://code-doc.larsoft.org/docs/latest/html/MCNeutrino_8h_source.html
      */
     template<class T>
-    bool is_dis(const T & obj) { return obj.genie_mode == 2; }
+    bool is_dis(const T & obj) { return obj.truth.genie_mode == 2; }
     REGISTER_CUT_SCOPE(RegistrationScope::True, is_dis, is_dis);
 
     /**
@@ -669,7 +669,7 @@ namespace cuts
      * https://code-doc.larsoft.org/docs/latest/html/MCNeutrino_8h_source.html
      */
     template<class T>
-    bool is_mec(const T & obj) { return obj.genie_mode == 10; }
+    bool is_mec(const T & obj) { return obj.truth.genie_mode == 10; }
     REGISTER_CUT_SCOPE(RegistrationScope::True, is_mec, is_mec);
 }
 #endif
