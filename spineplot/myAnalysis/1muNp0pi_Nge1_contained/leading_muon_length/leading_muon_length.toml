@@ -43,35 +43,3 @@ style = 'selected_icarus_1muNp0pi_N>=1'
 type = 'SpineSpectra1D'
 variable = 'reco_leading_muon_length'
 draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = true, 'normalize' = true, 'draw_error' = 'stats', 'draw_ratio'='True'}
-
-[[figure]]
-name = 'leading_muon_length_fractional_residual'
-type = 'SimpleFigure'
-style = 'selected_icarus_1muNp0pi_N>=1'
-[[figure.artists]]
-type = 'SpineSpectra2D'
-yvariable = 'reco_leading_muon_length_residual'
-xvariable = 'true_leading_muon_length_residual'
-xrange = [-2,2]
-xtitle = '$\frac{l_{\mu,\mathrm{reco}} - l_{\mu,\mathrm{true}}}{l_{\mu,\mathrm{true}}}$'
-draw_kwargs = {'show_option' = 'projection', 'draw_identity' = true, 'draw_colorbar' = true, 'logz' = true}
-
-[[figure]]
-name = 'leading_muon_length_2d_correlation'
-type = 'SimpleFigure'
-style = 'selected_icarus_1muNp0pi_N>=1'
-[[figure.artists]]
-type = 'SpineSpectra2D'
-xvariable = 'true_leading_muon_length'
-yvariable = 'reco_leading_muon_length'
-draw_kwargs = {'show_option' = '2d', 'draw_identity' = true, 'draw_colorbar' = true, 'logz' = true}
-
-[[figure]]
-name = 'leading_muon_length_smearing_matrix_normalized'
-type = 'SimpleFigure'
-style = 'selected_icarus_1muNp0pi_N>=1'
-[[figure.artists]]
-type = 'SpineSpectra2D'
-xvariable = 'true_leading_muon_length_smearing'
-yvariable = 'reco_leading_muon_length_smearing'
-draw_kwargs = {show_option = 'smearing', draw_colorbar = true}

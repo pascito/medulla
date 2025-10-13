@@ -586,5 +586,90 @@ namespace cuts
         return true; // All muons above threshold are contained (or no muons found)
     }
     REGISTER_CUT_SCOPE(RegistrationScope::Both, contained_muons_only, contained_muons_only);
+
+    /**
+     * @brief Apply a cut to select quasi-elastic (QE) interactions.
+     * @details This function applies a cut to select quasi-elastic interactions,
+     * which correspond to interaction mode 0 in the GENIE interaction mode
+     * enumeration. QE interactions are characterized by a single nucleon being
+     * knocked out of the nucleus by the neutrino, with no pion production or
+     * nuclear breakup. This cut is useful for selecting clean signal samples
+     * where the final state kinematics can be more precisely reconstructed.
+     * @tparam T the type of interaction (true or reco).
+     * @param obj the interaction to select on.
+     * @return true if the interaction is a quasi-elastic interaction.
+     * @note This cut uses the GENIE interaction mode enumeration and is
+     * intended for use on truth-level information. See the GENIE/LArSoft
+     * documentation for the complete interaction mode enumeration:
+     * https://code-doc.larsoft.org/docs/latest/html/MCNeutrino_8h_source.html
+     */
+    template<class T>
+    bool is_qe(const T & obj) { return obj.genie_mode == 0; }
+    REGISTER_CUT_SCOPE(RegistrationScope::True, is_qe, is_qe);
+
+    /**
+     * @brief Apply a cut to select resonant (RES) interactions.
+     * @details This function applies a cut to select resonant interactions,
+     * which correspond to interaction mode 1 in the GENIE interaction mode
+     * enumeration. RES interactions occur when the neutrino excites a nucleon
+     * to a resonant state (e.g., Delta baryon), which subsequently decays,
+     * typically producing one or more pions in the final state. These
+     * interactions are important for understanding pion production mechanisms
+     * in neutrino-nucleus scattering.
+     * @tparam T the type of interaction (true or reco).
+     * @param obj the interaction to select on.
+     * @return true if the interaction is a resonant interaction.
+     * @note This cut uses the GENIE interaction mode enumeration and is
+     * intended for use on truth-level information. See the GENIE/LArSoft
+     * documentation for the complete interaction mode enumeration:
+     * https://code-doc.larsoft.org/docs/latest/html/MCNeutrino_8h_source.html
+     */
+    template<class T>
+    bool is_res(const T & obj) { return obj.genie_mode == 1; }
+    REGISTER_CUT_SCOPE(RegistrationScope::True, is_res, is_res);
+
+    /**
+     * @brief Apply a cut to select deep inelastic scattering (DIS) interactions.
+     * @details This function applies a cut to select deep inelastic scattering
+     * interactions, which correspond to interaction mode 2 in the GENIE
+     * interaction mode enumeration. DIS interactions occur at high momentum
+     * transfer (Q²) where the neutrino probes the quark substructure of the
+     * nucleon, leading to hadronization and typically multiple hadrons in the
+     * final state. These interactions dominate at higher neutrino energies and
+     * are characterized by complex final states with multiple pions and other
+     * hadrons.
+     * @tparam T the type of interaction (true or reco).
+     * @param obj the interaction to select on.
+     * @return true if the interaction is a deep inelastic scattering interaction.
+     * @note This cut uses the GENIE interaction mode enumeration and is
+     * intended for use on truth-level information. See the GENIE/LArSoft
+     * documentation for the complete interaction mode enumeration:
+     * https://code-doc.larsoft.org/docs/latest/html/MCNeutrino_8h_source.html
+     */
+    template<class T>
+    bool is_dis(const T & obj) { return obj.genie_mode == 2; }
+    REGISTER_CUT_SCOPE(RegistrationScope::True, is_dis, is_dis);
+
+    /**
+     * @brief Apply a cut to select meson exchange current (MEC) interactions.
+     * @details This function applies a cut to select meson exchange current
+     * interactions, which correspond to interaction mode 10 in the GENIE
+     * interaction mode enumeration. MEC interactions occur when a neutrino
+     * interacts with a correlated pair of nucleons in the nucleus through
+     * the exchange of mesons between them. These two-body current interactions
+     * result in two nucleons being ejected without pion production, and are
+     * particularly important in the intermediate energy regime. MEC interactions
+     * can mimic QE-like signatures but with enhanced energy transfer.
+     * @tparam T the type of interaction (true or reco).
+     * @param obj the interaction to select on.
+     * @return true if the interaction is a meson exchange current interaction.
+     * @note This cut uses the GENIE interaction mode enumeration and is
+     * intended for use on truth-level information. See the GENIE/LArSoft
+     * documentation for the complete interaction mode enumeration:
+     * https://code-doc.larsoft.org/docs/latest/html/MCNeutrino_8h_source.html
+     */
+    template<class T>
+    bool is_mec(const T & obj) { return obj.genie_mode == 10; }
+    REGISTER_CUT_SCOPE(RegistrationScope::True, is_mec, is_mec);
 }
 #endif

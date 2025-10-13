@@ -94,6 +94,7 @@ namespace mctruth
      * @tparam T the type of the object to apply the variable on.
      * @param obj the SRTrueInteraction to apply the variable on.
      * @return the interaction mode.
+     * Here for numeration: https://code-doc.larsoft.org/docs/latest/html/MCNeutrino_8h_source.html
      */
     template<typename T>
         double interaction_mode(const T & obj) { return obj.genie_mode; }

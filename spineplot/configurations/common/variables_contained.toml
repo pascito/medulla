@@ -286,6 +286,44 @@ range = [50,500]
 nbins = 25
 xlabel = 'True Leading Muon Length [cm]'
 
+### leading_muon_polar_angle ------------------------------------
+
+[variables.reco_leading_muon_polar_angle_residual]
+key = "reco_leading_muon_polar_angle_cos"
+range = [-1,1]
+nbins = 200
+xlabel = 'Reconstructed Leading Muon Polar Angle'
+
+[variables.true_leading_muon_polar_angle_residual]
+key = "true_leading_muon_polar_angle_cos"
+range = [-1,1]
+nbins = 200
+xlabel = 'True Leading Muon Polar Angle'
+
+[variables.reco_leading_muon_polar_angle_smearing]
+key = "reco_leading_muon_polar_angle_cos"
+range = [-1,1]
+nbins = 10
+xlabel = 'Reconstructed Leading Muon Polar Angle'
+
+[variables.true_leading_muon_polar_angle_smearing]
+key = "true_leading_muon_polar_angle_cos"
+range = [-1,1]
+nbins = 10
+xlabel = 'True Leading Muon Polar Angle'
+
+[variables.reco_leading_muon_polar_angle]
+key = "reco_leading_muon_polar_angle_cos"
+range = [-1,1]
+nbins = 25
+xlabel = 'Reconstructed Leading Muon Polar Angle'
+
+[variables.true_leading_muon_polar_angle]
+key = "true_leading_muon_polar_angle_cos"
+range = [-1,1]
+nbins = 25
+xlabel = 'True Leading Muon Polar Angle'
+
 ### vtx_x ------------------------------------
 
 [variables.reco_vtx_x_residual]
@@ -399,5 +437,6 @@ key = "true_vertex_z"
 range = [-1000,1000]
 nbins = 75
 xlabel = 'True Vertex Z [cm]'
+
 
 

@@ -49,13 +49,13 @@ xlabel = 'True $\delta p_T$ [MeV/c]'
 [variables.true_dpT]
 key = "true_dpT"
 range = [0,1200]
-nbins = 80
+nbins = 50
 xlabel = 'True $\delta p_T$ [MeV/c]'
 
 [variables.reco_dpT]
 key = "reco_dpT"
 range = [0,1200]
-nbins = 80
+nbins = 50
 xlabel = 'Reco $\delta p_T$ [MeV/c]'
 
 ### dalphaT ------------------------------------
@@ -286,6 +286,44 @@ key = "true_leading_muon_length"
 range = [50,500]
 nbins = 25
 xlabel = 'True Leading Muon Length [cm]'
+
+### leading_muon_polar_angle ------------------------------------
+
+[variables.reco_leading_muon_polar_angle_residual]
+key = "reco_leading_muon_polar_angle_cos"
+range = [-1,1]
+nbins = 200
+xlabel = 'Reconstructed Leading Muon Polar Angle'
+
+[variables.true_leading_muon_polar_angle_residual]
+key = "true_leading_muon_polar_angle_cos"
+range = [-1,1]
+nbins = 200
+xlabel = 'True Leading Muon Polar Angle'
+
+[variables.reco_leading_muon_polar_angle_smearing]
+key = "reco_leading_muon_polar_angle_cos"
+range = [-1,1]
+nbins = 10
+xlabel = 'Reconstructed Leading Muon Polar Angle'
+
+[variables.true_leading_muon_polar_angle_smearing]
+key = "true_leading_muon_polar_angle_cos"
+range = [-1,1]
+nbins = 10
+xlabel = 'True Leading Muon Polar Angle'
+
+[variables.reco_leading_muon_polar_angle]
+key = "reco_leading_muon_polar_angle_cos"
+range = [-1,1]
+nbins = 25
+xlabel = 'Reconstructed Leading Muon Polar Angle'
+
+[variables.true_leading_muon_polar_angle]
+key = "true_leading_muon_polar_angle_cos"
+range = [-1,1]
+nbins = 25
+xlabel = 'True Leading Muon Polar Angle'
 
 ### vtx_x ------------------------------------
 
