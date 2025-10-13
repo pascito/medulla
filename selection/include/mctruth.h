@@ -128,7 +128,7 @@ namespace mctruth
      */
     template<typename T>
         bool is_qe(const T & obj) { return obj.genie_mode == 0; }
-    REGISTER_CUT_SCOPE(RegistrationScope::MCTruth, is_qe, is_qe);
+    REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, is_qe, is_qe);
 
     /**
      * @brief Apply a cut to select resonant (RES) interactions.
@@ -145,7 +145,7 @@ namespace mctruth
      */
     template<typename T>
         bool is_res(const T & obj) { return obj.genie_mode == 1; }
-    REGISTER_CUT_SCOPE(RegistrationScope::MCTruth, is_res, is_res);
+    REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, is_res, is_res);
 
     /**
      * @brief Apply a cut to select deep inelastic scattering (DIS) interactions.
@@ -163,7 +163,7 @@ namespace mctruth
      */
     template<typename T>
         bool is_dis(const T & obj) { return obj.genie_mode == 2; }
-    REGISTER_CUT_SCOPE(RegistrationScope::MCTruth, is_dis, is_dis);
+    REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, is_dis, is_dis);
 
     /**
      * @brief Apply a cut to select meson exchange current (MEC) interactions.
@@ -181,7 +181,7 @@ namespace mctruth
      */
     template<typename T>
         bool is_mec(const T & obj) { return obj.genie_mode == 10; }
-    REGISTER_CUT_SCOPE(RegistrationScope::MCTruth, is_mec, is_mec);
+    REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, is_mec, is_mec);
 
 } // namespace mctruth
 #endif
