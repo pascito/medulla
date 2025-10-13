@@ -88,7 +88,7 @@ cuts = [
 [[category]] # 9 : Uncontained muon, fiducial, single proton, QE
 cuts = [
     { name = "neutrino"        },
-    { name = "is_qe"           },
+    { name = "is_interaction_mode",     parameters = [ "@QE_parameter"       ] },
     { name = "fiducial_cut"    },
     { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
     { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
