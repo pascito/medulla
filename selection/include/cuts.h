@@ -127,26 +127,6 @@ namespace cuts
     REGISTER_CUT_SCOPE(RegistrationScope::True, is_interaction_mode, is_interaction_mode);
 
     /**
-     * @brief Apply a cut on the interaction type.
-     * @details This function applies a cut to select interactions based on
-     * the interaction type. The interaction type is stored by Genie as an
-     * enumerated category.
-     * @tparam T the type of interaction (true or reco).
-     * @param obj the interaction to select on.
-     * @param params the parameters for the cut. In this case, this is a vector
-     * of interaction types to select on.
-     * @return true if the interaction type is one of the specified types.
-     */
-    template<class T>
-    bool is_interaction_type(const T & obj, std::vector<double> params={})
-    {
-        if(params.empty())
-            return true; // No cut applied if no parameters are given.
-        return std::find(params.begin(), params.end(), obj.interaction_type) != params.end();
-    }
-    REGISTER_CUT_SCOPE(RegistrationScope::True, is_interaction_type, is_interaction_type);
-
-    /**
      * @brief Apply a fiducial volume cut; the interaction vertex must be
      * reconstructed within the fiducial volume.
      * @details The fiducial volume cut is applied on the reconstructed
@@ -165,23 +145,6 @@ namespace cuts
         return obj.is_fiducial && !(obj.vertex[0] > 210.215 && obj.vertex[1] > 60 && (obj.vertex[2] > 290 && obj.vertex[2] < 390));
     }
     REGISTER_CUT_SCOPE(RegistrationScope::Both, fiducial_cut, fiducial_cut);
-
-    template<class T>
-    bool fiducial_cut_tmp(const T & obj)
-    {
-        return (
-            (abs(obj.vertex[0]) > 10) &&
-            (abs(obj.vertex[0]) < 190) &&
-            (obj.vertex[2] > 10) &&
-            (obj.vertex[2] < 450) &&
-            (
-                ((obj.vertex[2] > 250) && (obj.vertex[1] > -190) && (obj.vertex[1] < 100)) ||
-                ((obj.vertex[2] < 250) && (abs(obj.vertex[1]) < 190))
-            )
-
-        );
-    }
-    REGISTER_CUT_SCOPE(RegistrationScope::Both, fiducial_cut_tmp, fiducial_cut_tmp);
     
     /**
      * @brief Apply a containment cut on the entire interaction.
@@ -194,69 +157,11 @@ namespace cuts
      * assumed t0 that is very out-of-time.
      * @tparam T the type of interaction (true or reco).
      * @param obj the interaction to select on.
-     * @return true if the interaction is contained.
+     * @return true if the vertex is contained.
      */
     template<class T>
     bool containment_cut(const T & obj) { return obj.is_contained; }
     REGISTER_CUT_SCOPE(RegistrationScope::Both, containment_cut, containment_cut);
-
-    /**
-     * @brief Apply a cut to reject events that have a non-electron particle that
-     * is not contained.
-     * @details This cut is intended to be used in analyses that select electrons
-     * in the final state and wish to allow for electrons that exit the detector.
-     * All other particles in the interaction must be contained.
-     * @tparam T the type of interaction (true or reco).
-     * @param obj the interaction to select on.
-     * @return true if all non-electron particles are contained.
-     */
-    template<class T>
-    bool nonelectron_containment_cut(const T & obj)
-    {
-        for(const auto & p : obj.particles)
-        {
-            if(pvars::pid(p) != pvars::kElectron && !pcuts::containment_cut(p))
-                return false;
-        }
-        return true;
-    }
-    REGISTER_CUT_SCOPE(RegistrationScope::Both, nonelectron_containment_cut, nonelectron_containment_cut);
-
-    /**
-     * @brief Apply a cut to reject events that have a non-muon particle that
-     * is not contained.
-     * @details This cut is intended to be used in analyses that select muons
-     * in the final state and wish to allow for muons that exit the detector.
-     * All other particles in the interaction must be contained, which is
-     * consistent with our ability to reconstruct exiting muons using the MCS
-     * technique.
-     * @tparam T the type of interaction (true or reco).
-     * @param obj the interaction to select on.
-     * @return true if all non-muon particles are contained.
-     */
-    template<class T>
-    bool nonmuon_containment_cut(const T & obj)
-    {
-        for(const auto & p : obj.particles)
-        {
-            if(pvars::pid(p) != pvars::kMuon && !pcuts::containment_cut(p))
-                return false;
-        }
-        return true;
-    }
-    REGISTER_CUT_SCOPE(RegistrationScope::Both, nonmuon_containment_cut, nonmuon_containment_cut);
-
-    /**
-     * @brief Apply a cut on the "time containment" of the interaction.
-     * @details The time containment cut applies additional restriction that
-     * stipulate that all spacepoints must be reconstructed in a feasible TPC.
-     * @tparam T the type of interaction (true or reco).
-     * @param obj the interaction to select on.
-     * @return true if the interaction is time-contained.
-     */
-    template<class T>
-    bool time_containment_cut(const T & obj) { return obj.is_time_contained; }
-    REGISTER_CUT_SCOPE(RegistrationScope::Both, time_containment_cut, time_containment_cut);
 
     /**
      * @brief Apply a flash time cut on the interaction.
@@ -288,32 +193,31 @@ namespace cuts
     REGISTER_CUT_SCOPE(RegistrationScope::Both, flash_cut, flash_cut);
 
     /**
-     * @brief Base particle multiplicity for a specific multiplicity.
-     * @details This function calculates the multiplicity of a specific
-     * particle species in an interaction. The particle species is specified by
-     * its SPINE PID index. The function counts the number of primary particles
-     * of the specified species with a kinetic energy above a given threshold.
-     * @tparam obj the interaction to select on.
-     * @param mult the desired multiplicity for the specified particle species.
+     * @brief Base particle multiplicity cut for a single particle.
+     * @details This function applies a cut to select interactions with a
+     * multiplicity of 1 for a specific particle type. The particle type is
+     * specified by the `particle_species` parameter, which corresponds to the
+     * index in the @ref utilities::count_primaries function.
+     * @param obj the interaction to select on.
      * @param particle_species the index of the particle species to count.
      * @param params the parameters for the cut. In this case, this sets the
      * kinetic energy threshold for the particle to count towards the
-     * multiplicity. The first element of the vector is used for this purpose.
-     * @return the multiplicity of the specified particle species terminated at
-     * some maximum value (the desired multiplicity + 1).
+     * multiplicity.
+     * @return true if the interaction has a multiplicity of 1 for the specified
+     * particle species.
      */
     template<class T>
-    size_t particle_multiplicity(const T & obj, size_t mult, size_t particle_species, std::vector<double> params={})
+    bool single_particle_multiplicity(const T & obj, size_t particle_species, std::vector<double> params={})
     {
         size_t count(0);
         for(const auto & p : obj.particles)
         {
             if(pvars::pid(p) == particle_species && pvars::primary_classification(p) && pvars::ke(p) >= params[0])
                 ++count;
-            if(count > mult)
-                break; // No need to count further.
+            if(count > 1)
+                break; // No need to count further, we only care about multiplicity of 1.
         }
-        return count;
+        return count == 1;
     }
 
     /**
@@ -330,7 +234,7 @@ namespace cuts
     template<class T>
     bool single_photon(const T & obj, std::vector<double> params={25.0,})
     {
-        return particle_multiplicity(obj, 1, 0, params) == 1;
+        return single_particle_multiplicity(obj, 0, params);
     }
     REGISTER_CUT_SCOPE(RegistrationScope::Both, single_photon, single_photon);
 
@@ -348,7 +252,7 @@ namespace cuts
     template<class T>
     bool single_electron(const T & obj, std::vector<double> params={25.0,})
     {
-        return particle_multiplicity(obj, 1, 1, params) == 1;
+        return single_particle_multiplicity(obj, 1, params);
     }
     REGISTER_CUT_SCOPE(RegistrationScope::Both, single_electron, single_electron);
 
@@ -367,7 +271,7 @@ namespace cuts
     template<class T>
     bool single_muon(const T & obj, std::vector<double> params={143.425,})
     {
-        return particle_multiplicity(obj, 1, 2, params) == 1;
+        return single_particle_multiplicity(obj, 2, params);
     }
     REGISTER_CUT_SCOPE(RegistrationScope::Both, single_muon, single_muon);
 
@@ -385,7 +289,7 @@ namespace cuts
     template<class T>
     bool single_pion(const T & obj, std::vector<double> params={25.0,})
     {
-        return particle_multiplicity(obj, 1, 3, params) == 1;
+        return single_particle_multiplicity(obj, 3, params);
     }
     REGISTER_CUT_SCOPE(RegistrationScope::Both, single_pion, single_pion);
 
@@ -403,9 +307,37 @@ namespace cuts
     template<class T>
     bool single_proton(const T & obj, std::vector<double> params={50.0,})
     {
-        return particle_multiplicity(obj, 1, 4, params) == 1;
+        return single_particle_multiplicity(obj, 4, params);
     }
     REGISTER_CUT_SCOPE(RegistrationScope::Both, single_proton, single_proton);
+
+    /**
+     * @brief Base particle multiplicity cut for nonzero particle multiplicity.
+     * @details This function applies a cut to select interactions with a
+     * nonzero multiplicity for a specific particle type. The particle type is
+     * specified by the `particle_species` parameter, which corresponds to the
+     * index in the @ref utilities::count_primaries function.
+     * @param obj the interaction to select on.
+     * @param particle_species the index of the particle species to count.
+     * @param params the parameters for the cut. In this case, this sets the
+     * kinetic energy threshold for the particle to count towards the
+     * multiplicity.
+     * @return true if the interaction has a nonzero multiplicity for the
+     * specified particle species.
+     */
+    template<class T>
+    bool nonzero_particle_multiplicity(const T & obj, size_t particle_species, std::vector<double> params={})
+    {
+        size_t count(0);
+        for(const auto & p : obj.particles)
+        {
+            if(pvars::pid(p) == particle_species && pvars::primary_classification(p) && pvars::ke(p) >= params[0])
+                ++count;
+            if(count > 0)
+                break; // No need to count further, we only care about nonzero multiplicity.
+        }
+        return count > 0;
+    }
 
     /**
      * @brief Binding for zero particle photon multiplicity cut (negation of
@@ -423,7 +355,7 @@ namespace cuts
     template<class T>
     bool no_photons(const T & obj, std::vector<double> params={25.0,})
     {
-        return particle_multiplicity(obj, 0, 0, params) == 0;
+        return !nonzero_particle_multiplicity(obj, 0, params);
     }
 
     REGISTER_CUT_SCOPE(RegistrationScope::Both, no_photons, no_photons);
@@ -444,7 +376,7 @@ namespace cuts
     template<class T>
     bool no_electrons(const T & obj, std::vector<double> params={25.0,})
     {
-        return particle_multiplicity(obj, 0, 1, params) == 0;
+        return !nonzero_particle_multiplicity(obj, 1, params);
     }
 
     REGISTER_CUT_SCOPE(RegistrationScope::Both, no_electrons, no_electrons);
@@ -466,7 +398,7 @@ namespace cuts
     template<class T>
     bool no_muons(const T & obj, std::vector<double> params={143.425,})
     {
-        return particle_multiplicity(obj, 0, 2, params) == 0;
+        return !nonzero_particle_multiplicity(obj, 2, params);
     }
     REGISTER_CUT_SCOPE(RegistrationScope::Both, no_muons, no_muons);
 
@@ -486,7 +418,7 @@ namespace cuts
     template<class T>
     bool no_charged_pions(const T & obj, std::vector<double> params={25.0,})
     {
-        return particle_multiplicity(obj, 0, 3, params) == 0;
+        return !nonzero_particle_multiplicity(obj, 3, params);
     }
     REGISTER_CUT_SCOPE(RegistrationScope::Both, no_charged_pions, no_charged_pions);
 
@@ -506,25 +438,9 @@ namespace cuts
     template<class T>
     bool no_protons(const T & obj, std::vector<double> params={50.0,})
     {
-        return particle_multiplicity(obj, 0, 4, params) == 0;
+        return !nonzero_particle_multiplicity(obj, 4, params);
     }
     REGISTER_CUT_SCOPE(RegistrationScope::Both, no_protons, no_protons);
-
-    /**
-     * @brief Cut to select interactions with more than one proton.
-     * @details This function applies a cut to select interactions with
-     * more than one proton (N > 1). This is complementary to the single_proton
-     * cut.
-     * @tparam T the type of interaction (true or reco).
-     * @param obj the interaction to select on.
-     * @return true if the interaction has more than one proton.
-     */
-    template<class T>
-    bool multiproton(const T & obj, std::vector<double> params={50.0,})
-    {
-        return particle_multiplicity(obj, 1, 4, params) > 1;
-    }
-    REGISTER_CUT_SCOPE(RegistrationScope::Both, multiproton, multiproton);
 
     /**
      * @brief Cut to select interactions with a single Michel electron.

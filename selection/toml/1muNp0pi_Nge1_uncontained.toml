@@ -11,6 +11,7 @@ pion_threshold = 25.0
 proton_threshold = 50.0
 flash_low_t = 0.0
 flash_high_t = 9.6
+QE_parameter = 0
 
 [[category]] # 0 : Uncontained muon, fiducial, single proton
 cuts = [
@@ -99,7 +100,7 @@ cuts = [
 [[category]] # 10 : Uncontained muon, fiducial, multiple protons, QE
 cuts = [
     { name = "neutrino"        },
-    { name = "is_qe"           },
+    { name = "is_interaction_mode",     parameters = [ "@QE_parameter"       ] },
     { name = "fiducial_cut"    },
     { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
     { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
