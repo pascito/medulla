@@ -16,8 +16,8 @@ flash_high_t = 9.6
 cuts = [
     { name = "neutrino"        },
     { name = "fiducial_cut"    },
-    #{ name = "contained_muons_only",    parameters = [ "@muon_threshold"     ] },
-    { name = "containment_cut" },
+    { name = "contained_muons_only",    parameters = [ "@muon_threshold"     ] },
+    #{ name = "containment_cut" },
     { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
     { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
     { name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
@@ -39,8 +39,8 @@ cuts = [
 cuts = [
     { name = "neutrino"        },
     { name = "fiducial_cut"    },
-    #{ name = "contained_muons_only",    parameters = [ "@muon_threshold"     ] },
-    { name = "containment_cut" },
+    { name = "contained_muons_only",    parameters = [ "@muon_threshold"     ] },
+    #{ name = "containment_cut" },
     { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
     { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
     { name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
@@ -62,8 +62,8 @@ cuts = [
 cuts = [
     { name = "neutrino"        },
     { name = "fiducial_cut"    },
-    #{ name = "contained_muons_only",    parameters = [ "@muon_threshold" ] },
-    { name = "containment_cut" },
+    { name = "contained_muons_only",    parameters = [ "@muon_threshold" ] },
+    #{ name = "containment_cut" },
     { name = "single_muon",             parameters = [ "@muon_threshold" ] },
 ]
 
@@ -90,6 +90,32 @@ cuts = [
     { name = "!neutrino" },
 ]
 
+[[category]] # 9 : Uncontained muon, fiducial, single proton, QE
+cuts = [
+    { name = "neutrino"        },
+    { name = "contained_muons_only",    parameters = [ "@muon_threshold"     ] },
+    #{ name = "containment_cut" },
+    { name = "is_interaction_mode",     parameters = [ "@QE_parameter"       ] },
+    { name = "fiducial_cut"    },
+    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
+    { name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
+    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
+    { name = "single_proton",           parameters = [ "@proton_threshold"   ] },
+]
+
+[[category]] # 10 : Uncontained muon, fiducial, multiple protons, QE
+cuts = [
+    { name = "neutrino"        },
+    { name = "is_interaction_mode",     parameters = [ "@QE_parameter"       ] },
+    { name = "fiducial_cut"    },
+    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
+    { name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
+    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
+    { name = "!no_protons",             parameters = [ "@proton_threshold"   ] },
+]
+
 # SIMULATION ONLY
 [[sample]]
 name = "nominal"
@@ -112,8 +138,8 @@ add_exposure = true
 mode = "reco"
 cut = [
     { name = "fiducial_cut",              type = "reco" },
-    #{ name = "contained_muons_only",      type = "reco",  parameters = [ "@muon_threshold"               ] },
-    { name = "containment_cut",           type = "reco" },
+    { name = "contained_muons_only",      type = "reco",  parameters = [ "@muon_threshold"               ] },
+    #{ name = "containment_cut",           type = "reco" },
     { name = "flash_cut",                 type = "reco",  parameters = [ "@flash_low_t", "@flash_high_t" ] },
     { name = "no_photons",                type = "reco",  parameters = [ "@photon_threshold"             ] },
     { name = "no_electrons",              type = "reco",  parameters = [ "@electron_threshold"           ] },
@@ -204,8 +230,8 @@ mode = "true"
 cut = [
     { name = "neutrino",                  type = "true" },
     { name = "fiducial_cut",              type = "true" },
-    #{ name = "contained_muons_only",     type = "true",  parameters = [ "@muon_threshold"     ] },
-    { name = "containment_cut",           type = "true" },
+    { name = "contained_muons_only",     type = "true",  parameters = [ "@muon_threshold"     ] },
+    #{ name = "containment_cut",           type = "true" },
     { name = "no_photons",                type = "true",  parameters = [ "@photon_threshold"   ] },
     { name = "no_electrons",              type = "true",  parameters = [ "@electron_threshold" ] },
     { name = "single_muon",               type = "true",  parameters = [ "@muon_threshold"     ] },
