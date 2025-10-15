@@ -149,11 +149,12 @@ branch = [
     { name = "baseline",                type = "mctruth" },
     { name = "containment_cut",         type = "both"    },
     { name = "cc",                      type = "mctruth" },
-    { name = "pdg",                     type = "mctruth" },
+    { name = "pdg",                     type = "mctruth" },     # Needed for NuMI Flux calculation
+    {name = "parent_pdg",               type = "mctruth" },     # Needed for NuMI Flux calculation
     { name = "interaction_type",        type = "mctruth" },
     { name = "interaction_mode",        type = "mctruth" },
     { name = "category",                type = "true"    },
-    { name = "neutrino_energy",         type = "mctruth" },
+    { name = "neutrino_energy",         type = "mctruth" },     # Needed for NuMI Flux calculation
     { name = "visible_energy",          type = "both"    },
     { name = "visible_energy_calosub",  type = "both"    },
     { name = "photon_multiplicity",     type = "reco", parameters = [ "@photon_threshold"   ]},
