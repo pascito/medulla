@@ -24,7 +24,7 @@ bins = [25, 0, 3000]
 #variable_length = false
 
 [[tree]]
-origin = 'events/simulation/selected'
+origin = 'events/nominal/selected'
 destination = 'events/full/'
 name = 'selected'
 action = 'add_weights'
@@ -32,8 +32,8 @@ table_types = ['multisim', 'multisigma']
 #table_types = ['multisim', 'multisigma', 'variation']
 
 [[tree]]
-origin = 'events/data/selected'
-destination = 'events/data/'
+origin = 'events/onbeam/selected'
+destination = 'events/onbeam/'
 name = 'selected'
 action = 'copy'
 
