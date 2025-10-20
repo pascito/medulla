@@ -1,5 +1,5 @@
 [[this_includes]]
-file = '../configurations/common/variables_contained.toml'
+file = '../configurations/common/variables_uncontained.toml'
 
 [[this_includes]]
 file = '../configurations/common/styles.toml'
@@ -7,9 +7,13 @@ file = '../configurations/common/styles.toml'
 # SIMULATION SAMPLE
 [samples]
 [samples.mc]
-key = "nominal"
+#key = "nominal"
+key = "full"
 exposure_type = "pot"
 trees = ['selected']
+print_sys = false
+# Comment this to avoid systematics when plotting (usually done for testing plots)
+systematics = ['multisimTree','multisigmaTree','selected_NuMIfluxsimTree']
 
 # DATA SAMPLE
 [samples.onbeam]
@@ -21,19 +25,34 @@ trees = ['selected']
 [output]
 path = '/Users/rvizarreta/Library/CloudStorage/GoogleDrive-rvizarreta14@gmail.com/My Drive/🏛 PhD Repository/🚀 Research/🤖 Experiments&Projects/ICARUS/ICARUS_CC0pi_Selection/ICARUS-NuMI-CC0pi-Selection/spineplot/myAnalysis/1muNp0pi_Nge1_uncontained/leading_muon_length'
 
+[[systematic_recipe]]
+name = 'stats'
+label = 'Stat.'
+pattern = 'mc_statistical'
+
+[[systematic_recipe]]
+name = 'flux'
+label = 'Flux'
+pattern = '\b\w*_Flux\b'
+
+[[systematic_recipe]]
+name = 'xsec'
+label = 'Cross-section'
+pattern = '\bGENIEReWeight_SBN_v1_multisim_\w+\b'
+
+[[systematic_recipe]]
+name = 'MC_total'
+label = 'Flux & Interaction Uncertainty'
+pattern = '^(flux|xsec|stats)$'
+
 [analysis]
 #ordinate_sample = 'mc'
 ordinate_sample = 'onbeam'
 category_branch = 'true_category'
 category_assignment = [[0,3], [1,4], [6,7,8], [9], [2,5], [10], [-100]]
 category_labels = ['Signal', 'Signal QE', 'Other CC', '$\nu$ NC', 'OOFV', 'Cosmic', 'Data']
-category_colors = ['darkgreen', 'forestgreen','C1', 'C3','C5', 'C4', 'C6','black']
+category_colors = ['darkgreen', 'darkgreen','C1', 'C3','C5', 'C4', 'C6', 'black']
 category_types = ['histogram', 'histogram', 'histogram', 'histogram','histogram','histogram', 'scatter']
-
-[[systematic_recipe]]
-name = 'stats'
-label = 'MC Statistical Uncertainty'
-pattern = 'mc_statistical'
 
 [[figure]]
 name = 'leading_muon_length_reco'
@@ -42,4 +61,19 @@ style = 'selected_icarus_1muNp0pi_N>=1'
 [[figure.artists]]
 type = 'SpineSpectra1D'
 variable = 'reco_leading_muon_length'
-draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = true, 'normalize' = true, 'draw_error' = 'stats', 'draw_ratio'='True'}
+draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = true, 'normalize' = true, 'draw_error' = 'MC_total', 'draw_ratio'='True'}
+
+[[figure]]
+name = "systematics_dpT"
+type = "SimpleFigure"
+style = 'selected_icarus_1muNp0pi_N>=1'
+[[figure.artists]]
+type = "SpineSpectra1D"
+variable = "reco_leading_muon_length"
+yrange = [0.0, 0.45]
+[figure.artists.draw_kwargs]
+method = "draw_systematics"
+systematic_names = ["flux", "xsec", "stats"]
+fractional = true
+show_total = true      # This will show MC_total (sum of all components)
+show_individual = true # This shows flux, xsec, stats separately

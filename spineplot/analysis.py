@@ -129,8 +129,21 @@ class Analysis:
                                                  x.get('xrange', None), x.get('xtitle', None),
                                                  x.get('yrange', None), x.get('ytitle', None))
                             draw_kwargs = x.get('draw_kwargs', {})
-                            draw_kwargs['draw_error'] = draw_kwargs.get('draw_error', None)
-                            self._figures[fig['name']].register_spine_artist(art, draw_kwargs=draw_kwargs)
+
+                            # Extract method from draw_kwargs
+                            draw_method = draw_kwargs.pop('method', 'draw')
+
+                            # Only add draw_error for the regular draw method, not for draw_systematics
+                            if draw_method == 'draw':
+                                if 'draw_error' not in draw_kwargs:
+                                    draw_kwargs['draw_error'] = None
+
+                            # Register with method parameter
+                            self._figures[fig['name']].register_spine_artist(
+                                art,
+                                draw_kwargs=draw_kwargs,
+                                method=draw_method
+                            )
                             self._artists.append(art)
                         elif x['type'] == 'SpineSpectra2D':
                             # Check if the variables are present in all samples

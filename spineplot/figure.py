@@ -48,23 +48,24 @@ class SpineFigure:
         self._axs = []
         self._artists = []
         self._draw_kwargs = []
+        self._draw_methods = []
 
-    def register_spine_artist(self, artist, draw_kwargs):
+    def register_spine_artist(self, artist, draw_kwargs, method='draw'):
         """
-        Register an artist with the figure. This method is used to
-        add an artist to the figure so that it can be displayed when
-        the figure is shown.
+        Register an artist with the figure.
 
         Parameters
         ----------
-        artist : matplotlib.artist.Artist
+        artist : SpineArtist
             The artist to add to the figure.
         draw_kwargs : dict
-            A dictionary of keyword arguments to pass to the draw
-            method of the artist.
+            Keyword arguments to pass to the artist's draw method.
+        method : str, optional
+            The name of the draw method to call. Default is 'draw'.
         """
         self._artists.append(artist)
         self._draw_kwargs.append(draw_kwargs)
+        self._draw_methods.append(method)
 
     def create(self):
         """
@@ -78,7 +79,17 @@ class SpineFigure:
         # Keep axes background solid
         with self._style as style:
             for axi, ax in enumerate(self._axs):
-                self._artists[axi].draw(ax, **self._draw_kwargs[axi], style=style)
+                # Get the method to call
+                method_name = self._draw_methods[axi]
+                draw_func = getattr(self._artists[axi], method_name, None)
+
+                if draw_func is None:
+                    # Fallback to draw if method doesn't exist
+                    print(f"Warning: Method '{method_name}' not found, using 'draw'")
+                    draw_func = self._artists[axi].draw
+
+                # Call the method
+                draw_func(ax, **self._draw_kwargs[axi], style=style)
             self._figure.suptitle(self._title)
     
     def close(self):

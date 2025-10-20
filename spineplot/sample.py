@@ -242,6 +242,9 @@ class Sample:
         -------
         None.
         """
+        print(f"\n{'=' * 60}")
+        print(f"Processing systematics for sample: {self._name}")
+        print(f"{'=' * 60}")
         for syst in self._systematics.values():
             syst.process(self, self._presel_mask)
                 

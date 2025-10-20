@@ -1,5 +1,5 @@
 [[this_includes]]
-file = '../configurations/common/variables_contained.toml'
+file = '../configurations/common/variables_uncontained.toml'
 
 [[this_includes]]
 file = '../configurations/common/styles.toml'
@@ -7,9 +7,13 @@ file = '../configurations/common/styles.toml'
 # SIMULATION SAMPLE
 [samples]
 [samples.mc]
-key = "nominal"
+#key = "nominal"
+key = "full"
 exposure_type = "pot"
 trees = ['selected']
+print_sys = false
+# Comment this to avoid systematics when plotting (usually done for testing plots)
+systematics = ['multisimTree','multisigmaTree','selected_NuMIfluxsimTree']
 
 # DATA SAMPLE
 [samples.onbeam]
@@ -21,19 +25,38 @@ trees = ['selected']
 [output]
 path = '/Users/rvizarreta/Library/CloudStorage/GoogleDrive-rvizarreta14@gmail.com/My Drive/🏛 PhD Repository/🚀 Research/🤖 Experiments&Projects/ICARUS/ICARUS_CC0pi_Selection/ICARUS-NuMI-CC0pi-Selection/spineplot/myAnalysis/1muNp0pi_Nge1_uncontained/vertex_y'
 
+[[systematic_recipe]]
+name = 'stats'
+label = 'MC Statistical Uncertainty'
+pattern = 'mc_statistical'
+
+[[systematic_recipe]]
+name = 'flux'
+label = 'Flux Systematics'
+#pattern = '_Flux'
+#pattern = '\\hysyst*(?!\\w*sigma\\b)\\w+\\b'
+pattern = 'hysyst*'
+
+[[systematic_recipe]]
+name = 'xsec'
+label = 'Interaction Systematics'
+pattern = '\\bGENIEReWeight_SBN_v1_multisigma_(?!\\w*sigma\\b)\\w+\\b'
+
+[[systematic_recipe]]
+name = 'MC_total'
+label = 'Flux & Interaction Uncertainty'
+#pattern = 'mc_statistical'
+#pattern = 'mc_nu_statistical'
+pattern = '(flux|xsec|stats)'
+
 [analysis]
 #ordinate_sample = 'mc'
 ordinate_sample = 'onbeam'
 category_branch = 'true_category'
 category_assignment = [[0,3], [1,4], [6,7,8], [9], [2,5], [10], [-100]]
 category_labels = ['Signal', 'Signal QE', 'Other CC', '$\nu$ NC', 'OOFV', 'Cosmic', 'Data']
-category_colors = ['darkgreen', 'forestgreen','C1', 'C3','C5', 'C4', 'C6','black']
+category_colors = ['darkgreen', 'darkgreen','C1', 'C3','C5', 'C4', 'C6', 'black']
 category_types = ['histogram', 'histogram', 'histogram', 'histogram','histogram','histogram', 'scatter']
-
-[[systematic_recipe]]
-name = 'stats'
-label = 'MC Statistical Uncertainty'
-pattern = 'mc_statistical'
 
 [[figure]]
 name = 'vertex_y_reco'
@@ -42,36 +65,6 @@ style = 'selected_icarus_1muNp0pi_N>=1'
 [[figure.artists]]
 type = 'SpineSpectra1D'
 variable = 'reco_vtx_y'
-draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = true, 'normalize' = true, 'draw_error' = 'stats', 'draw_ratio'='True'}
+yrange = [0.0, 0.055]
+draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = true, 'normalize' = true, 'draw_error' = 'MC_total', 'draw_ratio'='True'}
 
-[[figure]]
-name = 'vertex_y_fractional_residual'
-type = 'SimpleFigure'
-style = 'selected_icarus_1muNp0pi_N>=1'
-[[figure.artists]]
-type = 'SpineSpectra2D'
-yvariable = 'reco_vtx_y_residual'
-xvariable = 'true_vtx_y_residual'
-xrange = [-2,2]
-xtitle = '$\frac{y_{\mathrm{reco}} - y_{\mathrm{true}}}{y_{\mathrm{true}}}$'
-draw_kwargs = {'show_option' = 'projection', 'draw_identity' = true, 'draw_colorbar' = true, 'logz' = true}
-
-[[figure]]
-name = 'vertex_y_2d_correlation'
-type = 'SimpleFigure'
-style = 'selected_icarus_1muNp0pi_N>=1'
-[[figure.artists]]
-type = 'SpineSpectra2D'
-xvariable = 'true_vtx_y'
-yvariable = 'reco_vtx_y'
-draw_kwargs = {'show_option' = '2d', 'draw_identity' = true, 'draw_colorbar' = true, 'logz' = true}
-
-[[figure]]
-name = 'vertex_y_smearing_matrix_normalized'
-type = 'SimpleFigure'
-style = 'selected_icarus_1muNp0pi_N>=1'
-[[figure.artists]]
-type = 'SpineSpectra2D'
-xvariable = 'true_vtx_y_smearing'
-yvariable = 'reco_vtx_y_smearing'
-draw_kwargs = {show_option = 'smearing', draw_colorbar = true}

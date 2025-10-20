@@ -49,13 +49,13 @@ xlabel = 'True $\delta p_T$ [MeV/c]'
 [variables.true_dpT]
 key = "true_dpT"
 range = [0,1200]
-nbins = 50
+nbins = 20
 xlabel = 'True $\delta p_T$ [MeV/c]'
 
 [variables.reco_dpT]
 key = "reco_dpT"
 range = [0,1200]
-nbins = 50
+nbins = 20
 xlabel = 'Reco $\delta p_T$ [MeV/c]'
 
 ### dalphaT ------------------------------------
@@ -354,13 +354,13 @@ xlabel = 'True Vertex X [cm]'
 [variables.reco_vtx_x]
 key = "reco_vertex_x"
 range = [-400,400]
-nbins = 75
+nbins = 50
 xlabel = 'Reconstructed Vertex X [cm]'
 
 [variables.true_vtx_x]
 key = "true_vertex_x"
 range = [-400,400]
-nbins = 75
+nbins = 50
 xlabel = 'True Vertex X [cm]'
 
 ### vtx_y ------------------------------------

@@ -220,6 +220,8 @@ class SpineSpectra1D(SpineSpectra):
 
         if self._plotdata is not None:
             labels, data = zip(*self._plotdata.items())
+            # Store original labels before modification
+            original_labels = list(labels)
             colors = [self._colors[label] for label in labels]
             bincenters = [self._binedges[l][:-1] + np.diff(self._binedges[l]) / 2 for l in labels]
             binwidths = [np.diff(self._binedges[l]) for l in labels]
@@ -235,13 +237,46 @@ class SpineSpectra1D(SpineSpectra):
                 super().fit_with_function(ax, bincenters[0], np.sum(data, axis=0), self._binedges[labels[0]], fit_type, range=xr)
 
             if show_component_number and show_component_percentage:
-                hlabel = lambda x : f'{np.sum(x):.1f}, {np.sum(x)/denominator:.2%}'
-                slabel = lambda x : f'{np.sum(x):.1f}'
-                labels = [f'{label} ({hlabel(d) if li in histogram_mask else slabel(d)})' for li, (label, d) in enumerate(zip(labels, counts))]
+                # Find Signal and Signal QE indices
+                signal_idx = None
+                signal_qe_idx = None
+                for li, label in enumerate(labels):
+                    if label == 'Signal':
+                        signal_idx = li
+                    elif label == 'Signal QE':
+                        signal_qe_idx = li
+
+                # Calculate combined signal
+                if signal_idx is not None and signal_qe_idx is not None:
+                    signal_events = np.sum(counts[signal_idx])
+                    signal_qe_events = np.sum(counts[signal_qe_idx])
+                    combined_signal = signal_events + signal_qe_events
+
+                # Build labels with custom logic
+                new_labels = []
+                for li, (label, d) in enumerate(zip(labels, counts)):
+                    if li in histogram_mask:
+                        if label == 'Signal' and signal_idx is not None and signal_qe_idx is not None:
+                            # Signal: show combined total
+                            new_labels.append(f'{label} ({combined_signal:.1f}, {combined_signal / denominator:.2%})')
+                        elif label == 'Signal QE' and signal_idx is not None and signal_qe_idx is not None:
+                            # Signal QE: show what fraction of combined signal is QE
+                            new_labels.append(
+                                f'{label} ({signal_qe_events / combined_signal:.2%} of signal)')
+                        else:
+                            # All other histogram components
+                            new_labels.append(f'{label} ({np.sum(d):.1f}, {np.sum(d) / denominator:.2%})')
+                    else:
+                        # Scatter components
+                        new_labels.append(f'{label} ({np.sum(d):.1f})')
+
+                labels = new_labels
+
             elif show_component_number:
                 labels = [f'{label} ({np.sum(d):.1f})' for label, d in zip(labels, counts)]
             elif show_component_percentage:
-                labels = [f'{label} ({np.sum(d)/denominator:.2%})' if li in histogram_mask else label for li, (label, d) in enumerate(zip(labels, counts))]
+                labels = [f'{label} ({np.sum(d) / denominator:.2%})' if li in histogram_mask else label for
+                          li, (label, d) in enumerate(zip(labels, counts))]
 
             if invert_stack_order:
                 reduce = lambda x : [x[i] for i in histogram_mask[::-1]]
@@ -253,24 +288,55 @@ class SpineSpectra1D(SpineSpectra):
             # SAVE MC prediction for ratio plot BEFORE reduce() is redefined
             mc_sum_for_ratio = np.sum(reduce(data), axis=0)
 
-            ax.hist(reduce(bincenters), weights=[scale*x for x in reduce(data)], bins=self._variable._nbins, range=xr, label=reduce(labels), color=reduce(colors), **style.plot_kwargs)
-            # Add prediction line (sum of all MC components)
-            total_prediction = scale * np.sum(reduce(data), axis=0)
-            total_events = np.sum(reduce(data))  # Sum all events in histogram categories
-            first_hist_category = list(self._plotdata.keys())[histogram_mask[0]]
-            bin_edges = self._binedges[first_hist_category]
-            ax.step(bin_edges, np.append(total_prediction, total_prediction[-1]),
-                    where='post', color='black', linewidth=1, label=f'Prediction ({total_events:.1f} events)')
             if draw_error:
                 systs = [s[draw_error] for s in self._systematics.values() if draw_error in s]
                 cov = np.sum(s.get_covariance(self._variable._key) for s in systs)
                 x = reduce(bincenters)[0]
                 y = scale * np.sum(reduce(data), axis=0)
                 xerr = [x / 2 for x in binwidths[0]]
-                scov = Systematic.transform_as(cov, scale if not normalize else np.sum(reduce(data), axis=0))
+                #scov = Systematic.transform_as(cov, scale if not normalize else np.sum(reduce(data), axis=0))
+                scov = Systematic.transform_as(cov, scale)
                 yerr = np.sqrt(np.diag(scov))
 
-                draw_error_boxes(ax, x, y, xerr, yerr, facecolor='lightgray', edgecolor='gray', alpha=0.8, hatch='xxx', linewidth=1.0)
+                draw_error_boxes(ax, x, y, xerr, yerr, facecolor='lightgray', edgecolor='gray', alpha=1.0, hatch='xxx', linewidth=0.0)
+
+                # Draw border line on top of uncertainty band
+                bin_edges = list(self._binedges.values())[0]
+                y_top = y + yerr
+                ax.step(bin_edges,
+                        np.append(y_top, y_top[-1]),
+                        where='post',
+                        color='grey',  # or 'black', 'gray', etc.
+                        linewidth=1.5,
+                        zorder=1)
+
+            ax.hist(reduce(bincenters), weights=[scale*x for x in reduce(data)], bins=self._variable._nbins, range=xr, label=reduce(labels), color=reduce(colors), alpha=0.85, **style.plot_kwargs)
+
+            # Draw top border line for components with 'QE' in label
+            cumulative_heights = np.zeros(self._variable._nbins)
+            for i, (label, d, orig_label) in enumerate(zip(reduce(labels), reduce(data), reduce(original_labels))):
+                cumulative_heights += scale * d
+
+                # Check if this component has 'QE' in label
+                if 'QE' in label:
+                    # Use the ORIGINAL label to access binedges
+                    bin_edges = self._binedges[orig_label]  # <-- Use orig_label instead
+                    ax.step(bin_edges,
+                            np.append(cumulative_heights, cumulative_heights[-1]),
+                            where='post',
+                            color='darkred',
+                            linewidth=2,
+                            zorder=10)
+                    break
+
+            # Add prediction line (sum of all MC components)
+            total_prediction = scale * np.sum(reduce(data), axis=0)
+            total_events = np.sum(reduce(data))  # Sum all events in histogram categories
+            first_hist_category = list(self._plotdata.keys())[histogram_mask[0]]
+            bin_edges = self._binedges[first_hist_category]
+            ax.step(bin_edges, np.append(total_prediction, total_prediction[-1]),
+                    where='post', color='black', linewidth=1.5, label=f'Prediction ({total_events:.1f} events)')
+
 
             reduce = lambda x : [x[i] for i in scatter_mask]
             for i, label in enumerate(reduce(labels)):
@@ -303,6 +369,14 @@ class SpineSpectra1D(SpineSpectra):
                 h.append(plt.Rectangle((0, 0), 1, 1, fc='lightgray', ec='gray', alpha=0.6, hatch='xxx', linewidth=0.8))
                 l.append(systs[0].label)
             ax.legend(h, l, fontsize=8)
+
+        # Add borders to legend patches for 'QE' entries
+        legend = ax.get_legend()
+        for handle, label_text in zip(legend.legend_handles, legend.get_texts()):
+            if 'QE' in label_text.get_text():
+                handle.set_edgecolor('darkred')
+                handle.set_linewidth(1)
+                handle.set_facecolor('white')
 
         # Automatically extend y-axis by 35% to make room for legend
         #if self._yrange is None:
@@ -348,11 +422,11 @@ class SpineSpectra1D(SpineSpectra):
 
             if draw_error and np.any(mc_err > 0):
                 with np.errstate(divide='ignore', invalid='ignore'):
-                    band_err = np.where(data_values > 0, mc_err / data_values, 0)
+                    rel_mc_err = np.where(mc_prediction_ratio > 0, mc_err / mc_prediction_ratio, 0)
                 xerr_ratio = [x / 2 for x in binwidths[scatter_mask[0]]]
-                draw_error_boxes(ax_ratio, data_centers, ratio, xerr_ratio, band_err,
+                draw_error_boxes(ax_ratio, data_centers, np.ones_like(data_centers), xerr_ratio, rel_mc_err,
                                  facecolor='lightgray', edgecolor='gray', alpha=0.4,
-                                 hatch='xxx', linewidth=0.8)
+                                 hatch='xxx', linewidth=0.6)
 
             ax_ratio.errorbar(data_centers, ratio, xerr=[x / 2 for x in binwidths[scatter_mask[0]]], yerr=ratio_err,
                               fmt='o', markersize=4,
@@ -412,3 +486,170 @@ class SpineSpectra1D(SpineSpectra):
             mark_pot(ax, self._exposure, style.mark_pot_horizontal, vadj=vadj)
         if style.mark_preliminary is not None:
             mark_preliminary(ax, style.mark_preliminary, hadj=hadj, vadj=vadj)
+
+    def draw_systematics(self, ax, style, systematic_names=None,
+                         fractional=True, show_total=True,
+                         show_individual=True) -> None:
+        """
+        Plots systematic uncertainties as a function of the variable.
+
+        Parameters
+        ----------
+        ax : matplotlib.axes.Axes
+            The axis to draw the systematics on.
+        style : Style
+            The style to use when drawing the plot.
+        systematic_names : list of str, optional
+            List of systematic names to plot. If None, plots all available
+            systematics. The default is None.
+        fractional : bool, optional
+            If True, plot fractional uncertainties (σ/y). If False, plot
+            absolute uncertainties (σ). The default is True.
+        show_total : bool, optional
+            If True, show the total combined systematic uncertainty.
+            The default is True.
+        show_individual : bool, optional
+            If True, show individual systematic uncertainties. The default
+            is True.
+        """
+        # Set axis labels
+        ax.set_xlabel(self._variable._xlabel if self._xtitle is None else self._xtitle, fontsize=12, weight='bold')
+        if fractional:
+            ax.set_ylabel('Fractional Uncertainty', fontsize=12, weight='bold')
+        else:
+            ax.set_ylabel('Absolute Uncertainty', fontsize=12, weight='bold')
+        ax.set_xlim(*self._variable._range if self._xrange is None else self._xrange)
+
+        # Get bin centers for plotting
+        if self._plotdata is None:
+            print("Warning: No data has been added to the spectrum yet.")
+            return
+
+        labels = list(self._plotdata.keys())
+        bincenters = self._binedges[labels[0]][:-1] + np.diff(self._binedges[labels[0]]) / 2
+
+        # Get the prediction (central value) for normalization
+        histogram_mask = [li for li, label in enumerate(labels)
+                          if self._category_types[label] == 'histogram']
+        data = list(self._plotdata.values())
+        y_pred = np.sum([data[i] for i in histogram_mask], axis=0)
+
+        # Determine which systematics to plot
+        if systematic_names is None:
+            # Get all systematics from all samples
+            all_syst_names = set()
+            for sample_systs in self._systematics.values():
+                all_syst_names.update(sample_systs.keys())
+            systematic_names = sorted(list(all_syst_names))
+
+        # Define colors for individual systematics
+        colors = ['green', 'mediumblue', 'darkred', 'orange', 'purple', 'brown', 'pink', 'gray', 'olive', 'cyan']
+
+        # Storage for total uncertainty calculation
+        total_cov = None
+        stat_cov = None
+
+        # Plot individual systematics
+        if show_individual:
+            for idx, syst_name in enumerate(systematic_names):
+                # Collect systematics from all samples with this name
+                systs = []
+                for sample_systs in self._systematics.values():
+                    if syst_name in sample_systs:
+                        systs.append(sample_systs[syst_name])
+
+                if not systs:
+                    continue
+
+                # Sum covariance matrices from all samples
+                cov = np.sum([s.get_covariance(self._variable._key) for s in systs], axis=0)
+
+                # Check if this is statistical uncertainty
+                is_stat = 'stat' in syst_name.lower()
+
+                # Track statistical uncertainty separately
+                if is_stat:
+                    if stat_cov is None:
+                        stat_cov = cov.copy()
+                    else:
+                        stat_cov += cov
+
+                # Get uncertainty from diagonal
+                uncertainty = np.sqrt(np.diag(cov))
+                if fractional:
+                    print(
+                        f"Fractional - Min: {(uncertainty / y_pred).min():.2%}, Max: {(uncertainty / y_pred).max():.2%}")
+
+                # Convert to fractional if requested
+                if fractional:
+                    # Avoid division by zero
+                    with np.errstate(divide='ignore', invalid='ignore'):
+                        uncertainty = np.where(y_pred > 0, uncertainty / y_pred, 0)
+
+                # Plot - use dots for statistical, lines for others
+                label = systs[0].label if systs[0].label is not None else syst_name
+
+                if is_stat:
+                    # Plot statistical as black dots
+                    ax.step(bincenters, uncertainty, label=label, linestyle=':',
+                            color='black', linewidth=1)
+                else:
+                    # Plot systematic as colored line
+                    ax.step(bincenters, uncertainty, where='mid', label=label,
+                            color=colors[idx], linewidth=1.5, alpha=0.7)
+
+                # Add to total
+                if total_cov is None:
+                    total_cov = cov.copy()
+                else:
+                    total_cov += cov
+
+        # Plot total systematic (dashed line for syst only, solid line for total with stat)
+        if show_total and total_cov is not None:
+            total_uncertainty = np.sqrt(np.diag(total_cov))
+
+            if fractional:
+                with np.errstate(divide='ignore', invalid='ignore'):
+                    total_uncertainty = np.where(y_pred > 0, total_uncertainty / y_pred, 0)
+
+            # Determine if we have statistical component
+            if stat_cov is not None:
+
+                # Plot systematic-only as dashed line
+                syst_only_cov = total_cov - stat_cov
+                syst_only_uncertainty = np.sqrt(np.diag(syst_only_cov))
+                if fractional:
+                    with np.errstate(divide='ignore', invalid='ignore'):
+                        syst_only_uncertainty = np.where(y_pred > 0, syst_only_uncertainty / y_pred, 0)
+
+                ax.step(bincenters, syst_only_uncertainty, where='mid', label='Syst.',
+                        color='black', linewidth=1.5, linestyle='--')
+
+                # Total includes stat, so plot as solid line
+                ax.step(bincenters, total_uncertainty, where='mid', label='Total Uncertainty',
+                        color='black', linewidth=1.5, linestyle='-')
+            else:
+                # No stat component, just plot total as dashed
+                ax.step(bincenters, total_uncertainty, where='mid', label='Total Systematic',
+                        color='black', linewidth=2.5, linestyle='--')
+
+        # Add legend
+        ax.legend(loc='best', fontsize=10)
+
+        # Add grid for readability
+        ax.grid(True, alpha=0.3, linestyle='--')
+
+        # Set y-axis limits if provided
+        if isinstance(self._yrange, (tuple, list)):
+            ax.set_ylim(*self._yrange)
+        elif isinstance(self._yrange, (int, float)):
+            yl = ax.get_ylim()[1]
+            ax.set_ylim(None, yl * self._yrange)
+
+        # Add POT and preliminary labels if needed
+        if style.mark_pot:
+            mark_pot(ax, self._exposure, style.mark_pot_horizontal)
+        if style.mark_preliminary is not None:
+            mark_preliminary(ax, style.mark_preliminary)
+
+
