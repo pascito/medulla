@@ -264,6 +264,7 @@ class SpineEfficiency(SpineArtist):
             # but this gives the best "default" setting while leaving
             # the user the flexibility (and the responsibility) to 
             # ensure that the plot is clear and understandable.
+            colors = ["green", "mediumblue", "brown", "goldenrod", "darkviolet", "dodgerblue"]
             if len(groups) == 1:
                 for ci, (cut, cutname) in enumerate(self._cuts.items()):
                     _, cv, msigma, psigma = self.reduce(groups[0], significance=0.6827)
@@ -271,7 +272,7 @@ class SpineEfficiency(SpineArtist):
                                 xerr=self._variable._bin_widths[groups[0]] / 2.0,
                                 yerr=[  fmt(msigma[f'{key_base}{cut}']),
                                         fmt(psigma[f'{key_base}{cut}'])],
-                                fmt='o', color=style.get_color(ci), label=cutname)
+                                fmt='o', color=colors[ci], label=cutname, markersize=6, capsize=2, elinewidth=1)
             else:
                 for gi, group in enumerate(groups):
                     for ci, (cut, cutname) in enumerate(self._cuts.items()):
@@ -280,8 +281,8 @@ class SpineEfficiency(SpineArtist):
                                     xerr=self._variable._bin_widths[group] / 2.0,
                                     yerr=[  fmt(msigma[f'{key_base}{cut}']),
                                             fmt(psigma[f'{key_base}{cut}'])],
-                                    fmt=style.get_marker(ci), color=style.get_color(gi),
-                                    label=f'{group} : {cutname}')
+                                    fmt=style.get_marker(ci), color=colors[gi],
+                                    label=f'{group} : {cutname}', markersize=6, capsize=2, elinewidth=1)
 
             ax.set_xlabel(self._variable._xlabel if self._xtitle is None else self._xtitle, fontsize=12, weight='bold')
             ax.set_ylabel('Efficiency [%]' if percentage else 'Efficiency', fontsize=12, weight='bold')

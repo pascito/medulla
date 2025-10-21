@@ -38,7 +38,7 @@ pattern = '\b\w*_Flux\b'
 [[systematic_recipe]]
 name = 'xsec'
 label = 'Cross-section'
-pattern = '\bGENIEReWeight_SBN_v1_multisigma_\w+\b'
+pattern = '\bGENIEReWeight_SBN_v1_multisim_\w+\b'
 
 [[systematic_recipe]]
 name = 'MC_total'

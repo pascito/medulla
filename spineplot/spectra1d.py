@@ -396,6 +396,7 @@ class SpineSpectra1D(SpineSpectra):
 
             # Use saved MC prediction
             mc_prediction_ratio = mc_sum_for_ratio
+            mc_stat_err = np.sqrt(mc_prediction_ratio)
 
             # Calculate ratio
             with np.errstate(divide='ignore', invalid='ignore'):
@@ -414,7 +415,7 @@ class SpineSpectra1D(SpineSpectra):
 
             with np.errstate(divide='ignore', invalid='ignore'):
                 ratio_err = np.where(data_values > 0,
-                                     ratio * np.sqrt((mc_err / np.maximum(mc_prediction_ratio, 1e-10)) ** 2 +
+                                     ratio * np.sqrt((mc_stat_err / np.maximum(mc_prediction_ratio, 1e-10)) ** 2 +
                                                      (data_err / data_values) ** 2), 0)
 
             # Draw ratio plot
