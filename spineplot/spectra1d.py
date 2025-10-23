@@ -398,7 +398,7 @@ class SpineSpectra1D(SpineSpectra):
             mc_prediction_ratio = mc_sum_for_ratio
             mc_stat_err = np.sqrt(mc_prediction_ratio)
 
-            # Calculate ratio
+            # Calculate data/mc ratio
             with np.errstate(divide='ignore', invalid='ignore'):
                 ratio = np.where(data_values > 0, mc_prediction_ratio / data_values, 0)
 
