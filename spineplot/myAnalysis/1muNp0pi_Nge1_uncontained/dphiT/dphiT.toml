@@ -33,7 +33,7 @@ pattern = 'mc_statistical'
 [[systematic_recipe]]
 name = 'flux'
 label = 'Flux'
-pattern = '\b\w*_Flux\b'
+pattern = 'hysyst*(?!\w*sigma\b)\w+\b'
 
 [[systematic_recipe]]
 name = 'xsec'

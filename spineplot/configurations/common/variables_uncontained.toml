@@ -8,6 +8,12 @@ range = [0, 9]
 nbins = 9
 xlabel = "Category"
 
+[variables.true_neutrino_energy]
+key = "true_neutrino_energy"
+range = [0, 5]
+nbins = 50
+xlabel = '$E_\nu$ [GeV]'
+
 [variables.true_visible_energy]
 key = "true_visible_energy"
 range = [0, 3]
