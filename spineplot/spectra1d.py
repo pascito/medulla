@@ -342,18 +342,25 @@ class SpineSpectra1D(SpineSpectra):
             for i, label in enumerate(reduce(labels)):
                 idx = scatter_mask[i]  # Get the actual index in the original arrays
                 scale = 1.0 if not normalize else 1.0 / np.sum(data[idx])
+
+                # Filter out bins with no data
+                data_mask = data[scatter_mask[i]] > 0
+                if not np.any(data_mask):  # Skip if no data at all
+                    continue
+
                 xerr_data = [x / 2 for x in binwidths[idx]]  # Get bin widths for this category
-                ax.errorbar(bincenters[scatter_mask[i]], scale * data[scatter_mask[i]],
-                            xerr=xerr_data,
-                            yerr=scale * np.sqrt(data[scatter_mask[i]]),
-                            fmt='o',  # Circle markers
-                            markersize=6,  # Marker size
-                            markerfacecolor='black',  # Filled black
-                            markeredgecolor='black',  # Black edge
-                            color='black',  # Error bar color
-                            capsize=3,  # Horizontal cap size
-                            capthick=1.5,  # Cap thickness
-                            elinewidth=1.5,  # Error bar line width
+                ax.errorbar(bincenters[scatter_mask[i]][data_mask],
+                            scale * data[scatter_mask[i]][data_mask],
+                            xerr=[xerr_data[j] for j in range(len(xerr_data)) if data_mask[j]],
+                            yerr=scale * np.sqrt(data[scatter_mask[i]][data_mask]),
+                            fmt='o',
+                            markersize=6,
+                            markerfacecolor='black',
+                            markeredgecolor='black',
+                            color='black',
+                            capsize=3,
+                            capthick=1.5,
+                            elinewidth=1.5,
                             label=label)
         if invert_stack_order:
             h, l = ax.get_legend_handles_labels()
@@ -424,15 +431,23 @@ class SpineSpectra1D(SpineSpectra):
             if draw_error and np.any(mc_err > 0):
                 with np.errstate(divide='ignore', invalid='ignore'):
                     rel_mc_err = np.where(mc_prediction_ratio > 0, mc_err / mc_prediction_ratio, 0)
-                xerr_ratio = [x / 2 for x in binwidths[scatter_mask[0]]]
-                draw_error_boxes(ax_ratio, data_centers, np.ones_like(data_centers), xerr_ratio, rel_mc_err,
-                                 facecolor='lightgray', edgecolor='gray', alpha=0.4,
-                                 hatch='xxx', linewidth=0.6)
+                # Only draw error boxes where data exists
+                if np.any(data_mask):
+                    xerr_ratio = np.array(binwidths[scatter_mask[0]])[data_mask] / 2
+                    draw_error_boxes(ax_ratio, data_centers[data_mask], np.ones(np.sum(data_mask)),
+                                     xerr_ratio, rel_mc_err[data_mask],
+                                     facecolor='lightgray', edgecolor='gray', alpha=0.4,
+                                     hatch='xxx', linewidth=0.6)
 
-            ax_ratio.errorbar(data_centers, ratio, xerr=[x / 2 for x in binwidths[scatter_mask[0]]], yerr=ratio_err,
-                              fmt='o', markersize=4,
-                              markerfacecolor='black', markeredgecolor='black',
-                              color='black', capsize=2, elinewidth=1)
+            # Only plot data points where data exists
+            if np.any(data_mask):
+                xerr_ratio_filtered = np.array(binwidths[scatter_mask[0]])[data_mask] / 2
+                ax_ratio.errorbar(data_centers[data_mask], ratio[data_mask],
+                                  xerr=xerr_ratio_filtered,
+                                  yerr=ratio_err[data_mask],
+                                  fmt='o', markersize=4,
+                                  markerfacecolor='black', markeredgecolor='black',
+                                  color='black', capsize=2, elinewidth=1)
 
             ax_ratio.set_ylabel('MC/Data', fontsize=10, weight='bold')
             ax_ratio.set_xlabel(self._variable._xlabel if self._xtitle is None else self._xtitle,

@@ -142,12 +142,20 @@ class Systematic:
                 # distribution with mean 0 and standard deviation 1. The
                 # weights retrieved above are then interpolated at these
                 # values to generate the universe weights.
+                '''
                 random_sigmas = np.random.normal(0, 1, (weights_array.shape[0], nuniv))
                 self._universe_weights = np.apply_along_axis(
                     lambda w: np.interp(random_sigmas[0], sigma_levels, w),
                     axis=1,
                     arr=weights_array
                 )
+                '''
+                # Lines 145-150 - FIXED VERSION
+                random_sigmas = np.random.normal(0, 1, (weights_array.shape[0], nuniv))
+                self._universe_weights = np.array([
+                    np.interp(random_sigmas[i], sigma_levels, weights_array[i])
+                    for i in range(weights_array.shape[0])
+                ])
             else:
                 self._universe_weights = weights_array
 
