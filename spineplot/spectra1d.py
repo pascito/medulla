@@ -407,7 +407,7 @@ class SpineSpectra1D(SpineSpectra):
 
             # Calculate data/mc ratio
             with np.errstate(divide='ignore', invalid='ignore'):
-                ratio = np.where(data_values > 0, mc_prediction_ratio / data_values, 0)
+                ratio = np.where(data_values > 0, data_values / mc_prediction_ratio, 0)
 
             # Calculate uncertainties
             mc_err = np.zeros_like(mc_prediction_ratio)
@@ -416,14 +416,21 @@ class SpineSpectra1D(SpineSpectra):
                 if systs_ratio:
                     cov_ratio = np.sum(s.get_covariance(self._variable._key) for s in systs_ratio)
                     scov_ratio = Systematic.transform_as(cov_ratio, 1.0)
-                    mc_err = np.sqrt(np.diag(scov_ratio))
+                    mc_syst_err = np.sqrt(np.diag(scov_ratio))
+                    # Add MC statistical and systematic errors in quadrature
+                    mc_err = np.sqrt(mc_stat_err ** 2 + mc_syst_err ** 2)
+                else:
+                    # If no systematics, just use MC statistical error
+                    mc_err = mc_stat_err
+            else:
+                # If draw_error is False, still include MC statistical error in band
+                mc_err = mc_stat_err
 
             data_err = np.sqrt(data_values)
 
             with np.errstate(divide='ignore', invalid='ignore'):
-                ratio_err = np.where(data_values > 0,
-                                     ratio * np.sqrt((mc_stat_err / np.maximum(mc_prediction_ratio, 1e-10)) ** 2 +
-                                                     (data_err / data_values) ** 2), 0)
+                ratio_err = np.where(mc_prediction_ratio > 0,
+                                     data_err / mc_prediction_ratio, 0)
 
             # Draw ratio plot
             ax_ratio.axhline(y=1.0, color='black', linestyle='--', linewidth=1, alpha=0.5)
@@ -449,7 +456,7 @@ class SpineSpectra1D(SpineSpectra):
                                   markerfacecolor='black', markeredgecolor='black',
                                   color='black', capsize=2, elinewidth=1)
 
-            ax_ratio.set_ylabel('MC/Data', fontsize=10, weight='bold')
+            ax_ratio.set_ylabel('Data/MC', fontsize=10, weight='bold')
             ax_ratio.set_xlabel(self._variable._xlabel if self._xtitle is None else self._xtitle,
                                 fontsize=12, weight='bold')
             ax_ratio.set_ylim(0.0, 2.0)
