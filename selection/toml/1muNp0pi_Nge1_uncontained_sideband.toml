@@ -16,7 +16,19 @@ MEC_parameter = 10.0
 RES_parameter = 1.0
 DIS_parameter = 2.0
 
-[[category]] # 0 : Uncontained muon, fiducial, single proton, QE
+[[category]] # 0 : Uncontained muon, fiducial, single proton, not QE
+cuts = [
+    { name = "neutrino"        },
+    { name = "!is_interaction_mode",    parameters = [ "@QE_parameter"       ] },
+    { name = "fiducial_cut"    },
+    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
+    #{ name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
+    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
+    { name = "single_proton",           parameters = [ "@proton_threshold"   ] },
+]
+
+[[category]] # 1 : Uncontained muon, fiducial, single proton, QE
 cuts = [
     { name = "neutrino"        },
     { name = "is_interaction_mode",     parameters = [ "@QE_parameter"       ] },
@@ -28,7 +40,29 @@ cuts = [
     { name = "single_proton",           parameters = [ "@proton_threshold"   ] },
 ]
 
-[[category]] # 1 : Uncontained muon, fiducial, multiple protons, QE
+[[category]] # 2 : Uncontained muon, single proton
+cuts = [
+    { name = "neutrino" },
+    { name = "no_photons",       parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",     parameters = [ "@electron_threshold" ] },
+    #{ name = "no_charged_pions", parameters = [ "@pion_threshold"     ] },
+    { name = "single_muon",      parameters = [ "@muon_threshold"     ] },
+    { name = "single_proton",    parameters = [ "@proton_threshold"   ] },
+]
+
+[[category]] # 3 : Uncontained muon, fiducial, multiple protons, not QE
+cuts = [
+    { name = "neutrino"        },
+    { name = "fiducial_cut"    },
+    { name = "!is_interaction_mode",    parameters = [ "@QE_parameter"       ] },
+    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
+    #{ name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
+    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
+    { name = "!no_protons",             parameters = [ "@proton_threshold"   ] },
+]
+
+[[category]] # 4 : Uncontained muon, fiducial, multiple protons, QE
 cuts = [
     { name = "neutrino"        },
     { name = "is_interaction_mode",     parameters = [ "@QE_parameter"       ] },
@@ -40,76 +74,44 @@ cuts = [
     { name = "!no_protons",             parameters = [ "@proton_threshold"   ] },
 ]
 
-[[category]] # 2 : Uncontained muon, fiducial, single proton, MEC
+[[category]] # 5 : Uncontained muon, multiple protons
 cuts = [
-    { name = "neutrino"        },
-    { name = "is_interaction_mode",     parameters = [ "@MEC_parameter"       ] },
-    { name = "fiducial_cut"    },
-    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
-    #{ name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
-    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
-    { name = "single_proton",           parameters = [ "@proton_threshold"   ] },
+    { name = "neutrino" },
+    { name = "no_photons",       parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",     parameters = [ "@electron_threshold" ] },
+    #{ name = "no_charged_pions", parameters = [ "@pion_threshold"     ] },
+    { name = "single_muon",      parameters = [ "@muon_threshold"     ] },
+    { name = "!no_protons",      parameters = [ "@proton_threshold"   ] },
 ]
 
-[[category]] # 3 : Uncontained muon, fiducial, multiple protons, MEC
+[[category]] # 6 : Uncontained muon, fiducial
 cuts = [
     { name = "neutrino"        },
-    { name = "is_interaction_mode",     parameters = [ "@MEC_parameter"       ] },
     { name = "fiducial_cut"    },
-    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
-    #{ name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
-    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
-    { name = "!no_protons",             parameters = [ "@proton_threshold"   ] },
+    { name = "single_muon",             parameters = [ "@muon_threshold" ] },
 ]
 
-[[category]] # 4 : Uncontained muon, fiducial, single proton, RES
+[[category]] # 7 : Uncontained muon
 cuts = [
-    { name = "neutrino"        },
-    { name = "is_interaction_mode",     parameters = [ "@RES_parameter"       ] },
-    { name = "fiducial_cut"    },
-    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
-    #{ name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
-    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
-    { name = "single_proton",           parameters = [ "@proton_threshold"   ] },
+    { name = "neutrino" },
+    { name = "single_muon", parameters = [ "@muon_threshold" ] },
 ]
 
-[[category]] # 5 : Uncontained muon, fiducial, multiple protons, RES
+[[category]] # 8 : Neutrino, charged current
 cuts = [
-    { name = "neutrino"        },
-    { name = "is_interaction_mode",     parameters = [ "@RES_parameter"       ] },
-    { name = "fiducial_cut"    },
-    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
-    #{ name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
-    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
-    { name = "!no_protons",             parameters = [ "@proton_threshold"   ] },
+    { name = "neutrino" },
+    { name = "iscc"     },
 ]
 
-[[category]] # 6 : Uncontained muon, fiducial, single proton, DIS
+[[category]] # 9 : Neutrino, neutral current
 cuts = [
-    { name = "neutrino"        },
-    { name = "is_interaction_mode",     parameters = [ "@DIS_parameter"       ] },
-    { name = "fiducial_cut"    },
-    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
-    #{ name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
-    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
-    { name = "single_proton",           parameters = [ "@proton_threshold"   ] },
+    { name = "neutrino" },
+    { name = "!iscc"    },
 ]
 
-[[category]] # 7 : Uncontained muon, fiducial, multiple protons, DIS
+[[category]] # 10 : Cosmic
 cuts = [
-    { name = "neutrino"        },
-    { name = "is_interaction_mode",     parameters = [ "@DIS_parameter"       ] },
-    { name = "fiducial_cut"    },
-    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
-    #{ name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
-    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
-    { name = "!no_protons",             parameters = [ "@proton_threshold"   ] },
+    { name = "!neutrino" },
 ]
 
 # SIMULATION ONLY
@@ -155,6 +157,7 @@ branch = [
     { name = "muon_multiplicity",       type = "reco", parameters = [ "@muon_threshold"     ]},
     { name = "pion_multiplicity",       type = "reco", parameters = [ "@pion_threshold"     ]},
     { name = "proton_multiplicity",     type = "reco", parameters = [ "@proton_threshold"   ]},
+    { name = "pion_group_code",         type = "true"    },
 
     # Kinematic imbalance & angles
     { name = "opening_angle_deg", type = "both" },
@@ -248,6 +251,7 @@ branch = [
     { name = "neutrino_energy",        type = "mctruth" },     # Needed for NuMI Flux calculation
     { name = "visible_energy",         type = "both"    },
     { name = "visible_energy_calosub", type = "true"    },
+    { name = "pion_group_code",        type = "true"    },
 
     # Interaction-level selection variables
     { name = "photon_multiplicity",   type = "reco", parameters = [ "@photon_threshold"   ]},
