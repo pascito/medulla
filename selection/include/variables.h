@@ -942,5 +942,255 @@ namespace vars
 	return std::sqrt( std::pow(NUCLEON_MASS/1000.0, 2) + 2*(NUCLEON_MASS/1000.0)*(visible_energy(obj) - (pvars::energy(m)/1000.0)) - Q2(obj) );
     }
     REGISTER_VAR_SCOPE(RegistrationScope::Both, W, W);
+
+
+
+
+
+
+
+    // --- Keep this helper: resolve leading-pion children PDGs ---
+    template <class T>
+    std::vector<int64_t> get_pion_children_pdgs(const T& obj){
+        std::vector<int64_t> v;
+        const size_t pi = selectors::leading_pion(obj);
+        if (pi == kNoMatch) return v;
+
+        const auto& pion = obj.particles[pi];
+
+        std::unordered_map<int64_t,size_t> id2i;
+        id2i.reserve(obj.particles.size());
+        for (size_t i=0;i<obj.particles.size();++i)
+            id2i.emplace((int64_t)obj.particles[i].id, i);
+
+        for (auto cid_raw: pion.children_id){
+            auto it = id2i.find((int64_t)cid_raw);
+            if (it==id2i.end()) continue;
+            v.push_back((int64_t)obj.particles[it->second].pdg_code);
+        }
+        return v;
+    }
+
+    // Build: parent_id -> list of child indices
+    template <class T>
+    static inline std::unordered_map<int64_t, std::vector<size_t>>
+    build_parent_children_map(const T& obj)
+    {
+        std::unordered_map<int64_t, std::vector<size_t>> pc;
+        pc.reserve(obj.particles.size());
+        for (size_t i = 0; i < obj.particles.size(); ++i)
+        {
+            if (obj.particles[i].parent_id == obj.particles[i].id) continue; // <-- skip self-parented entries
+            pc[obj.particles[i].parent_id].push_back(i);
+        }
+        return pc;
+    }
+
+    // Descendant scan flags must be templated consistently
+    template <class T>
+        struct DescendantFlags {
+            bool hasMuon        = false;
+            bool hasMichelStrict= false; // (shape==2 && |pdg|==11)
+            bool hasChargedPi   = false; // |pdg|==211
+            bool hasPi0         = false; // 111
+            bool hasNuclear     = false; // p/n or PDG >= 1e9
+        };
+
+    template <class T>
+        static inline DescendantFlags<T>
+        scan_direct_children(const T& obj, size_t pion_idx)
+        {
+            DescendantFlags<T> f;  // same fields: hasMuon, hasMichelStrict, hasChargedPi, hasPi0, hasNuclear
+            if (pion_idx == kNoMatch || pion_idx >= obj.particles.size()) return f;
+
+            const auto pc = build_parent_children_map(obj);
+            const int64_t root = obj.particles[pion_idx].id;
+
+            auto it = pc.find(root);
+            if (it == pc.end()) return f; // no direct children
+
+            for (size_t idx : it->second) {
+                const auto& ch = obj.particles[idx];
+                if (ch.id == root) continue; // <-- ignore self as a "child"
+                const int pdg = ch.pdg_code;
+                const int ap  = std::abs(pdg);
+
+                if (ap == 13)                     f.hasMuon = true;
+                if (ch.shape == 2 && ap == 11)    f.hasMichelStrict = true; // Michel-like electron as a *direct* daughter only
+                if (ap == 211)                    f.hasChargedPi = true;
+                if (pdg == 111)                   f.hasPi0 = true;
+                if (ap == 2212 || ap == 2112 || ap >= 1000000000) f.hasNuclear = true; // p/n or ion
+            }
+            return f;
+        }
+
+    enum class PionGroupCode:int{ UNKNOWN=0, DECAY=1, CAPTURE=2, INELASTIC=3, ELASTIC=4 };
+
+    template <class T>
+        int classify_pion_group_code_int(const T& obj)
+        {
+            const size_t pi = selectors::leading_pion(obj);
+            if (pi == kNoMatch) return (int)PionGroupCode::UNKNOWN;
+
+            // Direct children PDGs (needed for gamma-only and counting nucleons)
+            const auto ch = get_pion_children_pdgs(obj);
+
+            auto cntN = [&](){
+                int c = 0;
+                for (auto x: ch) if (x==2212 || x==2112 || std::abs(x)>=1000000000) ++c;
+                return c;
+            };
+            auto onlyGammas = [&](){
+                if (ch.empty()) return false;
+                for (auto x: ch) if (x != 22) return false;
+                return true;
+            };
+
+            const int  Nnuc_dir = cntN();
+            const bool anyN_dir = (Nnuc_dir > 0);
+
+            // *** Direct-only scan ***
+            const auto df = scan_direct_children(obj, pi);
+
+            // -------- DECAY (direct-only) ----------
+            // Require a direct muon to call DECAY.
+            // (Optional) Allow a direct Michel-shaped e± ONLY if there are no direct pions/pi0/nuclear products.
+            if (df.hasMuon)
+                return (int)PionGroupCode::DECAY;
+
+            if (df.hasMichelStrict && !df.hasChargedPi && !df.hasPi0 && !anyN_dir)
+                return (int)PionGroupCode::DECAY;
+
+            // -------- CAPTURE (direct-only) --------
+            // π- capture often shows photons only, or nucleons with no pions.
+            if (onlyGammas())
+                return (int)PionGroupCode::CAPTURE;
+
+            if (anyN_dir && !df.hasChargedPi && !df.hasPi0)
+                return (int)PionGroupCode::CAPTURE;
+
+            // -------- INELASTIC / ELASTIC ----------
+            // π0 among direct daughters → inelastic
+            if (df.hasPi0)
+                return (int)PionGroupCode::INELASTIC;
+
+            // Charged π with nucleons → inelastic
+            if (df.hasChargedPi && anyN_dir)
+                return (int)PionGroupCode::INELASTIC;
+
+            // Exactly one direct charged π and nothing else → elastic-like
+            {
+                int nCpi = 0, nOther = 0;
+                for (auto x: ch) {
+                    if (std::abs(x) == 211) ++nCpi;
+                    else if (x != 0) ++nOther; // ignore 0 if it can appear
+                }
+                if (nCpi == 1 && nOther == 0)
+                    return (int)PionGroupCode::ELASTIC; // or INELASTIC if you don't keep ELASTIC separate
+            }
+
+            // Any charged π at all (and no stronger signature above) → inelastic bucket
+            if (df.hasChargedPi)
+                return (int)PionGroupCode::INELASTIC;
+
+            // -------- Fallback ----------
+            return (int)PionGroupCode::UNKNOWN;
+        }
+
+    // --- Scalar wrappers (double) for your binder ---
+    template <class T> double pion_group_code(const T& obj){ return (double)classify_pion_group_code_int(obj); }
+    template <class T> double pion_is_decay(const T& obj){ return pion_group_code(obj)==(double)PionGroupCode::DECAY ? 1.0:0.0; }
+    template <class T> double pion_is_capture(const T& obj){ return pion_group_code(obj)==(double)PionGroupCode::CAPTURE ? 1.0:0.0; }
+    template <class T> double pion_is_inelastic(const T& obj){ return pion_group_code(obj)==(double)PionGroupCode::INELASTIC ? 1.0:0.0; }
+
+    // (Optional) tiny debug helpers
+    template <class T> double pion_children_count(const T& obj){ return (double)get_pion_children_pdgs(obj).size(); }
+    template <class T> double pion_child0_pdg(const T& obj){
+
+        auto v=get_pion_children_pdgs(obj);
+
+        return v.empty()? -9999.0 : (double)v[0]; }
+
+    // --- Register once (in a single TU) ---
+    REGISTER_VAR_SCOPE(RegistrationScope::True, pion_group_code,     vars::pion_group_code);
+    REGISTER_VAR_SCOPE(RegistrationScope::True, pion_is_decay,       vars::pion_is_decay);
+    REGISTER_VAR_SCOPE(RegistrationScope::True, pion_is_capture,     vars::pion_is_capture);
+    REGISTER_VAR_SCOPE(RegistrationScope::True, pion_is_inelastic,   vars::pion_is_inelastic);
+    REGISTER_VAR_SCOPE(RegistrationScope::True, pion_children_count, vars::pion_children_count);
+    REGISTER_VAR_SCOPE(RegistrationScope::True, pion_child0_pdg,     vars::pion_child0_pdg);
+
+    template <class T>
+        std::vector<int64_t> get_muon_children_pdgs(const T& obj){
+            std::vector<int64_t> v;
+            const size_t mu = selectors::leading_muon(obj);
+            if (mu == kNoMatch) return v;
+
+            const auto& muon = obj.particles[mu];
+
+            std::unordered_map<int64_t,size_t> id2i;
+            id2i.reserve(obj.particles.size());
+            for (size_t i=0;i<obj.particles.size();++i)
+                id2i.emplace((int64_t)obj.particles[i].id, i);
+
+            for (auto cid_raw: muon.children_id){
+                auto it = id2i.find((int64_t)cid_raw);
+                if (it==id2i.end()) continue;
+                v.push_back((int64_t)obj.particles[it->second].pdg_code);
+            }
+            return v;
+        }
+
+    // --- Muon group codes ---
+    enum class MuonGroupCode:int{ UNKNOWN=0, DECAY=1, CAPTURE=2, INELASTIC=3 };
+
+    template <class T>
+        int classify_muon_group_code_int(const T& obj){
+            auto ch = get_muon_children_pdgs(obj);
+            if (ch.empty()) return (int)MuonGroupCode::UNKNOWN;
+
+            auto has = [&](std::initializer_list<int64_t> s){
+                for (auto x: ch) for (auto y: s) if (x==y) return true; return false;
+            };
+            auto cntN = [&](){
+                int c=0; for (auto x: ch) if (x==2212||x==2112) ++c; return c;
+            };
+            auto onlyGammas = [&](){
+                if (ch.empty()) return false;
+                for (auto x: ch) if (x!=22) return false; return true;
+            };
+
+            const bool hasE  = has({11,-11});
+            const bool anyN  = (cntN()>0) || has({1000010020,1000010030,1000020040});
+
+            // DECAY (μ± → e± ν ν)
+            if (hasE) return (int)MuonGroupCode::DECAY;
+
+            // CAPTURE (μ− absorption in nucleus)
+            if (onlyGammas())       return (int)MuonGroupCode::CAPTURE;
+            if (anyN && !hasE)      return (int)MuonGroupCode::CAPTURE;
+
+            // INELASTIC (μ scatters and survives with extra hadrons)
+            if (has({13,-13}))      return (int)MuonGroupCode::INELASTIC;
+
+            return (int)MuonGroupCode::UNKNOWN;
+        }
+
+    // --- Scalar wrappers (double) ---
+    template <class T> double muon_group_code(const T& obj){ return (double)classify_muon_group_code_int(obj); }
+    template <class T> double muon_is_decay(const T& obj){ return muon_group_code(obj)==(double)MuonGroupCode::DECAY ? 1.0:0.0; }
+    template <class T> double muon_is_capture(const T& obj){ return muon_group_code(obj)==(double)MuonGroupCode::CAPTURE ? 1.0:0.0; }
+    template <class T> double muon_is_inelastic(const T& obj){ return muon_group_code(obj)==(double)MuonGroupCode::INELASTIC ? 1.0:0.0; }
+
+    // (Optional debug helpers)
+    template <class T> double muon_children_count(const T& obj){ return (double)get_muon_children_pdgs(obj).size(); }
+    template <class T> double muon_child0_pdg(const T& obj){ auto v=get_muon_children_pdgs(obj); return v.empty()? -9999.0 : (double)v[0]; }
+
+    // --- Register once (in a single TU) ---
+    REGISTER_VAR_SCOPE(RegistrationScope::True, muon_group_code,     vars::muon_group_code);
+    REGISTER_VAR_SCOPE(RegistrationScope::True, muon_is_decay,       vars::muon_is_decay);
+    REGISTER_VAR_SCOPE(RegistrationScope::True, muon_is_capture,     vars::muon_is_capture);
+    REGISTER_VAR_SCOPE(RegistrationScope::True, muon_is_inelastic,   vars::muon_is_inelastic);
+
+
 }
 #endif // VARIABLES_H
