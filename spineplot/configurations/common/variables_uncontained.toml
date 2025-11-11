@@ -485,8 +485,8 @@ xlabel = 'True Vertex Z [cm]'
 
 ### leading_pion_KE ------------------------------------
 
-#[variables.true_leading_pion_KE]
-#key = "true_leading_pion_ke"
-#range = [0,3000]
-#nbins = 20
-#xlabel = 'True Leading Pion KE [MeV]'
+[variables.true_leading_pion_KE]
+key = "true_leading_pion_ke"
+range = [0,1000]
+nbins = 100
+xlabel = 'True Leading Pion KE [MeV]'
