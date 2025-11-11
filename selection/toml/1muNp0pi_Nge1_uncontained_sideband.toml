@@ -15,103 +15,29 @@ QE_parameter = 0.0
 MEC_parameter = 10.0
 RES_parameter = 1.0
 DIS_parameter = 2.0
+DECAY_parameter = 1.0
+CAPTURE_parameter = 2.0
+INELASTIC_parameter = 3.0
+ELASTIC_parameter = 4.0
 
-[[category]] # 0 : Uncontained muon, fiducial, single proton, not QE
+[[category]] # 0 : Pion Decay
 cuts = [
-    { name = "neutrino"        },
-    { name = "!is_interaction_mode",    parameters = [ "@QE_parameter"       ] },
-    { name = "fiducial_cut"    },
-    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
-    #{ name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
-    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
-    { name = "single_proton",           parameters = [ "@proton_threshold"   ] },
+    { name = "is_pion_group_code",      parameters = [ "@DECAY_parameter"       ] },
 ]
 
-[[category]] # 1 : Uncontained muon, fiducial, single proton, QE
+[[category]] # 1 : Pion Capture
 cuts = [
-    { name = "neutrino"        },
-    { name = "is_interaction_mode",     parameters = [ "@QE_parameter"       ] },
-    { name = "fiducial_cut"    },
-    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
-    #{ name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
-    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
-    { name = "single_proton",           parameters = [ "@proton_threshold"   ] },
+    { name = "is_pion_group_code",      parameters = [ "@CAPTURE_parameter"     ] },
 ]
 
-[[category]] # 2 : Uncontained muon, single proton
+[[category]] # 2 : Pion Inelastic
 cuts = [
-    { name = "neutrino" },
-    { name = "no_photons",       parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons",     parameters = [ "@electron_threshold" ] },
-    #{ name = "no_charged_pions", parameters = [ "@pion_threshold"     ] },
-    { name = "single_muon",      parameters = [ "@muon_threshold"     ] },
-    { name = "single_proton",    parameters = [ "@proton_threshold"   ] },
+    { name = "is_pion_group_code",      parameters = [ "@INELASTIC_parameter"   ] },
 ]
 
-[[category]] # 3 : Uncontained muon, fiducial, multiple protons, not QE
+[[category]] # 3 : Pion Elastic
 cuts = [
-    { name = "neutrino"        },
-    { name = "fiducial_cut"    },
-    { name = "!is_interaction_mode",    parameters = [ "@QE_parameter"       ] },
-    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
-    #{ name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
-    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
-    { name = "!no_protons",             parameters = [ "@proton_threshold"   ] },
-]
-
-[[category]] # 4 : Uncontained muon, fiducial, multiple protons, QE
-cuts = [
-    { name = "neutrino"        },
-    { name = "is_interaction_mode",     parameters = [ "@QE_parameter"       ] },
-    { name = "fiducial_cut"    },
-    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
-    #{ name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
-    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
-    { name = "!no_protons",             parameters = [ "@proton_threshold"   ] },
-]
-
-[[category]] # 5 : Uncontained muon, multiple protons
-cuts = [
-    { name = "neutrino" },
-    { name = "no_photons",       parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons",     parameters = [ "@electron_threshold" ] },
-    #{ name = "no_charged_pions", parameters = [ "@pion_threshold"     ] },
-    { name = "single_muon",      parameters = [ "@muon_threshold"     ] },
-    { name = "!no_protons",      parameters = [ "@proton_threshold"   ] },
-]
-
-[[category]] # 6 : Uncontained muon, fiducial
-cuts = [
-    { name = "neutrino"        },
-    { name = "fiducial_cut"    },
-    { name = "single_muon",             parameters = [ "@muon_threshold" ] },
-]
-
-[[category]] # 7 : Uncontained muon
-cuts = [
-    { name = "neutrino" },
-    { name = "single_muon", parameters = [ "@muon_threshold" ] },
-]
-
-[[category]] # 8 : Neutrino, charged current
-cuts = [
-    { name = "neutrino" },
-    { name = "iscc"     },
-]
-
-[[category]] # 9 : Neutrino, neutral current
-cuts = [
-    { name = "neutrino" },
-    { name = "!iscc"    },
-]
-
-[[category]] # 10 : Cosmic
-cuts = [
-    { name = "!neutrino" },
+    { name = "is_pion_group_code",      parameters = [ "@ELASTIC_parameter"     ] },
 ]
 
 # SIMULATION ONLY
@@ -157,6 +83,7 @@ branch = [
     { name = "muon_multiplicity",       type = "reco", parameters = [ "@muon_threshold"     ]},
     { name = "pion_multiplicity",       type = "reco", parameters = [ "@pion_threshold"     ]},
     { name = "proton_multiplicity",     type = "reco", parameters = [ "@proton_threshold"   ]},
+    { name = "is_pion_group_code",      type = "true", parameters = [ "@DECAY_parameter"    ]},
 
     # Kinematic imbalance & angles
     { name = "opening_angle_deg", type = "both" },
@@ -209,7 +136,6 @@ branch = [
     { name = "length",             type = "both_particle", selector = "leading_pion" },
     { name = "containment",        type = "both_particle", selector = "leading_pion"},
     { name = "energy",             type = "both_particle", selector = "leading_pion"},
-    { name = "pion_group_code",    type = "both_particle", selector = "leading_pion"},
 
     # Vertex & flash
     { name = "vertex_x",         type = "both" },
@@ -259,6 +185,7 @@ branch = [
     { name = "pion_multiplicity",     type = "reco", parameters = [ "@pion_threshold"     ]},
     { name = "proton_multiplicity",   type = "reco", parameters = [ "@proton_threshold"   ]},
     { name = "flash_time",            type = "reco" },
+    { name = "is_pion_group_code",    type = "true", parameters = [ "@DECAY_parameter"    ]},
 
     # Kinematic imbalance & angles
     { name = "opening_angle_deg", type = "both" },
@@ -309,7 +236,6 @@ branch = [
     { name = "length",             type = "both_particle", selector = "leading_pion" },
     { name = "containment",        type = "both_particle", selector = "leading_pion" },
     { name = "energy",             type = "both_particle", selector = "leading_pion" },
-    { name = "pion_group_code",    type = "both_particle", selector = "leading_pion" },
 
     # True-vertex
     { name = "vertex_x", type = "true" },

@@ -502,5 +502,31 @@ namespace cuts
         return true; // All muons above threshold are contained (or no muons found)
     }
     REGISTER_CUT_SCOPE(RegistrationScope::Both, contained_muons_only, contained_muons_only);
+
+    /**
+     * @brief Apply a cut on the pion group code.
+     * @details This function applies a cut to select interactions based on
+     * the fate of the leading pion. The pion group code classifies what happened
+     * to the leading pion in the interaction: DECAY=1 (π→μν), CAPTURE=2 (π⁻ absorbed),
+     * INELASTIC=3 (π scattering with hadron production), ELASTIC=4 (π elastic scatter),
+     * UNKNOWN=0 (no leading pion or unclear).
+     * @tparam T the type of interaction (true or reco).
+     * @param obj the interaction to select on.
+     * @param params the parameters for the cut. In this case, this is a vector
+     * of pion group codes to select on (e.g., {1.0} for decay only, {1.0, 2.0} for
+     * decay or capture).
+     * @return true if the pion group code is one of the specified codes.
+     */
+    template<class T>
+    bool is_pion_group_code(const T & obj, std::vector<double> params={})
+    {
+        if(params.empty())
+            return true; // No cut applied if no parameters are given.
+
+        double code = vars::pion_group_code(obj);
+        return std::find(params.begin(), params.end(), code) != params.end();
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::True, is_pion_group_code, is_pion_group_code);
+
 }
 #endif
