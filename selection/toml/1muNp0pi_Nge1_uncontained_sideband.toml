@@ -209,7 +209,7 @@ branch = [
     { name = "length",             type = "both_particle", selector = "leading_pion" },
     { name = "containment",        type = "both_particle", selector = "leading_pion"},
     { name = "energy",             type = "both_particle", selector = "leading_pion"},
-    { name = "pion_group_code",    type = "true",          selector = "leading_pion"},
+    { name = "pion_group_code",    type = "both_particle", selector = "leading_pion"},
 
     # Vertex & flash
     { name = "vertex_x",         type = "both" },
@@ -309,7 +309,7 @@ branch = [
     { name = "length",             type = "both_particle", selector = "leading_pion" },
     { name = "containment",        type = "both_particle", selector = "leading_pion" },
     { name = "energy",             type = "both_particle", selector = "leading_pion" },
-    { name = "pion_group_code",    type = "true",          selector = "leading_pion" },
+    { name = "pion_group_code",    type = "both_particle", selector = "leading_pion" },
 
     # True-vertex
     { name = "vertex_x", type = "true" },
