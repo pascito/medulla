@@ -516,16 +516,11 @@ namespace cuts
      * of pion group codes to select on (e.g., {1.0} for decay only, {1.0, 2.0} for
      * decay or capture).
      * @return true if the pion group code is one of the specified codes.
+     * @note This function will be properly linked when variables.h is included elsewhere.
      */
     template<class T>
-    bool is_pion_group_code(const T & obj, std::vector<double> params={})
-    {
-        if(params.empty())
-            return true; // No cut applied if no parameters are given.
+    bool is_pion_group_code(const T & obj, std::vector<double> params={});
 
-        double code = vars::pion_group_code(obj);
-        return std::find(params.begin(), params.end(), code) != params.end();
-    }
     REGISTER_CUT_SCOPE(RegistrationScope::True, is_pion_group_code, is_pion_group_code);
 
 }

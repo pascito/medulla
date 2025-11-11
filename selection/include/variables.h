@@ -1193,4 +1193,18 @@ namespace vars
 
 
 }
+
+namespace cuts {
+    template<class T>
+    bool is_pion_group_code(const T & obj, std::vector<double> params)
+    {
+        if(params.empty())
+            return true;
+
+        double code = vars::pion_group_code(obj);
+        return std::find(params.begin(), params.end(), code) != params.end();
+    }
+}
+
+
 #endif // VARIABLES_H
