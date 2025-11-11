@@ -1040,14 +1040,25 @@ namespace vars
                 for (auto x: ch) if (x==2212 || x==2112 || std::abs(x)>=1000000000) ++c;
                 return c;
             };
-            auto onlyGammas = [&](){
+
+                auto cntGammas = [&](){
+                int c = 0;
+                for (auto x: ch) if (x == 22) ++c;
+                return c;
+            };
+
+            auto onlyGammasAndNucleons = [&](){
                 if (ch.empty()) return false;
-                for (auto x: ch) if (x != 22) return false;
+                for (auto x: ch) {
+                    if (x != 22 && x != 2212 && x != 2112 && std::abs(x) < 1000000000)
+                        return false;
+                }
                 return true;
             };
 
             const int  Nnuc_dir = cntN();
             const bool anyN_dir = (Nnuc_dir > 0);
+            const int  Ngamma = cntGammas();
 
             // *** Direct-only scan ***
             const auto df = scan_direct_children(obj, pi);
@@ -1061,15 +1072,7 @@ namespace vars
             if (df.hasMichelStrict && !df.hasChargedPi && !df.hasPi0 && !anyN_dir)
                 return (int)PionGroupCode::DECAY;
 
-            // -------- CAPTURE (direct-only) --------
-            // π- capture often shows photons only, or nucleons with no pions.
-            if (onlyGammas())
-                return (int)PionGroupCode::CAPTURE;
-
-            if (anyN_dir && !df.hasChargedPi && !df.hasPi0)
-                return (int)PionGroupCode::CAPTURE;
-
-            // -------- INELASTIC / ELASTIC ----------
+            // -------- INELASTIC (check BEFORE capture) ----------
             // π0 among direct daughters → inelastic
             if (df.hasPi0)
                 return (int)PionGroupCode::INELASTIC;
@@ -1078,15 +1081,30 @@ namespace vars
             if (df.hasChargedPi && anyN_dir)
                 return (int)PionGroupCode::INELASTIC;
 
-            // Exactly one direct charged π and nothing else → elastic-like
+            // **NEW**: Exactly 2 gammas (likely π⁰ → γγ from charge-exchange)
+            // This catches: π± + nucleus → π⁰ + X → γγ + X
+            if (Ngamma == 2 && onlyGammasAndNucleons())
+                return (int)PionGroupCode::INELASTIC;
+
+            // -------- CAPTURE (now more restrictive) --------
+            // Multiple gammas (NOT exactly 2) suggests nuclear de-excitation
+            if (Ngamma > 0 && Ngamma != 2 && onlyGammasAndNucleons() && !df.hasChargedPi)
+                return (int)PionGroupCode::CAPTURE;
+
+            // Nucleons with no pions and no gammas → capture
+            if (anyN_dir && !df.hasChargedPi && !df.hasPi0 && Ngamma == 0)
+                return (int)PionGroupCode::CAPTURE;
+
+            // -------- ELASTIC ----------
+            // Exactly one direct charged π and nothing else → elastic
             {
                 int nCpi = 0, nOther = 0;
                 for (auto x: ch) {
                     if (std::abs(x) == 211) ++nCpi;
-                    else if (x != 0) ++nOther; // ignore 0 if it can appear
+                    else if (x != 0) ++nOther;
                 }
                 if (nCpi == 1 && nOther == 0)
-                    return (int)PionGroupCode::ELASTIC; // or INELASTIC if you don't keep ELASTIC separate
+                    return (int)PionGroupCode::ELASTIC;
             }
 
             // Any charged π at all (and no stronger signature above) → inelastic bucket
