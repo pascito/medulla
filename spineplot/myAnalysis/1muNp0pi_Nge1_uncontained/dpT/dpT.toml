@@ -62,7 +62,7 @@ style = 'selected_icarus_1muNp0pi_N>=1'
 [[figure.artists]]
 type = 'SpineSpectra1D'
 variable = 'reco_dpT'
-draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = true, 'normalize' = true, 'draw_error' = 'MC_total', 'draw_ratio'='True'}
+draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = true, 'normalize' = false, 'draw_error' = 'MC_total', 'draw_ratio'='True'}
 
 [[figure]]
 name = 'dpT_fractional_residual'

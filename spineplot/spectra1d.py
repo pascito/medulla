@@ -152,7 +152,7 @@ class SpineSpectra1D(SpineSpectra):
     def draw(self, ax, style, show_component_number=False,
              show_component_percentage=False, invert_stack_order=False,
              fit_type=None, logx=False, logy=False, normalize=False,
-             draw_error=None, draw_ratio=False) -> None:
+             draw_error=None, draw_ratio=False, prediction=True, show_fraction=False) -> None:
         """
         Plots the data for the SpineSpectra1D object.
 
@@ -190,6 +190,13 @@ class SpineSpectra1D(SpineSpectra):
         draw_error : str, optional
             Indicates the name of the Systematic object to use for
             drawing the error boxes. The default is None.
+        prediction : bool, optional
+            A flag to indicate if the prediction line legend (sum of all MC
+            components) should be drawn. The default is True.
+        show_fraction : bool, optional
+            If True, shows the per-bin fraction of each component
+            (each bin sums to 1.0). The y-axis becomes 'Fraction'
+            instead of 'Candidates'. The default is False.
 
         Returns
         -------
@@ -208,7 +215,8 @@ class SpineSpectra1D(SpineSpectra):
             ax_ratio = None
 
         ax.set_xlabel(self._variable._xlabel if self._xtitle is None else self._xtitle, fontsize=12, weight='bold')
-        ax.set_ylabel('Candidates', fontsize=12, weight='bold')
+        ylabel = 'Fraction' if show_fraction else 'Candidates'
+        ax.set_ylabel(ylabel, fontsize=12, weight='bold')
         ax.set_xlim(*self._variable._range if self._xrange is None else self._xrange)
         ax.set_title(self._title)
 
@@ -282,11 +290,33 @@ class SpineSpectra1D(SpineSpectra):
                 reduce = lambda x : [x[i] for i in histogram_mask[::-1]]
             else:
                 reduce = lambda x : [x[i] for i in histogram_mask]
-            
+
             scale = 1.0 if not normalize else 1.0 / np.sum(reduce(data))
 
-            # SAVE MC prediction for ratio plot BEFORE reduce() is redefined
+            # SAVE MC prediction for ratio plot BEFORE any modifications
             mc_sum_for_ratio = np.sum(reduce(data), axis=0)
+
+            # Apply per-bin normalization AFTER reduce() if show_fraction is True
+            if show_fraction:
+                # Get only the histogram components
+                hist_data = reduce(data)
+                # Get the total per bin for histogram components only
+                total_per_bin = np.sum(hist_data, axis=0)
+                # Avoid division by zero
+                total_per_bin = np.where(total_per_bin > 0, total_per_bin, 1.0)
+                # Normalize each histogram component by the total in each bin
+                hist_data_normalized = [d / total_per_bin for d in hist_data]
+                # We need to modify the reduce function to return normalized data
+                # Store normalized histogram data
+                normalized_hist_dict = {labels[histogram_mask[i]]: hist_data_normalized[i]
+                                        for i in range(len(histogram_mask))}
+                # Create new data tuple with normalized histogram data
+                data_list = list(data)
+                for idx, i in enumerate(histogram_mask):
+                    data_list[i] = hist_data_normalized[
+                        idx if not invert_stack_order else len(histogram_mask) - 1 - idx]
+                data = tuple(data_list)
+                scale = 1.0
 
             if draw_error:
                 systs = [s[draw_error] for s in self._systematics.values() if draw_error in s]
@@ -310,32 +340,46 @@ class SpineSpectra1D(SpineSpectra):
                         linewidth=1.5,
                         zorder=1)
 
-            ax.hist(reduce(bincenters), weights=[scale*x for x in reduce(data)], bins=self._variable._nbins, range=xr, label=reduce(labels), color=reduce(colors), alpha=0.85, **style.plot_kwargs)
+            if show_fraction:
+                # Draw each component as a separate line (not stacked)
+                for i, (label, d, color, bc) in enumerate(
+                        zip(reduce(labels), reduce(data), reduce(colors), reduce(bincenters))):
+                    bin_edges = self._binedges[
+                        original_labels[histogram_mask[i] if not invert_stack_order else histogram_mask[::-1][i]]]
+                    ax.step(bin_edges, np.append(scale * d, scale * d[-1]),
+                            where='post', label=label, color=color, linewidth=1.5)
+            else:
+                # Draw stacked histogram (original behavior)
+                ax.hist(reduce(bincenters), weights=[scale * x for x in reduce(data)], bins=self._variable._nbins,
+                        range=xr, label=reduce(labels), color=reduce(colors), alpha=0.85, **style.plot_kwargs)
 
-            # Draw top border line for components with 'QE' in label
-            cumulative_heights = np.zeros(self._variable._nbins)
-            for i, (label, d, orig_label) in enumerate(zip(reduce(labels), reduce(data), reduce(original_labels))):
-                cumulative_heights += scale * d
+            # Draw top border line for components with 'QE' in label (only for stacked plots)
+            if not show_fraction:
+                cumulative_heights = np.zeros(self._variable._nbins)
+                for i, (label, d, orig_label) in enumerate(zip(reduce(labels), reduce(data), reduce(original_labels))):
+                    cumulative_heights += scale * d
 
-                # Check if this component has 'QE' in label
-                if 'QE' in label:
-                    # Use the ORIGINAL label to access binedges
-                    bin_edges = self._binedges[orig_label]  # <-- Use orig_label instead
-                    ax.step(bin_edges,
-                            np.append(cumulative_heights, cumulative_heights[-1]),
-                            where='post',
-                            color='darkred',
-                            linewidth=2,
-                            zorder=10)
-                    break
+                    # Check if this component has 'QE' in label
+                    if 'QE' in label:
+                        # Use the ORIGINAL label to access binedges
+                        bin_edges = self._binedges[orig_label]  # <-- Use orig_label instead
+                        ax.step(bin_edges,
+                                np.append(cumulative_heights, cumulative_heights[-1]),
+                                where='post',
+                                color='darkred',
+                                linewidth=2,
+                                zorder=10)
+                        break
 
-            # Add prediction line (sum of all MC components)
-            total_prediction = scale * np.sum(reduce(data), axis=0)
-            total_events = np.sum(reduce(data))  # Sum all events in histogram categories
-            first_hist_category = list(self._plotdata.keys())[histogram_mask[0]]
-            bin_edges = self._binedges[first_hist_category]
-            ax.step(bin_edges, np.append(total_prediction, total_prediction[-1]),
-                    where='post', color='black', linewidth=1.5, label=f'Prediction ({total_events:.1f} events)')
+            # Add prediction line (sum of all MC components) - skip for fraction plots
+            if not show_fraction:
+                total_prediction = scale * np.sum(reduce(data), axis=0)
+                total_events = np.sum(reduce(data))  # Sum all events in histogram categories
+                first_hist_category = list(self._plotdata.keys())[histogram_mask[0]]
+                bin_edges = self._binedges[first_hist_category]
+                label = f'Prediction ({total_events:.1f} events)' if prediction else None
+                ax.step(bin_edges, np.append(total_prediction, total_prediction[-1]),
+                        where='post', color='black', linewidth=1.5, label=label)
 
 
             reduce = lambda x : [x[i] for i in scatter_mask]
@@ -614,7 +658,7 @@ class SpineSpectra1D(SpineSpectra):
 
                 if is_stat:
                     # Plot statistical as black dots
-                    ax.step(bincenters, uncertainty, label=label, linestyle=':',
+                    ax.step(bincenters, uncertainty, where='mid', label=label, linestyle=':',
                             color='black', linewidth=1)
                 else:
                     # Plot systematic as colored line
