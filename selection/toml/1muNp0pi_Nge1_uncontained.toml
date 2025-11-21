@@ -211,6 +211,7 @@ disable = false
 [[tree]]
 name = "selected"
 sim_only = false
+add_systematics = true
 add_exposure = true
 mode = "reco"
 cut = [
