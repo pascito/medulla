@@ -13,12 +13,11 @@ flash_low_t = 0.0
 flash_high_t = 9.6
 QE_parameter = 0.0
 
-[[category]] # 0 : Contained muon, fiducial, single muon, single proton
+[[category]] # 0 : Uncontained muon, fiducial, single proton, not QE
 cuts = [
     { name = "neutrino"        },
+    { name = "!is_interaction_mode",    parameters = [ "@QE_parameter"       ] },
     { name = "fiducial_cut"    },
-    { name = "contained_muons_only",    parameters = [ "@muon_threshold"     ] },
-    #{ name = "containment_cut" },
     { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
     { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
     { name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
@@ -26,7 +25,19 @@ cuts = [
     { name = "single_proton",           parameters = [ "@proton_threshold"   ] },
 ]
 
-[[category]] # 1 : Single muon, single proton
+[[category]] # 1 : Uncontained muon, fiducial, single proton, QE
+cuts = [
+    { name = "neutrino"        },
+    { name = "is_interaction_mode",     parameters = [ "@QE_parameter"       ] },
+    { name = "fiducial_cut"    },
+    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
+    { name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
+    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
+    { name = "single_proton",           parameters = [ "@proton_threshold"   ] },
+]
+
+[[category]] # 2 : Uncontained muon, single proton
 cuts = [
     { name = "neutrino" },
     { name = "no_photons",       parameters = [ "@photon_threshold"   ] },
@@ -36,12 +47,11 @@ cuts = [
     { name = "single_proton",    parameters = [ "@proton_threshold"   ] },
 ]
 
-[[category]] # 2 : Contained muon, fiducial, single muon, multiple protons
+[[category]] # 3 : Uncontained muon, fiducial, multiple protons, not QE
 cuts = [
     { name = "neutrino"        },
     { name = "fiducial_cut"    },
-    { name = "contained_muons_only",    parameters = [ "@muon_threshold"     ] },
-    #{ name = "containment_cut" },
+    { name = "!is_interaction_mode",    parameters = [ "@QE_parameter"       ] },
     { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
     { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
     { name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
@@ -49,7 +59,19 @@ cuts = [
     { name = "!no_protons",             parameters = [ "@proton_threshold"   ] },
 ]
 
-[[category]] # 3 : Single muon, multiple protons
+[[category]] # 4 : Uncontained muon, fiducial, multiple protons, QE
+cuts = [
+    { name = "neutrino"        },
+    { name = "is_interaction_mode",     parameters = [ "@QE_parameter"       ] },
+    { name = "fiducial_cut"    },
+    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
+    { name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
+    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
+    { name = "!no_protons",             parameters = [ "@proton_threshold"   ] },
+]
+
+[[category]] # 5 : Uncontained muon, multiple protons
 cuts = [
     { name = "neutrino" },
     { name = "no_photons",       parameters = [ "@photon_threshold"   ] },
@@ -59,37 +81,36 @@ cuts = [
     { name = "!no_protons",      parameters = [ "@proton_threshold"   ] },
 ]
 
-[[category]] # 4 : Contained muon, fiducial, single muon
+[[category]] # 6 : Uncontained muon, fiducial
 cuts = [
     { name = "neutrino"        },
     { name = "fiducial_cut"    },
-    { name = "contained_muons_only",    parameters = [ "@muon_threshold" ] },
-    #{ name = "containment_cut" },
     { name = "single_muon",             parameters = [ "@muon_threshold" ] },
 ]
 
-[[category]] # 5 : Single muon
+[[category]] # 7 : Uncontained muon
 cuts = [
     { name = "neutrino" },
     { name = "single_muon", parameters = [ "@muon_threshold" ] },
 ]
 
-[[category]] # 6 : Neutrino, charged current
+[[category]] # 8 : Neutrino, charged current
 cuts = [
     { name = "neutrino" },
     { name = "iscc"     },
 ]
 
-[[category]] # 7 : Neutrino, neutral current
+[[category]] # 9 : Neutrino, neutral current
 cuts = [
     { name = "neutrino" },
     { name = "!iscc"    },
 ]
 
-[[category]] # 8 : Cosmic
+[[category]] # 10 : Cosmic
 cuts = [
     { name = "!neutrino" },
 ]
+
 
 [[category]] # 9 : Uncontained muon, fiducial, single proton, QE
 cuts = [

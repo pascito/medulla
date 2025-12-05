@@ -300,12 +300,6 @@ range = [0,2000]
 nbins = 25
 xlabel = 'Reconstructed Leading Muon Ke csda [MeV/c]'
 
-[variables.true_leading_muon_ke_csda]
-key = "true_leading_muon_csda_ke"
-range = [0,2000]
-nbins = 25
-xlabel = 'True Leading Muon Ke csda [MeV/c]'
-
 ### leading_muon_length ------------------------------------
 
 [variables.reco_leading_muon_length_residual]
