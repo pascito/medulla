@@ -214,37 +214,37 @@ xlabel = 'Reco $\cos{(\theta_{\mu p})}$'
 
 [variables.reco_leading_muon_ke_residual]
 key = "reco_leading_muon_ke"
-range = [0,2000]
+range = [0,1600]
 nbins = 200
 xlabel = 'Reconstructed Leading Muon Ke [MeV/c]'
 
 [variables.true_leading_muon_ke_residual]
 key = "true_leading_muon_ke"
-range = [0,2000]
+range = [0,1600]
 nbins = 200
 xlabel = 'True Leading Muon Ke [MeV/c]'
 
 [variables.reco_leading_muon_ke_smearing]
 key = "reco_leading_muon_ke"
-range = [0,2000]
+range = [0,1600]
 nbins = 10
 xlabel = 'Reconstructed Leading Muon Ke [MeV/c]'
 
 [variables.true_leading_muon_ke_smearing]
 key = "true_leading_muon_ke"
-range = [0,2000]
+range = [0,1600]
 nbins = 10
 xlabel = 'True Leading Muon Ke [MeV/c]'
 
 [variables.reco_leading_muon_ke]
 key = "reco_leading_muon_ke"
-range = [0,2000]
+range = [0,1600]
 nbins = 25
 xlabel = 'Reconstructed Leading Muon Ke [MeV/c]'
 
 [variables.true_leading_muon_ke]
 key = "true_leading_muon_ke"
-range = [0,2000]
+range = [0,1600]
 nbins = 25
 xlabel = 'True Leading Muon Ke [MeV/c]'
 
@@ -252,53 +252,53 @@ xlabel = 'True Leading Muon Ke [MeV/c]'
 
 [variables.reco_leading_muon_ke_mcs_residual]
 key = "reco_leading_muon_mcs_ke"
-range = [0,2000]
+range = [0,1600]
 nbins = 200
-xlabel = 'Reconstructed Leading Muon Ke mcs [MeV/c]'
+xlabel = 'Reconstructed Leading Muon KE MCS [MeV/c]'
 
 [variables.reco_leading_muon_ke_mcs_smearing]
 key = "reco_leading_muon_mcs_ke"
-range = [0,2000]
+range = [0,1600]
 nbins = 10
-xlabel = 'Reconstructed Leading Muon Ke mcs [MeV/c]'
+xlabel = 'Reconstructed Leading Muon KE MCS [MeV/c]'
 
 [variables.reco_leading_muon_ke_mcs]
 key = "reco_leading_muon_mcs_ke"
-range = [0,2000]
+range = [0,1600]
 nbins = 25
-xlabel = 'Reconstructed Leading Muon Ke mcs [MeV/c]'
+xlabel = 'Reconstructed Leading Muon KE MCS [MeV/c]'
 
 ### leading_muon_ke_csda ------------------------------------
 
 [variables.reco_leading_muon_ke_csda_residual]
 key = "reco_leading_muon_csda_ke"
-range = [0,2000]
+range = [0,1600]
 nbins = 200
-xlabel = 'Reconstructed Leading Muon Ke csda [MeV/c]'
+xlabel = 'Reconstructed Leading Muon KE CSDA [MeV/c]'
 
 [variables.true_leading_muon_ke_csda_residual]
 key = "true_leading_muon_csda_ke"
-range = [0,2000]
+range = [0,1600]
 nbins = 200
-xlabel = 'True Leading Muon Ke csda [MeV/c]'
+xlabel = 'True Leading Muon KE CSDA [MeV/c]'
 
 [variables.reco_leading_muon_ke_csda_smearing]
 key = "reco_leading_muon_csda_ke"
-range = [0,2000]
+range = [0,1600]
 nbins = 10
-xlabel = 'Reconstructed Leading Muon Ke csda [MeV/c]'
+xlabel = 'Reconstructed Leading Muon KE CSDA [MeV/c]'
 
 [variables.true_leading_muon_ke_csda_smearing]
 key = "true_leading_muon_csda_ke"
-range = [0,2000]
+range = [0,1600]
 nbins = 10
-xlabel = 'True Leading Muon Ke csda [MeV/c]'
+xlabel = 'True Leading Muon KE CSDA [MeV/c]'
 
 [variables.reco_leading_muon_ke_csda]
 key = "reco_leading_muon_csda_ke"
-range = [0,2000]
+range = [0,1600]
 nbins = 25
-xlabel = 'Reconstructed Leading Muon Ke csda [MeV/c]'
+xlabel = 'Reconstructed Leading Muon KE CSDA [MeV/c]'
 
 ### leading_muon_length ------------------------------------
 
