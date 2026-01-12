@@ -42,6 +42,7 @@ add_executable(to_gundam src/to_gundam.cc)
 # Link the ROOT libraries to the target
 target_link_libraries(run_systematics PRIVATE ${ROOT_LIBRARIES} sbnanaobj_standardrecord shared detsys trees)
 target_include_directories(run_systematics PRIVATE include/ ${SBNANAOBJ_INC} ${ROOT_INCLUDE_DIRS})
+include_directories(${ROOT_INCLUDE_DIRS} ${SBNANAOBJ_INCLUDE_DIRS} include/ tomlplusplus/include)
 
 # Add ROOT definitions
 add_definitions(${ROOT_CXX_FLAGS})
