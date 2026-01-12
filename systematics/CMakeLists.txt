@@ -37,6 +37,7 @@ set_target_properties(sbnanaobj_standardrecord PROPERTIES
 
 # Add the executable target
 add_executable(run_systematics src/main.cc)
+add_executable(to_gundam src/to_gundam.cc)
 
 # Link the ROOT libraries to the target
 target_link_libraries(run_systematics PRIVATE ${ROOT_LIBRARIES} sbnanaobj_standardrecord shared detsys trees)

@@ -40,6 +40,7 @@ pattern = 'hysyst*(?!\w*sigma\b)\w+\b'
 name = 'xsec'
 label = 'Cross-section'
 pattern = '\bGENIEReWeight_SBN_v1_multisim_\w+\b'
+#pattern = '\bGENIEReWeight_SBN_v1_multisigma_\w+\b'
 
 [[systematic_recipe]]
 name = 'detsys'
@@ -49,7 +50,8 @@ pattern = '\bvar(00|01|02|03|04|05|06|07)\b'
 [[systematic_recipe]]
 name = 'MC_total'
 label = 'Flux, Interaction, & Detector Uncertainty'
-pattern = '^(flux|xsec|stats|detsys)$'
+#pattern = '^(flux|xsec|stats|detsys)$'
+pattern = '^(flux|xsec|stats)$'
 
 [analysis]
 #ordinate_sample = 'mc'
@@ -63,7 +65,7 @@ category_types = ['histogram', 'histogram', 'histogram', 'histogram','histogram'
 [[figure]]
 name = 'dpT_reco'
 type = 'SimpleFigure'
-style = 'selected_icarus_1muNp0pi_N>=1'
+style = 'selected_icarus_data'
 [[figure.artists]]
 type = 'SpineSpectra1D'
 variable = 'reco_dpT'
@@ -72,7 +74,7 @@ draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = tru
 [[figure]]
 name = 'dpT_fractional_residual'
 type = 'SimpleFigure'
-style = 'selected_icarus_1muNp0pi_N>=1'
+style = 'selected_icarus_mc'
 [[figure.artists]]
 type = 'SpineSpectra2D'
 yvariable = 'reco_dpT_residual'
@@ -84,7 +86,7 @@ draw_kwargs = {'show_option' = 'projection', 'draw_identity' = true, 'draw_color
 [[figure]]
 name = 'dpT_2d_correlation'
 type = 'SimpleFigure'
-style = 'selected_icarus_1muNp0pi_N>=1'
+style = 'selected_icarus_mc'
 [[figure.artists]]
 type = 'SpineSpectra2D'
 xvariable = 'true_dpT'
@@ -94,7 +96,7 @@ draw_kwargs = {'show_option' = '2d', 'draw_identity' = true, 'draw_colorbar' = t
 [[figure]]
 name = 'dpT_smearing_matrix_normalized'
 type = 'SimpleFigure'
-style = 'selected_icarus_1muNp0pi_N>=1'
+style = 'selected_icarus_mc'
 [[figure.artists]]
 type = 'SpineSpectra2D'
 xvariable = 'true_dpT_smearing'
@@ -104,7 +106,7 @@ draw_kwargs = {show_option = 'smearing', draw_colorbar = true}
 [[figure]]
 name = "systematics_dpT"
 type = "SimpleFigure"
-style = 'selected_icarus_1muNp0pi_N>=1'
+style = 'selected_icarus_mc'
 [[figure.artists]]
 type = "SpineSpectra1D"
 variable = "reco_dpT"

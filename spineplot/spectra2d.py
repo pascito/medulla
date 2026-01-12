@@ -141,6 +141,7 @@ class SpineSpectra2D(SpineSpectra):
         -------
         None.
         """
+        
         super().add_sample(sample, is_ordinate)
 
         if self._plotdata is None:
@@ -161,7 +162,9 @@ class SpineSpectra2D(SpineSpectra):
         else:
             joint_mask = None
 
-        data, weights = sample.get_data([self._variables[0]._key, self._variables[1]._key], joint_mask)        
+        data, weights = sample.get_data([self._variables[0]._key, self._variables[1]._key], joint_mask)
+
+        
         for category, values in data.items():
             if category not in self._categories.keys():
                 continue
@@ -170,6 +173,7 @@ class SpineSpectra2D(SpineSpectra):
             xr = self._variables[0]._range if self._xrange is None else self._xrange
             yr = self._variables[1]._range if self._yrange is None else self._yrange
             h = np.histogram2d(values[0], values[1], bins=(self._variables[0]._nbins, self._variables[1]._nbins), range=(xr, yr), weights=weights[category])
+            
             self._plotdata[self._categories[category]] += h[0]
             self._binedges[self._categories[category]] = h[1]
 
@@ -273,6 +277,7 @@ class SpineSpectra2D(SpineSpectra):
                 cbar.ax.tick_params(labelsize=12, size=6, width=1.5)
 
         if show_option == 'smearing' and self._plotdata is not None:
+
             values = np.sum([v for v in self._plotdata.values()], axis=0)
             binedges = self._binedges[list(self._plotdata.keys())[0]]
 

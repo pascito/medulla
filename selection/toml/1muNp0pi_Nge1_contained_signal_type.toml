@@ -16,7 +16,7 @@ MEC_parameter = 10.0
 RES_parameter = 1.0
 DIS_parameter = 2.0
 
-[[category]] # 0 : Uncontained muon, fiducial, single proton, QE
+[[category]] # 0 : Contained muon, fiducial, single proton, QE
 cuts = [
     { name = "neutrino"        },
     { name = "is_interaction_mode",     parameters = [ "@QE_parameter"       ] },
@@ -28,7 +28,7 @@ cuts = [
     { name = "single_proton",           parameters = [ "@proton_threshold"   ] },
 ]
 
-[[category]] # 1 : Uncontained muon, fiducial, multiple protons, QE
+[[category]] # 1 : Contained muon, fiducial, multiple protons, QE
 cuts = [
     { name = "neutrino"        },
     { name = "is_interaction_mode",     parameters = [ "@QE_parameter"       ] },
@@ -40,7 +40,7 @@ cuts = [
     { name = "!no_protons",             parameters = [ "@proton_threshold"   ] },
 ]
 
-[[category]] # 2 : Uncontained muon, fiducial, single proton, MEC
+[[category]] # 2 : Contained muon, fiducial, single proton, MEC
 cuts = [
     { name = "neutrino"        },
     { name = "is_interaction_mode",     parameters = [ "@MEC_parameter"       ] },
@@ -52,7 +52,7 @@ cuts = [
     { name = "single_proton",           parameters = [ "@proton_threshold"   ] },
 ]
 
-[[category]] # 3 : Uncontained muon, fiducial, multiple protons, MEC
+[[category]] # 3 : Contained muon, fiducial, multiple protons, MEC
 cuts = [
     { name = "neutrino"        },
     { name = "is_interaction_mode",     parameters = [ "@MEC_parameter"       ] },
@@ -64,7 +64,7 @@ cuts = [
     { name = "!no_protons",             parameters = [ "@proton_threshold"   ] },
 ]
 
-[[category]] # 4 : Uncontained muon, fiducial, single proton, RES
+[[category]] # 4 : Contained muon, fiducial, single proton, RES
 cuts = [
     { name = "neutrino"        },
     { name = "is_interaction_mode",     parameters = [ "@RES_parameter"       ] },
@@ -76,7 +76,7 @@ cuts = [
     { name = "single_proton",           parameters = [ "@proton_threshold"   ] },
 ]
 
-[[category]] # 5 : Uncontained muon, fiducial, multiple protons, RES
+[[category]] # 5 : Contained muon, fiducial, multiple protons, RES
 cuts = [
     { name = "neutrino"        },
     { name = "is_interaction_mode",     parameters = [ "@RES_parameter"       ] },
@@ -88,7 +88,7 @@ cuts = [
     { name = "!no_protons",             parameters = [ "@proton_threshold"   ] },
 ]
 
-[[category]] # 6 : Uncontained muon, fiducial, single proton, DIS
+[[category]] # 6 : Contained muon, fiducial, single proton, DIS
 cuts = [
     { name = "neutrino"        },
     { name = "is_interaction_mode",     parameters = [ "@DIS_parameter"       ] },
@@ -100,7 +100,7 @@ cuts = [
     { name = "single_proton",           parameters = [ "@proton_threshold"   ] },
 ]
 
-[[category]] # 7 : Uncontained muon, fiducial, multiple protons, DIS
+[[category]] # 7 : Contained muon, fiducial, multiple protons, DIS
 cuts = [
     { name = "neutrino"        },
     { name = "is_interaction_mode",     parameters = [ "@DIS_parameter"       ] },

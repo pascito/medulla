@@ -67,7 +67,8 @@ def mark_preliminary(ax, label, vadj=0, hadj=0) -> None:
     usey = yrange[1] + 0.025*(yrange[1] - yrange[0]) + vadj*(yrange[1] - yrange[0])
     xrange = ax.get_xlim()
     usex = xrange[0] + 0.025*(xrange[1] - xrange[0]) + hadj*(xrange[1] - xrange[0])
-    ax.text(x=usex, y=usey, s=label, fontsize=12, color='blue')
+    color = 'chocolate' if 'data' in label.lower() else 'blue'
+    ax.text(x=usex, y=usey, s=label, fontsize=12, color=color, verticalalignment='bottom')
 
 def draw_error_boxes(ax, x, y, xerr, yerr, **kwargs):
     """
