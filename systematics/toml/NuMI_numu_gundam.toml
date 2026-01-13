@@ -24,7 +24,7 @@ nuniverses = 1000
 variable_length = false
 
 [[tree]]
-origin = 'events/full/selected'
+origin = 'events/nominal/selected'
 destination = 'events/full/'
 name = 'selected'
 action = 'add_weights'
