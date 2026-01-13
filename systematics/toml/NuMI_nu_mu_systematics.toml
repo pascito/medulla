@@ -6,7 +6,7 @@ weights = '/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_fl
 use_additional_hash = true
 
 [output]
-path = '/exp/icarus/data/users/rvizarr/medulla/icarus_numi_numu_mc_onbeam_offbeam_syst_gundam.root'
+path = '/exp/icarus/data/users/rvizarr/medulla/icarus_numi_numu_mc_onbeam_offbeam_syst.root'
 histogram_destination = 'variations/'
 
 [[sysvar]]
