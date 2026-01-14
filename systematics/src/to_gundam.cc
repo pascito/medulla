@@ -40,7 +40,7 @@ int main(int argc, char * argv[])
   /////////////////////////////////////////////////////////////
   /// Output
   /////////////////////////////////////////////////////////////
-  TFile* output = TFile::Open("output.root", "RECREATE");
+  TFile* output = TFile::Open("/exp/icarus/data/users/rvizarr/medulla/icarus_numi_numu_mc_onbeam_offbeam_syst_gundam.root", "RECREATE");
 
   /////////////////////////////////////////////////////////////
   // Loop over every tree in TOML config
