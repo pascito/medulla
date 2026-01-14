@@ -42,8 +42,8 @@ type = 'variation'
 index = -1
 nsigma = [-3, -2, -1, 0, 1 ,2, 3]
 scale = [-3, -2, -1, 1, 1, 2, 3]
-ordinate = 'nominal'
-points = ['var00', 'var00', 'var00', 'nominal', 'var00', 'var00', 'var00']
+ordinate = 'cvext'
+points = ['var00', 'var00', 'var00', 'cvext', 'var00', 'var00', 'var00']
 
 [[sys]]
 name = 'var01'
@@ -51,8 +51,8 @@ type = 'variation'
 index = -1
 nsigma = [-3, -2, -1, 0, 1 ,2, 3]
 scale = [-3, -2, -1, 1, 1, 2, 3]
-ordinate = 'nominal'
-points = ['var01m', 'var01m', 'var01m', 'nominal', 'var01p', 'var01p', 'var01p']
+ordinate = 'cvext'
+points = ['var01m', 'var01m', 'var01m', 'cvext', 'var01p', 'var01p', 'var01p']
 
 [[sys]]
 name = 'var02'
@@ -60,8 +60,8 @@ type = 'variation'
 index = -1
 nsigma = [-3, -2, -1, 0, 1 ,2, 3]
 scale = [-3, -2, -1, 1, 1, 2, 3]
-ordinate = 'nominal'
-points = ['var02m', 'var02m', 'var02m', 'nominal', 'var02p', 'var02p', 'var02p']
+ordinate = 'cvext'
+points = ['var02m', 'var02m', 'var02m', 'cvext', 'var02p', 'var02p', 'var02p']
 
 [[sys]]
 name = 'var03'
@@ -69,8 +69,8 @@ type = 'variation'
 index = -1
 nsigma = [-3, -2, -1, 0, 1 ,2, 3]
 scale = [3, 2, 1, 1, 1, 2, 3]
-ordinate = 'nominal'
-points = ['var03m', 'var03m', 'var03m', 'nominal', 'var03p', 'var03p', 'var03p']
+ordinate = 'cvext'
+points = ['var03m', 'var03m', 'var03m', 'cvext', 'var03p', 'var03p', 'var03p']
 
 [[sys]]
 name = 'var04'
@@ -78,8 +78,8 @@ type = 'variation'
 index = -1
 nsigma = [-3, -2, -1, 0, 1 ,2, 3]
 scale = [-3, -2, -1, 1, 1, 2, 3]
-ordinate = 'nominal'
-points = ['var04m', 'var04m', 'var04m', 'nominal', 'var04p', 'var04p', 'var04p']
+ordinate = 'cvext'
+points = ['var04m', 'var04m', 'var04m', 'cvext', 'var04p', 'var04p', 'var04p']
 
 [[sys]]
 name = 'var05'
@@ -87,8 +87,8 @@ type = 'variation'
 index = -1
 nsigma = [-3, -2, -1, 0, 1 ,2, 3]
 scale = [-3, -2, -1, 1, 1, 2, 3]
-ordinate = 'nominal'
-points = ['var05', 'var05', 'var05', 'nominal', 'var05', 'var05', 'var05']
+ordinate = 'cvext'
+points = ['var05', 'var05', 'var05', 'cvext', 'var05', 'var05', 'var05']
 
 [[sys]]
 name = 'var06'
@@ -96,8 +96,8 @@ type = 'variation'
 index = -1
 nsigma = [-3, -2, -1, 0, 1 ,2, 3]
 scale = [-3, -2, -1, 1, 1, 2, 3]
-ordinate = 'nominal'
-points = ['var06', 'var06', 'var06', 'nominal', 'var06', 'var06', 'var06']
+ordinate = 'cvext'
+points = ['var06', 'var06', 'var06', 'cvext', 'var06', 'var06', 'var06']
 
 [[sys]]
 name = 'var07'
@@ -105,8 +105,8 @@ type = 'variation'
 index = -1
 nsigma = [-3, -2, -1, 0, 1 ,2, 3]
 scale = [-3, -2, -1, 1, 1, 2, 3]
-ordinate = 'nominal'
-points = ['var07', 'var07', 'var07', 'nominal', 'var07', 'var07', 'var07']
+ordinate = 'simulation'
+points = ['var07', 'var07', 'var07', 'simulation', 'var07', 'var07', 'var07']
 
 
 [[sys]]
@@ -852,3 +852,192 @@ index = 126
 name = 'piplus_Flux'
 type = 'multisim'
 index = 127
+
+[[sys]]
+name = 'hysyst_beam_horn_2kA'
+name_short = 'horn_2kA'
+type = 'NuMIfluxsim'
+index = 128
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_beam_horn1_x_3mm'
+name_short = 'horn1_x_3mm'
+type = 'NuMIfluxsim'
+index = 129
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_beam_horn1_y_3mm'
+name_short = 'horn1_y_3mm'
+type = 'NuMIfluxsim'
+index = 130
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_beam_spot_1_3mm'
+name_short = 'spot_1_3mm'
+type = 'NuMIfluxsim'
+index = 131
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_beam_spot_1_7mm'
+name_short = 'spot_1_7mm'
+type = 'NuMIfluxsim'
+index = 132
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_beam_horn2_x_3mm'
+name_short = 'horn2_x_3mm'
+type = 'NuMIfluxsim'
+index = 133
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_beam_horn2_y_3mm'
+name_short = 'horn2_y_3mm'
+type = 'NuMIfluxsim'
+index = 134
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_beam_horns_0mm_water'
+name_short = 'horns_0mm_water'
+type = 'NuMIfluxsim'
+index = 135
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_beam_horns_2mm_water'
+name_short = 'horns_2mm_water'
+type = 'NuMIfluxsim'
+index = 136
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_beam_Beam_shift_x_1mm'
+name_short = 'Beam_shift_x_1mm'
+type = 'NuMIfluxsim'
+index = 137
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_beam_Beam_shift_y_1mm'
+name_short = 'Beam_shift_y_1mm'
+type = 'NuMIfluxsim'
+index = 138
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_beam_Target_z_7mm'
+name_short = 'Target_z_7mm'
+type = 'NuMIfluxsim'
+index = 139
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_hpc_0'
+name_short = 'hpc_0'
+type = 'NuMIfluxsim'
+index = 140
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_hpc_1'
+name_short = 'hpc_1'
+type = 'NuMIfluxsim'
+index = 141
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_hpc_2'
+name_short = 'hpc_2'
+type = 'NuMIfluxsim'
+index = 142
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_hpc_3'
+name_short = 'hpc_4'
+type = 'NuMIfluxsim'
+index = 143
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_hpc_4'
+name_short = 'hpc_4'
+type = 'NuMIfluxsim'
+index = 144
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_hpc_5'
+name_short = 'hpc_5'
+type = 'NuMIfluxsim'
+index = 145
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_hpc_6'
+name_short = 'hysyst_hpc_7'
+type = 'NuMIfluxsim'
+index = 146
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_hpc_7'
+name_short = 'hpc_7'
+type = 'NuMIfluxsim'
+index = 147
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_hpc_8'
+name_short = 'hpc_8'
+type = 'NuMIfluxsim'
+index = 148
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_hpc_9'
+name_short = 'hpc_9'
+type = 'NuMIfluxsim'
+index = 149
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_hpc_10'
+name_short = 'hpc_10'
+type = 'NuMIfluxsim'
+index = 150
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_hpc_11'
+name_short = 'hpc_11'
+type = 'NuMIfluxsim'
+index = 151
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_hpc_12'
+name_short = 'hpc_12'
+type = 'NuMIfluxsim'
+index = 152
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_hpc_13'
+name_short = 'hpc_13'
+type = 'NuMIfluxsim'
+index = 153
+nsigma = [-3,-2,-1,0,1,2,3]
+
+[[sys]]
+name = 'hysyst_hpc_14'
+name_short = 'hpc_14'
+type = 'NuMIfluxsim'
+index = 154
+nsigma = [-3,-2,-1,0,1,2,3]
