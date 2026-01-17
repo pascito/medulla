@@ -44,6 +44,12 @@ destination = 'events/onbeam/'
 name = 'selected'
 action = 'copy'
 
+[[tree]]
+origin = 'events/onbeam/sideband'
+destination = 'events/onbeam/'
+name = 'sideband'
+action = 'copy'
+
 [[sys]]
 name = 'var00'
 type = 'variation'

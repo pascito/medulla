@@ -19,3 +19,25 @@ mark_pot = true
 mark_preliminary = """$\\bf{ICARUS\\cdot NuMI}$ Data (10% Run 2)
 Work-in-Progress"""
 plot_kwargs = {'histtype' = 'barstacked', 'stacked' = true}
+
+[[style]]
+name = 'selected_sideband_icarus_mc'
+style_sheet = "/Users/rvizarreta/Library/CloudStorage/GoogleDrive-rvizarreta14@gmail.com/My Drive/🏛 PhD Repository/🚀 Research/🤖 Experiments&Projects/ICARUS/ICARUS_CC0pi_Selection/ICARUS-NuMI-CC0pi-Selection/spineplot/styles/muon2024.mplstyle"
+markers = ['o', '^', 's', 'P', 'D']
+default_figsize = [6.4,4.8]
+title = '' #'$\bf{ICARUS}$ $CC 1\mu Np 0\pi$'
+mark_pot = true
+mark_preliminary = """$\\bf{ICARUS\\cdot NuMI}$ Simulation
+Work-in-Progress | Sideband"""
+plot_kwargs = {'histtype' = 'barstacked', 'stacked' = true}
+
+[[style]]
+name = 'selected_sideband_icarus_data'
+style_sheet = "/Users/rvizarreta/Library/CloudStorage/GoogleDrive-rvizarreta14@gmail.com/My Drive/🏛 PhD Repository/🚀 Research/🤖 Experiments&Projects/ICARUS/ICARUS_CC0pi_Selection/ICARUS-NuMI-CC0pi-Selection/spineplot/styles/muon2024.mplstyle"
+markers = ['o', '^', 's', 'P', 'D']
+default_figsize = [6.4,4.8]
+title = '' #'$\bf{ICARUS}$ $CC 1\mu Np 0\pi$ $(N\geq2)$'
+mark_pot = true
+mark_preliminary = """$\\bf{ICARUS\\cdot NuMI}$ Data (10% Run 2)
+Work-in-Progress | Sideband"""
+plot_kwargs = {'histtype' = 'barstacked', 'stacked' = true}
