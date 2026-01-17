@@ -32,7 +32,7 @@ action = 'add_weights'
 table_types = ['multisim', 'multisigma', 'variation']
 
 [[tree]]
-origin = 'events/sideband/selected'
+origin = 'events/nominal/sideband'
 destination = 'events/full/'
 name = 'sideband'
 action = 'add_weights'
