@@ -483,6 +483,13 @@ range = [-1000,1000]
 nbins = 75
 xlabel = 'True Vertex Z [cm]'
 
+### PDG ------------------------------------------------
+[variables.pdg_truth]
+key = "pdg_truth"
+range = [-1000,1000]
+nbins = 75
+xlabel = 'True Vertex Z [cm]'
+
 ### leading_pion_KE ------------------------------------
 
 #[variables.true_leading_pion_KE]

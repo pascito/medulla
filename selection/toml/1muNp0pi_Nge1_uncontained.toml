@@ -227,9 +227,9 @@ cut = [
 ]
 branch = [
     # Interaction-level truth/reco branches
-    { name = "is_nu",                    type = "both"   },
-    { name = "is_data",                  type = "both"   },
-    { name = "cut_type",                 type = "both"   },
+    { name = "is_nu",                   type = "both"   },
+    { name = "is_data",                 type = "both"   },
+    { name = "cut_type",                type = "both"   },
     { name = "neutrino_id",             type = "true"    },
     { name = "baseline",                type = "mctruth" },
     { name = "containment_cut",         type = "both"    },
@@ -247,10 +247,11 @@ branch = [
     { name = "muon_multiplicity",       type = "reco", parameters = [ "@muon_threshold"     ]},
     { name = "pion_multiplicity",       type = "reco", parameters = [ "@pion_threshold"     ]},
     { name = "proton_multiplicity",     type = "reco", parameters = [ "@proton_threshold"   ]},
+    { name = "no_charged_pions",        type = "true",  parameters = [ "@pion_threshold"     ] },
 
     # Kinematic imbalance & angles
     { name = "opening_angle_deg", type = "both" },
-    { name = "opening_angle_cos",   type = "both" },
+    { name = "opening_angle_cos", type = "both" },
     { name = "dpT",               type = "both" },
     { name = "dpT_lp",            type = "both" },
     { name = "dphiT_deg",         type = "both" },
@@ -446,6 +447,7 @@ branch = [
     { name = "muon_multiplicity",       type = "reco", parameters = [ "@muon_threshold"     ]},
     { name = "pion_multiplicity",       type = "reco", parameters = [ "@pion_threshold"     ]},
     { name = "proton_multiplicity",     type = "reco", parameters = [ "@proton_threshold"   ]},
+    { name = "no_charged_pions",        type = "true", parameters = [ "@pion_threshold"     ]},
 
     # Kinematic imbalance & angles
     { name = "opening_angle_deg", type = "both" },
