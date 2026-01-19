@@ -419,7 +419,7 @@ cut = [
     { name = "no_photons",                type = "reco",  parameters = [ "@photon_threshold"             ] },
     { name = "no_electrons",              type = "reco",  parameters = [ "@electron_threshold"           ] },
     { name = "single_muon",               type = "reco",  parameters = [ "@muon_threshold"               ] },
-    #{ name = "no_charged_pions",          type = "reco",  parameters = [ "@pion_threshold"               ] },
+    { name = "!no_charged_pions",         type = "reco",  parameters = [ "@pion_threshold"               ] },
     { name = "!no_protons",               type = "reco",  parameters = [ "@proton_threshold"             ] },
     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
     { name = "data_quality_cut",          type = "event", decrements_exposure = true },
