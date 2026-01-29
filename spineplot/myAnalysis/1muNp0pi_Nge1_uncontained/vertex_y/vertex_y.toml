@@ -13,7 +13,7 @@ exposure_type = "pot"
 trees = ['selected']
 print_sys = false
 # Comment this to avoid systematics when plotting (usually done for testing plots)
-systematics = ['multisimTree','multisigmaTree','selected_NuMIfluxsimTree']
+systematics = ['selected_multisimTree', 'selected_variationTree', 'selected_multisigmaTree', 'selected_NuMIfluxsimTree']
 
 # DATA SAMPLE
 [samples.onbeam]
@@ -38,11 +38,12 @@ pattern = 'hysyst*(?!\w*sigma\b)\w+\b'
 [[systematic_recipe]]
 name = 'xsec'
 label = 'Interaction Systematics'
-pattern = '\\bGENIEReWeight_SBN_v1_multisigma_(?!\\w*sigma\\b)\\w+\\b'
+#pattern = '\bGENIEReWeight_SBN_v1_multisim_\w+\b'
+pattern = '\bGENIEReWeight_SBN_v1_multisigma_\w+\b'
 
 [[systematic_recipe]]
 name = 'MC_total'
-label = 'Flux & Interaction Uncertainty'
+label = 'Stats, Flux & Interaction Uncertainty'
 #pattern = 'mc_statistical'
 #pattern = 'mc_nu_statistical'
 pattern = '(flux|xsec|stats)'
@@ -59,7 +60,7 @@ category_types = ['histogram', 'histogram', 'histogram', 'histogram','histogram'
 [[figure]]
 name = 'vertex_y_reco'
 type = 'SimpleFigure'
-style = 'selected_icarus_1muNp0pi_N>=1'
+style = 'selected_icarus_data'
 [[figure.artists]]
 type = 'SpineSpectra1D'
 variable = 'reco_vtx_y'

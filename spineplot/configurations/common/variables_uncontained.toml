@@ -483,12 +483,19 @@ range = [-1000,1000]
 nbins = 75
 xlabel = 'True Vertex Z [cm]'
 
-### PDG ------------------------------------------------
-[variables.pdg_truth]
-key = "pdg_truth"
-range = [-1000,1000]
-nbins = 75
-xlabel = 'True Vertex Z [cm]'
+### Sideband Variables
+
+[variables.no_charged_pions]
+key = "true_no_charged_pions"
+range = [0,2]
+nbins = 5
+xlabel = 'No charged pions cut'
+
+[variables.true_leading_pion_ke]
+key = "true_leading_pion_ke"
+range = [0,200]
+nbins = 50
+xlabel = 'True Leading Pion Energy'
 
 ### leading_pion_KE ------------------------------------
 

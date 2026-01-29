@@ -55,7 +55,7 @@ xlabel = "True $p_{KE}$ [MeV/c]"
 [[figure]]
 name = "icarus_sig_1muNp0pi_efficiency_table"
 type = "SimpleFigure"
-style = 'selected_icarus_1muNp0pi_N>=1'
+style = 'selected_icarus_mc'
 figsize = [5.0, 3.0]
 
 [[figure.artists]]
@@ -77,7 +77,7 @@ no_electrons_cut = "No Electrons"
 [[figure]]
 name = "efficiency_plot_true_leading_muon_momentum"
 type = "SimpleFigure"
-style = 'selected_icarus_1muNp0pi_N>=1'
+style = 'selected_icarus_mc'
 figsize = [8.0, 4.0]
 
 [[figure.artists]]
@@ -99,7 +99,7 @@ no_electrons_cut = "No Electrons"
 [[figure]]
 name = "efficiency_plot_true_leading_proton_momentum"
 type = "SimpleFigure"
-style = 'selected_icarus_1muNp0pi_N>=1'
+style = 'selected_icarus_mc'
 figsize = [8.0, 4.0]
 
 [[figure.artists]]
@@ -121,7 +121,7 @@ no_electrons_cut = "No Electrons"
 [[figure]]
 name = "efficiency_plot_true_leading_muon_ke"
 type = "SimpleFigure"
-style = 'selected_icarus_1muNp0pi_N>=1'
+style = 'selected_icarus_mc'
 figsize = [8.0, 4.0]
 
 [[figure.artists]]

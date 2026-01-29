@@ -132,11 +132,10 @@ class Systematic:
         if self._handle is not None:
             # Read the weights from the TTree
             weights_array = np.stack(self._handle.array(library='np'))[mask, :]
-            
-            if weights_array.shape[1] == 7:
-                # Set the "sigma" levels corresponding to each weight in the
-                # array. 
-                sigma_levels = np.linspace(-3, 3, 7)
+            weights_array_shape = weights_array.shape[1]
+            if weights_array_shape == 6 or weights_array_shape == 7:
+                # Set the "sigma" levels corresponding to each weight in the array.
+                sigma_levels = np.array([-1, 1, -2, 2, -3, 3]) if weights_array_shape == 6 else np.linspace(-3, 3, 7)
 
                 # A set of `nuniv` random values is drawn from a normal
                 # distribution with mean 0 and standard deviation 1. The

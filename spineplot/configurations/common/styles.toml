@@ -28,7 +28,7 @@ default_figsize = [6.4,4.8]
 title = '' #'$\bf{ICARUS}$ $CC 1\mu Np 0\pi$'
 mark_pot = true
 mark_preliminary = """$\\bf{ICARUS\\cdot NuMI}$ Simulation
-Work-in-Progress | Sideband"""
+Work-in-Progress | $\\pi^\\pm$ Sideband"""
 plot_kwargs = {'histtype' = 'barstacked', 'stacked' = true}
 
 [[style]]
@@ -39,5 +39,5 @@ default_figsize = [6.4,4.8]
 title = '' #'$\bf{ICARUS}$ $CC 1\mu Np 0\pi$ $(N\geq2)$'
 mark_pot = true
 mark_preliminary = """$\\bf{ICARUS\\cdot NuMI}$ Data (10% Run 2)
-Work-in-Progress | Sideband"""
+Work-in-Progress | $\\pi^\\pm$ Sideband"""
 plot_kwargs = {'histtype' = 'barstacked', 'stacked' = true}

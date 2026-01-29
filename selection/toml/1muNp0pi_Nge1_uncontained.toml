@@ -427,9 +427,9 @@ cut = [
 ]
 branch = [
     # Interaction-level truth/reco branches
-    { name = "is_nu",                    type = "both"   },
-    { name = "is_data",                  type = "both"   },
-    { name = "cut_type",                 type = "both"   },
+    { name = "is_nu",                   type = "both"    },
+    { name = "is_data",                 type = "both"    },
+    { name = "cut_type",                type = "both"    },
     { name = "neutrino_id",             type = "true"    },
     { name = "baseline",                type = "mctruth" },
     { name = "containment_cut",         type = "both"    },

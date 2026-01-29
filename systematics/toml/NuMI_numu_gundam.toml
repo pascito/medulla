@@ -15,8 +15,8 @@ name = 'reco_leading_muon_ke'
 bins = [25, 0, 3000]
 
 [variations]
-#keys = ['nominal','cvext', 'var00', 'var01p','var01m', 'var02m','var02p', 'var03m', 'var03p', 'var04m','var04p', 'var05','var06','var07']
-keys = ['nominal', 'var00', 'var01p','var01m', 'var02m','var02p', 'var03m', 'var03p', 'var04m','var04p', 'var05','var06','var07']
+keys = ['nominal','cvext', 'var00', 'var01p','var01m', 'var02m','var02p', 'var03m', 'var03p', 'var04m','var04p', 'var05','var06','var07']
+#keys = ['nominal', 'var00', 'var01p','var01m', 'var02m','var02p', 'var03m', 'var03p', 'var04m','var04p', 'var05','var06','var07']
 origin = 'events/'
 tree = 'selected'
 result_destination = 'detsys_results/'

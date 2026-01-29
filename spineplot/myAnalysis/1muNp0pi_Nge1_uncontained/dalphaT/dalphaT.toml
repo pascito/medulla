@@ -13,7 +13,7 @@ exposure_type = "pot"
 trees = ['selected']
 print_sys = false
 # Comment this to avoid systematics when plotting (usually done for testing plots)
-systematics = ['multisimTree','multisigmaTree','selected_NuMIfluxsimTree']
+systematics = ['selected_multisimTree', 'selected_variationTree', 'selected_multisigmaTree', 'selected_NuMIfluxsimTree']
 
 # DATA SAMPLE
 [samples.onbeam]
@@ -38,11 +38,12 @@ pattern = 'hysyst*(?!\w*sigma\b)\w+\b'
 [[systematic_recipe]]
 name = 'xsec'
 label = 'Cross-section'
-pattern = '\bGENIEReWeight_SBN_v1_multisim_\w+\b'
+#pattern = '\bGENIEReWeight_SBN_v1_multisim_\w+\b'
+pattern = '\bGENIEReWeight_SBN_v1_multisigma_\w+\b'
 
 [[systematic_recipe]]
 name = 'MC_total'
-label = 'Flux & Interaction Uncertainty'
+label = 'Stats, Flux & Interaction Uncertainty'
 pattern = '^(flux|xsec|stats)$'
 
 [analysis]
@@ -57,7 +58,7 @@ category_types = ['histogram', 'histogram', 'histogram', 'histogram','histogram'
 [[figure]]
 name = 'dalphaT_reco'
 type = 'SimpleFigure'
-style = 'selected_icarus_1muNp0pi_N>=1'
+style = 'selected_icarus_data'
 [[figure.artists]]
 type = 'SpineSpectra1D'
 variable = 'reco_dalphaT'
@@ -66,7 +67,7 @@ draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = tru
 [[figure]]
 name = 'dalphaT_fractional_residual'
 type = 'SimpleFigure'
-style = 'selected_icarus_1muNp0pi_N>=1'
+style = 'selected_icarus_mc'
 [[figure.artists]]
 type = 'SpineSpectra2D'
 yvariable = 'reco_dalphaT_residual'
@@ -76,19 +77,9 @@ xtitle = '$\frac{\delta_{\alpha_T,\mathrm{reco}} - \delta_{\alpha_T,\mathrm{true
 draw_kwargs = {'show_option' = 'projection', 'draw_identity' = true, 'draw_colorbar' = true, 'logz' = true}
 
 [[figure]]
-name = 'dalphaT_2d_correlation'
-type = 'SimpleFigure'
-style = 'selected_icarus_1muNp0pi_N>=1'
-[[figure.artists]]
-type = 'SpineSpectra2D'
-yvariable = 'reco_dalphaT'
-xvariable = 'true_dalphaT'
-draw_kwargs = {'show_option' = '2d', 'draw_identity' = true, 'draw_colorbar' = true, 'logz' = true}
-
-[[figure]]
 name = 'dalphaT_smearing_matrix_normalized'
 type = 'SimpleFigure'
-style = 'selected_icarus_1muNp0pi_N>=1'
+style = 'selected_icarus_mc'
 [[figure.artists]]
 type = 'SpineSpectra2D'
 xvariable = 'true_dalphaT_smearing'
@@ -98,7 +89,7 @@ draw_kwargs = {show_option = 'smearing', draw_colorbar = true}
 [[figure]]
 name = "systematics_dpT"
 type = "SimpleFigure"
-style = 'selected_icarus_1muNp0pi_N>=1'
+style = 'selected_icarus_mc'
 [[figure.artists]]
 type = "SpineSpectra1D"
 variable = "reco_dalphaT"
