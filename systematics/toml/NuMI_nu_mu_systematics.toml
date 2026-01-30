@@ -28,7 +28,6 @@ origin = 'events/nominal/selected'
 destination = 'events/full/'
 name = 'selected'
 action = 'add_weights'
-#table_types = ['multisim', 'multisigma']
 table_types = ['multisim', 'multisigma', 'variation']
 
 [[tree]]
@@ -42,13 +41,6 @@ table_types = ['multisim', 'multisigma', 'variation']
 origin = 'events/nominal/signal'
 destination = 'events/full/'
 name = 'signal'
-action = 'add_weights'
-table_types = ['multisim', 'multisigma', 'variation']
-
-[[tree]]
-origin = 'events/nominal/sideband'
-destination = 'events/full/'
-name = 'sideband'
 action = 'add_weights'
 table_types = ['multisim', 'multisigma', 'variation']
 
