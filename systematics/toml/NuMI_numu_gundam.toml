@@ -36,6 +36,26 @@ gundam_store_syst = true
 is_nu = true
 is_data = false
 
+[[tree]]
+origin = 'events/full/sideband'
+destination = 'events/full/'
+name = 'sideband'
+action = 'add_weights'
+table_types = ['multisim', 'multisigma', 'variation','NuMIfluxsim']
+gundam_store_syst = true
+is_nu = true
+is_data = false
+
+[[tree]]
+origin = 'events/full/signal'
+destination = 'events/full/'
+name = 'signal'
+action = 'add_weights'
+table_types = ['multisim', 'multisigma', 'variation','NuMIfluxsim']
+gundam_store_syst = true
+is_nu = true
+is_data = false
+
 [[sys]]
 name = 'var00'
 type = 'variation'

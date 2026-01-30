@@ -39,6 +39,20 @@ action = 'add_weights'
 table_types = ['multisim', 'multisigma', 'variation']
 
 [[tree]]
+origin = 'events/nominal/signal'
+destination = 'events/full/'
+name = 'signal'
+action = 'add_weights'
+table_types = ['multisim', 'multisigma', 'variation']
+
+[[tree]]
+origin = 'events/nominal/sideband'
+destination = 'events/full/'
+name = 'sideband'
+action = 'add_weights'
+table_types = ['multisim', 'multisigma', 'variation']
+
+[[tree]]
 origin = 'events/onbeam/selected'
 destination = 'events/onbeam/'
 name = 'selected'
