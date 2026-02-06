@@ -1,6 +1,7 @@
 
 [input]
-path = '/exp/icarus/data/users/rvizarr/medulla/1muNp0pi_Nge1_uncontained.root'
+#path = '/exp/icarus/data/users/rvizarr/medulla/1muNp0pi_Nge1_uncontained.root'
+path = '/exp/icarus/data/users/rvizarr/medulla/icarus_numi_numu_mc_onbeam_offbeam_syst.root'
 weights = '/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/*.root'
 
 use_additional_hash = true
