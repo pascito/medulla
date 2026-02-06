@@ -329,6 +329,9 @@ cut = [
 ]
 branch = [
     # Interaction-level truth branches
+    { name = "is_nu",                   type = "both"   },
+    { name = "is_data",                 type = "both"   },
+    { name = "cut_type",                type = "both"   },
     { name = "neutrino_id",            type = "true"    },
     { name = "containment_cut",        type = "both"    },
     { name = "fiducial_cut",           type = "both"    },
