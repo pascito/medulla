@@ -254,6 +254,10 @@ void copy_with_syst(cfg::ConfigurationTable config, cfg::ConfigurationTable tabl
 
 	    Float_t w05 = 1.f + 0.5f*(w1 - 1.f);
 
+	    // Clear vectors (safety, though they're freshly declared)
+        nsigmas.clear();
+        weights.clear();
+
 	    nsigmas.push_back(-1.f);
 	    nsigmas.push_back(-0.5f);
 	    nsigmas.push_back(0.f);
@@ -282,22 +286,22 @@ void copy_with_syst(cfg::ConfigurationTable config, cfg::ConfigurationTable tabl
 	      weights.push_back(val);
           }
 
-	// weight = 1 for nsigma = 0
-	if(!strcmp(syst_type.c_str(), "multisigma"))
-	  {
-	    nsigmas.push_back(0);
-	    if(table.get_bool_field("is_nu") == false)
-	      weights.push_back(-5);
-	    else
-	      weights.push_back(1);
-	  }
-  }
+        // weight = 1 for nsigma = 0
+        if(!strcmp(syst_type.c_str(), "multisigma"))
+          {
+            nsigmas.push_back(0);
+            if(table.get_bool_field("is_nu") == false)
+              weights.push_back(-5);
+            else
+              weights.push_back(1);
+          }
+    }
 
-        // Create a TGraph for every event
-        TGraph *graph = new TGraph(nsigmas.size(), &nsigmas[0], &weights[0]);
-        graph->Sort();
-        new( (*arrSyst[sys_idxs[name]])[0]) TGraph(nsigmas.size(),graph->GetX(),graph->GetY());
-      } // end systematic parameter loop
+    // Create a TGraph for every event
+    TGraph *graph = new TGraph(nsigmas.size(), &nsigmas[0], &weights[0]);
+    graph->Sort();
+    new( (*arrSyst[sys_idxs[name]])[0]) TGraph(nsigmas.size(),graph->GetX(),graph->GetY());
+  } // end systematic parameter loop
 
     // This is needed in order to not fill with output TTree with duplicates
     // (only fill specified systematic branches)
