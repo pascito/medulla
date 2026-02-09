@@ -34,7 +34,7 @@ int main(int argc, char * argv[])
   /// To-do: Automate this
   TTree* multisigma_tree = (TTree*)input->Get("events/full/selected_multisigmaTree");
   TTree* variation_tree = (TTree*)input->Get("events/full/selected_variationTree");
-  TTree* multisim_tree = (TTree*)input->Get("events/full/selected_multisimTree"); // TEST...delete if anything breaks
+  //TTree* multisim_tree = (TTree*)input->Get("events/full/selected_multisimTree"); // TEST...delete if anything breaks
   TTree* NuMIflux_tree = (TTree*)input->Get("events/full/selected_NuMIfluxsimTree");
 
   /////////////////////////////////////////////////////////////
@@ -78,8 +78,8 @@ int main(int argc, char * argv[])
     }
   // TEST: Copy multisim tree as-is...delete if anything breaks
   output->cd();
-  TTree* multisim_tree_copy = multisim_tree->CloneTree(-1);
-  multisim_tree_copy->Write();
+  //TTree* multisim_tree_copy = multisim_tree->CloneTree(-1);
+  //multisim_tree_copy->Write();
 
   output->Close();
   input->Close();
