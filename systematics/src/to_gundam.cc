@@ -220,6 +220,15 @@ void copy_with_syst(cfg::ConfigurationTable config, cfg::ConfigurationTable tabl
           sysIdx++;
         }
     }
+
+  // Define morph dial names for special handling
+  std::vector<std::string> morph_names = {
+    "GENIEReWeight_SBN_v1_multisigma_VecFFCCQEshape",
+    "GENIEReWeight_SBN_v1_multisigma_DecayAngMEC",
+    "GENIEReWeight_SBN_v1_multisigma_Theta_Delta2Npi",
+    "GENIEReWeight_SBN_v1_multisigma_ThetaDelta2NRad"
+  };
+
   // Loop through the entries of the tree and access the data
   Long64_t nEntries = syst_in_tree->GetEntries();
   for (Long64_t i = 0; i < nEntries; ++i) {
@@ -230,11 +239,41 @@ void copy_with_syst(cfg::ConfigurationTable config, cfg::ConfigurationTable tabl
       {
 	std::vector<Float_t>* x_vec_ptr = branch_addresses_nsigmas.at(name);
 	std::vector<Float_t> nsigmas;
+	std::vector<Float_t> weights;
+
+	// Check if this is a morph dial
+	bool is_morph = (!strcmp(syst_type.c_str(), "multisigma")) &&
+	    (std::find(morph_names.begin(), morph_names.end(), name) != morph_names.end());
+
+	if (is_morph)
+	{
+	    // Build 5-point symmetric spline for morph dials
+	    Float_t w1 = (y_vec_ptr && !y_vec_ptr->empty()) ? y_vec_ptr->front() : 1.f;
+	    if (!std::isfinite(w1)) w1 = 1.f;
+	    if (table.get_bool_field("is_nu") == false) w1 = 1.f;
+
+	    Float_t w05 = 1.f + 0.5f*(w1 - 1.f);
+
+	    nsigmas.push_back(-1.f);
+	    nsigmas.push_back(-0.5f);
+	    nsigmas.push_back(0.f);
+	    nsigmas.push_back(0.5f);
+	    nsigmas.push_back(1.f);
+
+	    weights.push_back(w1);
+	    weights.push_back(w05);
+	    weights.push_back(1.f);
+	    weights.push_back(w05);
+	    weights.push_back(w1);
+	}
+	else
+	{
+        // Original behavior for standard multisigma dials
         for (Float_t val : *x_vec_ptr)
           {
             nsigmas.push_back(val);
           }
-	std::vector<Float_t> weights;
+
         for (Float_t val : *y_vec_ptr)
           {
 	    if(table.get_bool_field("is_nu") == false)
@@ -252,6 +291,7 @@ void copy_with_syst(cfg::ConfigurationTable config, cfg::ConfigurationTable tabl
 	    else
 	      weights.push_back(1);
 	  }
+  }
 
         // Create a TGraph for every event
         TGraph *graph = new TGraph(nsigmas.size(), &nsigmas[0], &weights[0]);
