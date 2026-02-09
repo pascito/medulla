@@ -162,7 +162,8 @@ name = 'GENIEReWeight_SBN_v1_multisigma_VecFFCCQEshape'
 name_short = 'VecFFCCQEshape'
 type = 'multisigma'
 index = 4
-nsigma = [-1,1,-2,2,-3,3]
+#nsigma = [-1,1,-2,2,-3,3]
+nsigma = [1]
 
 [[sys]]
 name = 'GENIEReWeight_SBN_v1_multisigma_RPA_CCQE'
@@ -197,7 +198,8 @@ name = 'GENIEReWeight_SBN_v1_multisigma_DecayAngMEC'
 name_short = 'DecayAngMEC'
 type = 'multisigma'
 index = 9
-nsigma = [-1,1,-2,2,-3,3]
+#nsigma = [-1,1,-2,2,-3,3]
+nsigma = [1]
 
 [[sys]]
 name = 'GENIEReWeight_SBN_v1_multisigma_MaNCEL'
@@ -372,14 +374,16 @@ name = 'GENIEReWeight_SBN_v1_multisigma_Theta_Delta2Npi'
 name_short = 'Theta_Delta2Npi'
 type = 'multisigma'
 index = 34
-nsigma = [-1,1,-2,2,-3,3]
+#nsigma = [-1,1,-2,2,-3,3]
+nsigma = [1]
 
 [[sys]]
 name = 'GENIEReWeight_SBN_v1_multisigma_ThetaDelta2NRad'
 name_short = 'ThetaDelta2NRad'
 type = 'multisigma'
 index = 35
-nsigma = [-1,1,-2,2,-3,3]
+#nsigma = [-1,1,-2,2,-3,3]
+nsigma = [1]
 
 [[sys]]
 name = 'GENIEReWeight_SBN_v1_multisigma_NormCCCOH'
