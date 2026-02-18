@@ -104,6 +104,8 @@ void copy_no_syst(cfg::ConfigurationTable table, TTree * out_tree, TTree * in_tr
   in_tree->SetBranchAddress("Subrun", &subrun);
   std::cout<<"3"<<std::endl;
   in_tree->SetBranchAddress("Evt", &event);
+  double ppfx_cv_weight_val;
+  in_tree->SetBranchAddress("ppfx_cv_weight", &ppfx_cv_weight_val);
 
   // These are branches we wish to modify
   double _cut_type, _is_nu, _is_data, _category;
@@ -122,6 +124,7 @@ void copy_no_syst(cfg::ConfigurationTable table, TTree * out_tree, TTree * in_tr
   out_tree->Branch("Run", &run);
   out_tree->Branch("Subrun", &subrun);
   out_tree->Branch("Evt", &event);
+  out_tree->Branch("ppfx_cv_weight", &ppfx_cv_weight_val, "ppfx_cv_weight/D");
 
   int cut_type, is_nu, is_data, category;
   out_tree->Branch("cut_type", &cut_type, "cut_type/I");
