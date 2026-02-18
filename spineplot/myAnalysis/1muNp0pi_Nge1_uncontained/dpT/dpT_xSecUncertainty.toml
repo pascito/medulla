@@ -13,7 +13,7 @@ exposure_type = "pot"
 trees = ['selected']
 print_sys = true
 # Comment this to avoid systematics when plotting (usually done for testing plots)
-systematics = ['multisimTree','multisigmaTree','selected_NuMIfluxsimTree']
+systematics = ['multisigmaTree','selected_NuMIfluxsimTree']
 
 # DATA SAMPLE
 [samples.onbeam]
@@ -65,7 +65,7 @@ category_colors = ['darkgreen', 'darkgreen','C1', 'C3','C5', 'C4', 'black']
 category_types = ['histogram', 'histogram', 'histogram', 'histogram','histogram','histogram', 'scatter']
 
 [[figure]]
-name = "systematics_dpT"
+name = "dpT_xSecUncertainty_expanded"
 type = "SimpleFigure"
 style = 'selected_icarus_1muNp0pi_N>=1'
 [[figure.artists]]
