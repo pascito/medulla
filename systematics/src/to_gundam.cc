@@ -94,9 +94,9 @@ void copy_no_syst(cfg::ConfigurationTable table, TTree * out_tree, TTree * in_tr
   std::cout<<"0.2"<<std::endl;
   int run, subrun, event;
   std::cout<<"Number of branches"<<in_tree<<std::endl;
-  double br[in_tree->GetNbranches()-3];
+  double br[in_tree->GetNbranches()-4];
   std::cout<<"1"<<std::endl;
-  for (int i = 0; i < in_tree->GetNbranches()-3; i++)
+  for (int i = 0; i < in_tree->GetNbranches()-4; i++)
     in_tree->SetBranchAddress(in_tree->GetListOfBranches()->At(i)->GetName(), br+i);
   std::cout<<"1"<<std::endl;
   in_tree->SetBranchAddress("Run", &run);
@@ -117,7 +117,7 @@ void copy_no_syst(cfg::ConfigurationTable table, TTree * out_tree, TTree * in_tr
   in_tree->SetBranchAddress("true_category", &_category);
 
   // Output tree
-  for (int i = 0; i < in_tree->GetNbranches()-3; i++)
+  for (int i = 0; i < in_tree->GetNbranches()-4; i++)
     out_tree->Branch(in_tree->GetListOfBranches()->At(i)->GetName(), br+i);
   out_tree->Branch("Run", &run);
   out_tree->Branch("Subrun", &subrun);
