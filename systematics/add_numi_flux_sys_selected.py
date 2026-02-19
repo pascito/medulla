@@ -592,6 +592,9 @@ tdir.WriteTObject(t, t.GetName(), "Overwrite")
 
 # --- write ppfx_cv_weight into the main selected tree ---
 main_tree = f.Get("events/full/selected")
+existing_branch = main_tree.GetBranch("ppfx_cv_weight")
+if existing_branch:
+    main_tree.GetListOfBranches().Remove(existing_branch)
 ppfx_buf = array('d', [0.0])
 ppfx_branch = main_tree.Branch("ppfx_cv_weight", ppfx_buf, "ppfx_cv_weight/D")
 for i in range(main_tree.GetEntries()):
