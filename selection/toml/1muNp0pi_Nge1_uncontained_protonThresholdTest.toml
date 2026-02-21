@@ -158,7 +158,7 @@ branch = [
     { name = "electron_multiplicity",   type = "reco", parameters = [ "@electron_threshold" ]},
     { name = "muon_multiplicity",       type = "reco", parameters = [ "@muon_threshold"     ]},
     { name = "pion_multiplicity",       type = "reco", parameters = [ "@pion_threshold"     ]},
-    { name = "proton_multiplicity",     type = "reco", parameters = [ "@proton_threshold"   ]},
+    { name = "proton_multiplicity",     type = "reco", parameters = [ "@proton_low_threshold", "@proton_high_threshold" ]},
     { name = "no_charged_pions",        type = "true",  parameters = [ "@pion_threshold"     ] },
 
     # Kinematic imbalance & angles
@@ -263,7 +263,7 @@ branch = [
     { name = "electron_multiplicity", type = "reco", parameters = [ "@electron_threshold" ]},
     { name = "muon_multiplicity",     type = "reco", parameters = [ "@muon_threshold"     ]},
     { name = "pion_multiplicity",     type = "reco", parameters = [ "@pion_threshold"     ]},
-    { name = "proton_multiplicity",   type = "reco", parameters = [ "@proton_threshold"   ]},
+    { name = "proton_multiplicity",   type = "reco", parameters = [ "@proton_low_threshold", "@proton_high_threshold" ]},
     { name = "flash_time",            type = "reco" },
 
     # Kinematic imbalance & angles
@@ -361,7 +361,7 @@ branch = [
     { name = "electron_multiplicity",   type = "reco", parameters = [ "@electron_threshold" ]},
     { name = "muon_multiplicity",       type = "reco", parameters = [ "@muon_threshold"     ]},
     { name = "pion_multiplicity",       type = "reco", parameters = [ "@pion_threshold"     ]},
-    { name = "proton_multiplicity",     type = "reco", parameters = [ "@proton_threshold"   ]},
+    { name = "proton_multiplicity",     type = "reco", parameters = [ "@proton_low_threshold", "@proton_high_threshold" ]},
     { name = "no_charged_pions",        type = "true", parameters = [ "@pion_threshold"     ]},
 
     # Kinematic imbalance & angles
