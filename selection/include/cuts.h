@@ -325,6 +325,7 @@ namespace cuts
      * @return true if the interaction has a nonzero multiplicity for the
      * specified particle species.
      */
+    template<class T>
     bool nonzero_particle_multiplicity(const T & obj, size_t particle_species, std::vector<double> params={})
     {
         size_t count(0);
