@@ -231,12 +231,11 @@ mode = "true"
 cut = [
     { name = "neutrino",                  type = "true" },
     { name = "fiducial_cut",              type = "true" },
-    #{ name = "!contained_muons_only",     type = "true",  parameters = [ "@muon_threshold"     ] },
-    { name = "no_photons",                type = "true",  parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons",              type = "true",  parameters = [ "@electron_threshold" ] },
-    { name = "single_muon",               type = "true",  parameters = [ "@muon_threshold"     ] },
-    { name = "no_charged_pions",          type = "true",  parameters = [ "@pion_threshold"     ] },
-    { name = "!no_protons",               type = "true",  parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
+    { name = "no_photons_srtruth",        type = "mctruth",  parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons_srtruth",      type = "mctruth",  parameters = [ "@electron_threshold" ] },
+    { name = "single_muon_srtruth",       type = "mctruth",  parameters = [ "@muon_threshold"     ] },
+    { name = "no_charged_pions_srtruth",  type = "mctruth",  parameters = [ "@pion_threshold"     ] },
+    { name = "has_proton_srtruth",        type = "mctruth",  parameters = [ "@proton_threshold"   ] },
     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
 ]
 branch = [
