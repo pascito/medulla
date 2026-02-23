@@ -594,5 +594,138 @@ namespace cuts
 
     REGISTER_CUT_SCOPE(RegistrationScope::True, is_pion_group_code, is_pion_group_code);
 
+    /**
+     * @brief Cut for exactly one true final state muon above threshold.
+     * @param obj the SRTrueInteraction to apply the cut on.
+     * @param params KE threshold in MeV, defaults to 143.425 MeV.
+     * @return true if exactly one muon above threshold.
+     */
+    template<typename T>
+    bool single_muon_srtruth(const T & obj, std::vector<double> params={143.425,})
+    {
+        int num_muons(0);
+        for(const auto & p : obj.prim)
+        {
+            if(abs(p.pdg) == 13)
+            {
+                double ke = 1000. * (p.genE - (MUON_MASS/1000.));
+                if(ke >= params[0])
+                    num_muons++;
+            }
+        }
+        return num_muons == 1;
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::MCTruth, single_muon_srtruth, single_muon_srtruth);
+
+    /**
+     * @brief Cut for at least one true final state proton above threshold.
+     * @param obj the SRTrueInteraction to apply the cut on.
+     * @param params KE threshold in MeV, defaults to 50 MeV.
+     * @return true if at least one proton above threshold.
+     */
+    template<typename T>
+    bool has_proton_srtruth(const T & obj, std::vector<double> params={50.0,})
+    {
+        for(const auto & p : obj.prim)
+        {
+            if(p.pdg == 2212)
+            {
+                double ke = 1000. * (p.genE - (PROTON_MASS/1000.));
+                if(ke >= params[0])
+                    return true;
+            }
+        }
+        return false;
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::MCTruth, has_proton_srtruth, has_proton_srtruth);
+
+    /**
+     * @brief Cut for zero true final state charged pions above threshold.
+     * @param obj the SRTrueInteraction to apply the cut on.
+     * @param params KE threshold in MeV, defaults to 25 MeV.
+     * @return true if no charged pions above threshold.
+     */
+    template<typename T>
+    bool no_charged_pions_srtruth(const T & obj, std::vector<double> params={25.0,})
+    {
+        for(const auto & p : obj.prim)
+        {
+            if(abs(p.pdg) == 211)
+            {
+                double ke = 1000. * (p.genE - (PION_MASS/1000.));
+                if(ke >= params[0])
+                    return false;
+            }
+        }
+        return true;
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::MCTruth, no_charged_pions_srtruth, no_charged_pions_srtruth);
+
+    /**
+     * @brief Cut for zero true final state neutral pions.
+     * @param obj the SRTrueInteraction to apply the cut on.
+     * @param params KE threshold in MeV, defaults to 0 MeV.
+     * @return true if no neutral pions above threshold.
+     */
+    template<typename T>
+    bool no_neutral_pions_srtruth(const T & obj, std::vector<double> params={0.0,})
+    {
+        for(const auto & p : obj.prim)
+        {
+            if(p.pdg == 111)
+            {
+                double ke = 1000. * p.genE - 134.977;
+                if(ke >= params[0])
+                    return false;
+            }
+        }
+        return true;
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::MCTruth, no_neutral_pions_srtruth, no_neutral_pions_srtruth);
+
+    /**
+     * @brief Cut for zero true final state photons above threshold.
+     * @param obj the SRTrueInteraction to apply the cut on.
+     * @param params energy threshold in MeV, defaults to 25 MeV.
+     * @return true if no photons above threshold.
+     */
+    template<typename T>
+    bool no_photons_srtruth(const T & obj, std::vector<double> params={25.0,})
+    {
+        for(const auto & p : obj.prim)
+        {
+            if(p.pdg == 22)
+            {
+                double energy = 1000. * p.genE;
+                if(energy >= params[0])
+                    return false;
+            }
+        }
+        return true;
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::MCTruth, no_photons_srtruth, no_photons_srtruth);
+
+    /**
+     * @brief Cut for zero true final state electrons above threshold.
+     * @param obj the SRTrueInteraction to apply the cut on.
+     * @param params KE threshold in MeV, defaults to 25 MeV.
+     * @return true if no electrons above threshold.
+     */
+    template<typename T>
+    bool no_electrons_srtruth(const T & obj, std::vector<double> params={25.0,})
+    {
+        for(const auto & p : obj.prim)
+        {
+            if(abs(p.pdg) == 11)
+            {
+                double ke = 1000. * (p.genE - (ELECTRON_MASS/1000.));
+                if(ke >= params[0])
+                    return false;
+            }
+        }
+        return true;
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::MCTruth, no_electrons_srtruth, no_electrons_srtruth);
+
 }
 #endif

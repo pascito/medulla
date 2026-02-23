@@ -115,8 +115,8 @@ cuts = [
 # SIMULATION ONLY
 [[sample]]
 name = "nominal"
-#path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_00.root"
-path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_0*.root"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_00.root"
+#path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_0*.root"
 ismc = true
 disable = false
 
@@ -171,7 +171,7 @@ mode = "true"
 cut = [
     { name = "neutrino",                  type = "true" },
     { name = "fiducial_cut",              type = "true" },
-    { name = "no_photons_fsi",                type = "true",  parameters = [ "@photon_threshold"   ] },
+    { name = "no_photons_srtruth",                type = "true",  parameters = [ "@photon_threshold"   ] },
     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
 ]
 branch = [
@@ -188,8 +188,8 @@ mode = "true"
 cut = [
     { name = "neutrino",                  type = "true" },
     { name = "fiducial_cut",              type = "true" },
-    { name = "no_photons_fsi",                type = "true",  parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons_fsi",              type = "true",  parameters = [ "@electron_threshold" ] },
+    { name = "no_photons_srtruth",                type = "true",  parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons_srtruth",              type = "true",  parameters = [ "@electron_threshold" ] },
     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
 ]
 branch = [
@@ -206,9 +206,9 @@ mode = "true"
 cut = [
     { name = "neutrino",                  type = "true" },
     { name = "fiducial_cut",              type = "true" },
-    { name = "no_photons_fsi",                type = "true",  parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons_fsi",              type = "true",  parameters = [ "@electron_threshold" ] },
-    { name = "single_muon",               type = "true",  parameters = [ "@muon_threshold"     ] },
+    { name = "no_photons_srtruth",                type = "true",  parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons_srtruth",              type = "true",  parameters = [ "@electron_threshold" ] },
+    { name = "single_muon_srtruth",               type = "true",  parameters = [ "@muon_threshold"     ] },
     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
 ]
 branch = [
@@ -225,10 +225,10 @@ mode = "true"
 cut = [
     { name = "neutrino",                  type = "true" },
     { name = "fiducial_cut",              type = "true" },
-    { name = "no_photons_fsi",                type = "true",  parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons_fsi",              type = "true",  parameters = [ "@electron_threshold" ] },
-    { name = "single_muon",               type = "true",  parameters = [ "@muon_threshold"     ] },
-    { name = "no_charged_pions_fsi",          type = "true",  parameters = [ "@pion_threshold"     ] },
+    { name = "no_photons_srtruth",                type = "true",  parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons_srtruth",              type = "true",  parameters = [ "@electron_threshold" ] },
+    { name = "single_muon_srtruth",               type = "true",  parameters = [ "@muon_threshold"     ] },
+    { name = "no_charged_pions_srtruth",          type = "true",  parameters = [ "@pion_threshold"     ] },
     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
 ]
 branch = [
@@ -245,11 +245,11 @@ mode = "true"
 cut = [
     { name = "neutrino",                  type = "true" },
     { name = "fiducial_cut",              type = "true" },
-    { name = "no_photons_fsi",                type = "true",  parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons_fsi",              type = "true",  parameters = [ "@electron_threshold" ] },
-    { name = "single_muon",               type = "true",  parameters = [ "@muon_threshold"     ] },
-    { name = "no_charged_pions_fsi",          type = "true",  parameters = [ "@pion_threshold"     ] },
-    { name = "has_proton_fsi",               type = "true",  parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
+    { name = "no_photons_srtruth",                type = "true",  parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons_srtruth",              type = "true",  parameters = [ "@electron_threshold" ] },
+    { name = "single_muon_srtruth",               type = "true",  parameters = [ "@muon_threshold"     ] },
+    { name = "no_charged_pions_srtruth",          type = "true",  parameters = [ "@pion_threshold"     ] },
+    { name = "has_proton_srtruth",               type = "true",  parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
 ]
 branch = [
