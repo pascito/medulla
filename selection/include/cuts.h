@@ -396,6 +396,19 @@ namespace cuts
     }
 
     REGISTER_CUT_SCOPE(RegistrationScope::Both, no_electrons, no_electrons);
+
+    template<class T>
+    bool no_electrons_fsi(const T & obj, std::vector<double> params={25.0,})
+    {
+        for(const auto & p : obj.particles)
+        {
+            if(pvars::pid(p) == 1 && pvars::ke(p) >= params[0])
+                return false;
+        }
+        return true;
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::Both, no_electrons_fsi, no_electrons_fsi);
+
     /**
      * @brief Binding for zero particle muon multiplicity cut (negation of
      * nonzero_particle_multiplicity).
