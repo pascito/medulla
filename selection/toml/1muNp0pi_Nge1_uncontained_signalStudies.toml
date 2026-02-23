@@ -1,0 +1,261 @@
+[general]
+output = "/exp/icarus/data/users/rvizarr/medulla/1muNp0pi_Nge1_uncontained_protonTest"
+primfn = "default_primary_classification"
+pidfn = "default_pid"
+
+[parameters]
+photon_threshold = 25.0
+electron_threshold = 25.0
+muon_threshold = 143.425
+pion_threshold = 25.0
+proton_low_threshold = 50.0
+proton_high_threshold = 433.0
+flash_low_t = 0.0
+flash_high_t = 9.6
+QE_parameter = 0.0
+
+[[category]] # 0 : Uncontained muon, fiducial, single proton, not QE
+cuts = [
+    { name = "neutrino"        },
+    { name = "!is_interaction_mode",    parameters = [ "@QE_parameter"       ] },
+    { name = "fiducial_cut"    },
+    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
+    { name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
+    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
+    { name = "single_proton",           parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
+]
+
+[[category]] # 1 : Uncontained muon, fiducial, single proton, QE
+cuts = [
+    { name = "neutrino"        },
+    { name = "is_interaction_mode",     parameters = [ "@QE_parameter"       ] },
+    { name = "fiducial_cut"    },
+    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
+    { name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
+    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
+    { name = "single_proton",           parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
+]
+
+[[category]] # 2 : Uncontained muon, single proton
+cuts = [
+    { name = "neutrino" },
+    { name = "no_photons",       parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",     parameters = [ "@electron_threshold" ] },
+    { name = "no_charged_pions", parameters = [ "@pion_threshold"     ] },
+    { name = "single_muon",      parameters = [ "@muon_threshold"     ] },
+    { name = "single_proton",    parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
+]
+
+[[category]] # 3 : Uncontained muon, fiducial, multiple protons, not QE
+cuts = [
+    { name = "neutrino"        },
+    { name = "fiducial_cut"    },
+    { name = "!is_interaction_mode",    parameters = [ "@QE_parameter"       ] },
+    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
+    { name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
+    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
+    { name = "!no_protons",             parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
+]
+
+[[category]] # 4 : Uncontained muon, fiducial, multiple protons, QE
+cuts = [
+    { name = "neutrino"        },
+    { name = "is_interaction_mode",     parameters = [ "@QE_parameter"       ] },
+    { name = "fiducial_cut"    },
+    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
+    { name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
+    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
+    { name = "!no_protons",             parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
+]
+
+[[category]] # 5 : Uncontained muon, multiple protons
+cuts = [
+    { name = "neutrino" },
+    { name = "no_photons",       parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",     parameters = [ "@electron_threshold" ] },
+    { name = "no_charged_pions", parameters = [ "@pion_threshold"     ] },
+    { name = "single_muon",      parameters = [ "@muon_threshold"     ] },
+    { name = "!no_protons",      parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
+]
+
+[[category]] # 6 : Uncontained muon, fiducial
+cuts = [
+    { name = "neutrino"        },
+    { name = "fiducial_cut"    },
+    { name = "single_muon",             parameters = [ "@muon_threshold" ] },
+]
+
+[[category]] # 7 : Uncontained muon
+cuts = [
+    { name = "neutrino" },
+    { name = "single_muon", parameters = [ "@muon_threshold" ] },
+]
+
+[[category]] # 8 : Neutrino, charged current
+cuts = [
+    { name = "neutrino" },
+    { name = "iscc"     },
+]
+
+[[category]] # 9 : Neutrino, neutral current
+cuts = [
+    { name = "neutrino" },
+    { name = "!iscc"    },
+]
+
+[[category]] # 10 : Cosmic
+cuts = [
+    { name = "!neutrino" },
+]
+
+# SIMULATION ONLY
+[[sample]]
+name = "nominal"
+#path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_07.root"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_0*.root"
+ismc = true
+disable = false
+
+[[tree]]
+name = "signal_cut1"
+sim_only = true
+add_exposure = true
+mode = "true"
+cut = [
+    { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
+]
+branch = [
+    # Interaction-level truth branches
+    { name = "pdg",                    type = "mctruth" },     # Needed for NuMI Flux calculation
+    { name = "neutrino_energy",        type = "mctruth" },     # Needed for NuMI Flux calculation
+]
+
+[[tree]]
+name = "signal_cut12"
+sim_only = true
+add_exposure = true
+mode = "true"
+cut = [
+    { name = "neutrino",                  type = "true" },
+    { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
+]
+branch = [
+    # Interaction-level truth branches
+    { name = "pdg",                    type = "mctruth" },     # Needed for NuMI Flux calculation
+    { name = "neutrino_energy",        type = "mctruth" },     # Needed for NuMI Flux calculation
+]
+
+[[tree]]
+name = "signal_cut123"
+sim_only = true
+add_exposure = true
+mode = "true"
+cut = [
+    { name = "neutrino",                  type = "true" },
+    { name = "fiducial_cut",              type = "true" },
+    { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
+]
+branch = [
+    # Interaction-level truth branches
+    { name = "pdg",                    type = "mctruth" },     # Needed for NuMI Flux calculation
+    { name = "neutrino_energy",        type = "mctruth" },     # Needed for NuMI Flux calculation
+]
+
+[[tree]]
+name = "signal_cut1234"
+sim_only = true
+add_exposure = true
+mode = "true"
+cut = [
+    { name = "neutrino",                  type = "true" },
+    { name = "fiducial_cut",              type = "true" },
+    { name = "no_photons",                type = "true",  parameters = [ "@photon_threshold"   ] },
+    { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
+]
+branch = [
+    # Interaction-level truth branches
+    { name = "pdg",                    type = "mctruth" },     # Needed for NuMI Flux calculation
+    { name = "neutrino_energy",        type = "mctruth" },     # Needed for NuMI Flux calculation
+]
+
+[[tree]]
+name = "signal_cut12345"
+sim_only = true
+add_exposure = true
+mode = "true"
+cut = [
+    { name = "neutrino",                  type = "true" },
+    { name = "fiducial_cut",              type = "true" },
+    { name = "no_photons",                type = "true",  parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",              type = "true",  parameters = [ "@electron_threshold" ] },
+    { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
+]
+branch = [
+    # Interaction-level truth branches
+    { name = "pdg",                    type = "mctruth" },     # Needed for NuMI Flux calculation
+    { name = "neutrino_energy",        type = "mctruth" },     # Needed for NuMI Flux calculation
+]
+
+[[tree]]
+name = "signal_cut123456"
+sim_only = true
+add_exposure = true
+mode = "true"
+cut = [
+    { name = "neutrino",                  type = "true" },
+    { name = "fiducial_cut",              type = "true" },
+    { name = "no_photons",                type = "true",  parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",              type = "true",  parameters = [ "@electron_threshold" ] },
+    { name = "single_muon",               type = "true",  parameters = [ "@muon_threshold"     ] },
+    { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
+]
+branch = [
+    # Interaction-level truth branches
+    { name = "pdg",                    type = "mctruth" },     # Needed for NuMI Flux calculation
+    { name = "neutrino_energy",        type = "mctruth" },     # Needed for NuMI Flux calculation
+]
+
+[[tree]]
+name = "signal_cut1234567"
+sim_only = true
+add_exposure = true
+mode = "true"
+cut = [
+    { name = "neutrino",                  type = "true" },
+    { name = "fiducial_cut",              type = "true" },
+    { name = "no_photons",                type = "true",  parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",              type = "true",  parameters = [ "@electron_threshold" ] },
+    { name = "single_muon",               type = "true",  parameters = [ "@muon_threshold"     ] },
+    { name = "no_charged_pions",          type = "true",  parameters = [ "@pion_threshold"     ] },
+    { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
+]
+branch = [
+    # Interaction-level truth branches
+    { name = "pdg",                    type = "mctruth" },     # Needed for NuMI Flux calculation
+    { name = "neutrino_energy",        type = "mctruth" },     # Needed for NuMI Flux calculation
+]
+
+[[tree]]
+name = "signal_cut12345678"
+sim_only = true
+add_exposure = true
+mode = "true"
+cut = [
+    { name = "neutrino",                  type = "true" },
+    { name = "fiducial_cut",              type = "true" },
+    { name = "no_photons",                type = "true",  parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",              type = "true",  parameters = [ "@electron_threshold" ] },
+    { name = "single_muon",               type = "true",  parameters = [ "@muon_threshold"     ] },
+    { name = "no_charged_pions",          type = "true",  parameters = [ "@pion_threshold"     ] },
+    { name = "!no_protons",               type = "true",  parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
+    { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
+]
+branch = [
+    # Interaction-level truth branches
+    { name = "pdg",                    type = "mctruth" },     # Needed for NuMI Flux calculation
+    { name = "neutrino_energy",        type = "mctruth" },     # Needed for NuMI Flux calculation
+]
