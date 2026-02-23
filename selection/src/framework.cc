@@ -728,21 +728,24 @@ ana::SpillMultiVar spill_multivar_helper(
 
                 if constexpr(std::is_same_v<VarOn, TType>)
                 {
-                    if(cuts(i) && (!comps || (match_id != kNoMatch && (*comps)(sr->dlp_true[match_id])) || !ismc))
+                    if(cuts(i) && (!comps || (match_id != kNoMatch && (*comps)(sr->dlp_true[match_id])) || !ismc)
+                        && (match_id == kNoMatch || sr->dlp_true[match_id].nu_id < 0 || mctruth_cut(sr->mc.nu[sr->dlp_true[match_id].nu_id])))
                     {
                         values.push_back(ismc && match_id != kNoMatch ? var(sr->dlp_true[match_id]) : kNoMatchValue);
                     }
                 }
                 else if constexpr(std::is_same_v<VarOn, RType>)
                 {
-                    if(cuts(i) && (!comps || (match_id != kNoMatch && (*comps)(sr->dlp[match_id]))) && (i.nu_id < 0 || mctruth_cut(sr->mc.nu[i.nu_id])))
+                    if(cuts(i) && (!comps || (match_id != kNoMatch && (*comps)(sr->dlp_true[match_id])) || !ismc)
+                        && (match_id == kNoMatch || sr->dlp_true[match_id].nu_id < 0 || mctruth_cut(sr->mc.nu[sr->dlp_true[match_id].nu_id])))
                     {
                         values.push_back(var(i));
                     }
                 }
                 else if constexpr(std::is_same_v<VarOn, MCTruth>)
                 {
-                    if(cuts(i) && (!comps || (match_id != kNoMatch && (*comps)(sr->dlp_true[match_id])) || !ismc))
+                    if(cuts(i) && (!comps || (match_id != kNoMatch && (*comps)(sr->dlp_true[match_id])))
+                        && (match_id == kNoMatch || sr->dlp_true[match_id].nu_id < 0 || mctruth_cut(sr->mc.nu[sr->dlp_true[match_id].nu_id])))
                     {
                         if(!ismc || match_id == kNoMatch)
                         {
