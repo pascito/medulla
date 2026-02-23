@@ -364,6 +364,18 @@ namespace cuts
 
     REGISTER_CUT_SCOPE(RegistrationScope::Both, no_photons, no_photons);
 
+    template<class T>
+    bool no_photons_fsi(const T & obj, std::vector<double> params={25.0,})
+    {
+        for(const auto & p : obj.particles)
+        {
+            if(pvars::pid(p) == 0 && pvars::ke(p) >= params[0])
+                return false;
+        }
+        return true;
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::Both, no_photons_fsi, no_photons_fsi);
+
     /**
      * @brief Binding for zero particle electron multiplicity cut (negation of
      * nonzero_particle_multiplicity).
