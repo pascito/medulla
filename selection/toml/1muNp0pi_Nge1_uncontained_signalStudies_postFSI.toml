@@ -57,7 +57,7 @@ cuts = [
     { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
     { name = "no_charged_pions_fsi",        parameters = [ "@pion_threshold"     ] },
     { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
-    { name = "!no_protons",             parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
+    { name = "has_proton_fsi",             parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
 ]
 
 [[category]] # 4 : Uncontained muon, fiducial, multiple protons, QE
@@ -69,7 +69,7 @@ cuts = [
     { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
     { name = "no_charged_pions_fsi",        parameters = [ "@pion_threshold"     ] },
     { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
-    { name = "!no_protons",             parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
+    { name = "has_proton_fsi",             parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
 ]
 
 [[category]] # 5 : Uncontained muon, multiple protons
@@ -79,7 +79,7 @@ cuts = [
     { name = "no_electrons",     parameters = [ "@electron_threshold" ] },
     { name = "no_charged_pions_fsi", parameters = [ "@pion_threshold"     ] },
     { name = "single_muon",      parameters = [ "@muon_threshold"     ] },
-    { name = "!no_protons",      parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
+    { name = "has_proton_fsi",      parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
 ]
 
 [[category]] # 6 : Uncontained muon, fiducial
@@ -251,7 +251,7 @@ cut = [
     { name = "no_electrons",              type = "true",  parameters = [ "@electron_threshold" ] },
     { name = "single_muon",               type = "true",  parameters = [ "@muon_threshold"     ] },
     { name = "no_charged_pions_fsi",          type = "true",  parameters = [ "@pion_threshold"     ] },
-    { name = "!no_protons",               type = "true",  parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
+    { name = "has_proton_fsi",               type = "true",  parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
 ]
 branch = [

@@ -450,6 +450,25 @@ namespace cuts
     REGISTER_CUT_SCOPE(RegistrationScope::Both, no_charged_pions_fsi, no_charged_pions_fsi);
 
     /**
+     * @brief Cut to select interactions with at least one final state proton
+     * above threshold, including FSI secondary protons.
+     * @param obj the interaction to select on.
+     * @param params kinetic energy threshold, defaults to 50 MeV.
+     * @return true if the interaction has at least one final state proton above threshold.
+     */
+    template<class T>
+    bool has_proton_fsi(const T & obj, std::vector<double> params={50.0,})
+    {
+        for(const auto & p : obj.particles)
+        {
+            if(pvars::pid(p) == 4 && pvars::ke(p) >= params[0])
+                return true;
+        }
+        return false;
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::Both, has_proton_fsi, has_proton_fsi);
+
+    /**
      * @brief Binding for zero particle proton multiplicity cut (negation of
      * nonzero_particle_multiplicity).
      * @details This function binds the nonzero particle multiplicity cut for
