@@ -126,7 +126,6 @@ sim_only = true
 add_exposure = true
 mode = "true"
 cut = [
-    { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
 ]
 branch = [
     # Interaction-level truth branches
@@ -140,7 +139,6 @@ sim_only = true
 add_exposure = true
 mode = "true"
 cut = [
-    { name = "neutrino",                  type = "true" },
     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
 ]
 branch = [
