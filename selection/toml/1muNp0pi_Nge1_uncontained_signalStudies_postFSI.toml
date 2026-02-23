@@ -135,7 +135,7 @@ branch = [
     { name = "no_electrons_srtruth",      type = "mctruth",  parameters = [ "@electron_threshold" ] },
     { name = "single_muon_srtruth",       type = "mctruth",  parameters = [ "@muon_threshold"     ] },
     { name = "no_charged_pions_srtruth",  type = "mctruth",  parameters = [ "@pion_threshold"     ] },
-    { name = "has_proton_srtruth",        type = "mctruth",  parameters = [ "@proton_threshold"   ] },
+    { name = "has_proton_srtruth",        type = "mctruth",  parameters = [ "@proton_low_threshold", "@proton_high_threshold"  ] },
 ]
 
 [[tree]]
@@ -154,7 +154,7 @@ branch = [
     { name = "no_electrons_srtruth",      type = "mctruth",  parameters = [ "@electron_threshold" ] },
     { name = "single_muon_srtruth",       type = "mctruth",  parameters = [ "@muon_threshold"     ] },
     { name = "no_charged_pions_srtruth",  type = "mctruth",  parameters = [ "@pion_threshold"     ] },
-    { name = "has_proton_srtruth",        type = "mctruth",  parameters = [ "@proton_threshold"   ] },
+    { name = "has_proton_srtruth",        type = "mctruth",  parameters = [ "@proton_low_threshold", "@proton_high_threshold"  ] },
 ]
 
 [[tree]]
@@ -175,7 +175,7 @@ branch = [
     { name = "no_electrons_srtruth",      type = "mctruth",  parameters = [ "@electron_threshold" ] },
     { name = "single_muon_srtruth",       type = "mctruth",  parameters = [ "@muon_threshold"     ] },
     { name = "no_charged_pions_srtruth",  type = "mctruth",  parameters = [ "@pion_threshold"     ] },
-    { name = "has_proton_srtruth",        type = "mctruth",  parameters = [ "@proton_threshold"   ] },
+    { name = "has_proton_srtruth",        type = "mctruth",  parameters = [ "@proton_low_threshold", "@proton_high_threshold"  ] },
 ]
 
 [[tree]]
@@ -197,7 +197,7 @@ branch = [
     { name = "no_electrons_srtruth",      type = "mctruth",  parameters = [ "@electron_threshold" ] },
     { name = "single_muon_srtruth",       type = "mctruth",  parameters = [ "@muon_threshold"     ] },
     { name = "no_charged_pions_srtruth",  type = "mctruth",  parameters = [ "@pion_threshold"     ] },
-    { name = "has_proton_srtruth",        type = "mctruth",  parameters = [ "@proton_threshold"   ] },
+    { name = "has_proton_srtruth",        type = "mctruth",  parameters = [ "@proton_low_threshold", "@proton_high_threshold"  ] },
 ]
 
 [[tree]]
@@ -220,7 +220,7 @@ branch = [
     { name = "no_electrons_srtruth",      type = "mctruth",  parameters = [ "@electron_threshold" ] },
     { name = "single_muon_srtruth",       type = "mctruth",  parameters = [ "@muon_threshold"     ] },
     { name = "no_charged_pions_srtruth",  type = "mctruth",  parameters = [ "@pion_threshold"     ] },
-    { name = "has_proton_srtruth",        type = "mctruth",  parameters = [ "@proton_threshold"   ] },
+    { name = "has_proton_srtruth",        type = "mctruth",  parameters = [ "@proton_low_threshold", "@proton_high_threshold"  ] },
 ]
 
 [[tree]]
@@ -244,7 +244,7 @@ branch = [
     { name = "no_electrons_srtruth",      type = "mctruth",  parameters = [ "@electron_threshold" ] },
     { name = "single_muon_srtruth",       type = "mctruth",  parameters = [ "@muon_threshold"     ] },
     { name = "no_charged_pions_srtruth",  type = "mctruth",  parameters = [ "@pion_threshold"     ] },
-    { name = "has_proton_srtruth",        type = "mctruth",  parameters = [ "@proton_threshold"   ] },
+    { name = "has_proton_srtruth",        type = "mctruth",  parameters = [ "@proton_low_threshold", "@proton_high_threshold"   ] },
 ]
 
 [[tree]]
@@ -269,7 +269,7 @@ branch = [
     { name = "no_electrons_srtruth",      type = "mctruth",  parameters = [ "@electron_threshold" ] },
     { name = "single_muon_srtruth",       type = "mctruth",  parameters = [ "@muon_threshold"     ] },
     { name = "no_charged_pions_srtruth",  type = "mctruth",  parameters = [ "@pion_threshold"     ] },
-    { name = "has_proton_srtruth",        type = "mctruth",  parameters = [ "@proton_threshold"   ] },
+    { name = "has_proton_srtruth",        type = "mctruth",  parameters = [ "@proton_low_threshold", "@proton_high_threshold"  ] },
 ]
 
 [[tree]]
@@ -295,5 +295,5 @@ branch = [
     { name = "no_electrons_srtruth",      type = "mctruth",  parameters = [ "@electron_threshold" ] },
     { name = "single_muon_srtruth",       type = "mctruth",  parameters = [ "@muon_threshold"     ] },
     { name = "no_charged_pions_srtruth",  type = "mctruth",  parameters = [ "@pion_threshold"     ] },
-    { name = "has_proton_srtruth",        type = "mctruth",  parameters = [ "@proton_threshold"   ] },
+    { name = "has_proton_srtruth",        type = "mctruth",  parameters = [ "@proton_low_threshold", "@proton_high_threshold"  ] },
 ]
