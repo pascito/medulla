@@ -305,6 +305,7 @@ NamedSpillMultiVar construct(const std::vector<cfg::ConfigurationTable> & cuts,
                     true_particle_cut,
                     var_fn_with_selector,
                     event_cut,
+                    mctruth_cut,
                     ismc));
             }
             else
@@ -318,6 +319,7 @@ NamedSpillMultiVar construct(const std::vector<cfg::ConfigurationTable> & cuts,
                     true_particle_cut,
                     var_fn,
                     event_cut,
+                    mctruth_cut,
                     ismc));
             }
         }
@@ -353,6 +355,7 @@ NamedSpillMultiVar construct(const std::vector<cfg::ConfigurationTable> & cuts,
                     true_particle_cut,
                     var_fn_with_selector,
                     event_cut,
+                    mctruth_cut,
                     ismc));
             }
             else
@@ -366,6 +369,7 @@ NamedSpillMultiVar construct(const std::vector<cfg::ConfigurationTable> & cuts,
                     true_particle_cut,
                     var_fn,
                     event_cut,
+                    mctruth_cut,
                     ismc));
             }
         }
@@ -380,6 +384,7 @@ NamedSpillMultiVar construct(const std::vector<cfg::ConfigurationTable> & cuts,
                 true_particle_cut,
                 var_fn,
                 event_cut,
+                mctruth_cut,
                 ismc));
         }
         else if(var_type == "true_particle")
@@ -393,6 +398,7 @@ NamedSpillMultiVar construct(const std::vector<cfg::ConfigurationTable> & cuts,
                 true_particle_cut,
                 var_fn,
                 event_cut,
+                mctruth_cut,
                 ismc));
         }
         else if(var_type == "reco_particle")
@@ -406,6 +412,7 @@ NamedSpillMultiVar construct(const std::vector<cfg::ConfigurationTable> & cuts,
                 true_particle_cut,
                 var_fn,
                 event_cut,
+                mctruth_cut,
                 ismc));
         }
         else
@@ -458,6 +465,7 @@ NamedSpillMultiVar construct(const std::vector<cfg::ConfigurationTable> & cuts,
                     true_particle_cut,
                     var_fn_with_selector,
                     event_cut,
+                    mctruth_cut,
                     ismc));
             }
             else
@@ -471,6 +479,7 @@ NamedSpillMultiVar construct(const std::vector<cfg::ConfigurationTable> & cuts,
                     true_particle_cut,
                     var_fn,
                     event_cut,
+                    mctruth_cut,
                     ismc));
             }
         }
@@ -505,6 +514,7 @@ NamedSpillMultiVar construct(const std::vector<cfg::ConfigurationTable> & cuts,
                     reco_particle_cut,
                     var_fn_with_selector,
                     event_cut,
+                    mctruth_cut,
                     ismc));
             }
             else
@@ -518,6 +528,7 @@ NamedSpillMultiVar construct(const std::vector<cfg::ConfigurationTable> & cuts,
                     true_particle_cut,
                     var_fn,
                     event_cut,
+                    mctruth_cut,
                     ismc));
             }
         }
@@ -532,6 +543,7 @@ NamedSpillMultiVar construct(const std::vector<cfg::ConfigurationTable> & cuts,
                 true_particle_cut,
                 var_fn,
                 event_cut,
+                mctruth_cut,
                 ismc));
         }
         else if(var_type == "true_particle")
@@ -545,6 +557,7 @@ NamedSpillMultiVar construct(const std::vector<cfg::ConfigurationTable> & cuts,
                 reco_particle_cut,
                 var_fn,
                 event_cut,
+                mctruth_cut,
                 ismc));
         }
         else if(var_type == "reco_particle")
@@ -558,6 +571,7 @@ NamedSpillMultiVar construct(const std::vector<cfg::ConfigurationTable> & cuts,
                 reco_particle_cut,
                 var_fn,
                 event_cut,
+                mctruth_cut,
                 ismc));
         }
         else
@@ -601,10 +615,11 @@ ana::SpillMultiVar spill_multivar_helper(
     const CutFn<PCutsOn> & pcuts,
     const VarFn<VarOn> & var,
     const CutFn<EventType> & event_cut,
+    const CutFn<MCTruth> & mctruth_cut,
     const bool ismc
 )
 {
-    return ana::SpillMultiVar([comps, cuts, pcuts, var, ismc, event_cut](const caf::Proxy<caf::StandardRecord> * sr) -> std::vector<double>
+    return ana::SpillMultiVar([comps, cuts, pcuts, var, ismc, event_cut, mctruth_cut](const caf::Proxy<caf::StandardRecord> * sr) -> std::vector<double>
     {
         std::vector<double> values;
 

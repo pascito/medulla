@@ -253,6 +253,10 @@ namespace                                                                       
             VarFactoryRegistry<EventType>::instance().register_fn(                         \
                 "event_" #name, bind<fn<EventType>, EventType, double>                     \
             );                                                                             \
+        if constexpr((scope)==RegistrationScope::MCTruth)                                  \
+            CutFactoryRegistry<MCTruth>::instance().register_fn(                           \
+                "mctruth_" #name, bind<+fn<MCTruth>, MCTruth, bool>                        \
+            );                                                                             \
         return true;                                                                       \
     }();                                                                                   \
 }
@@ -342,6 +346,7 @@ ana::SpillMultiVar spill_multivar_helper(
     const CutFn<PCutsOn> & pcuts,
     const VarFn<VarOn> & var,
     const CutFn<EventType> & event_cut,
+    const CutFn<MCTruth> & mctruth_cut,
     const bool ismc = true
 );
 
