@@ -427,6 +427,29 @@ namespace cuts
     REGISTER_CUT_SCOPE(RegistrationScope::Both, no_charged_pions, no_charged_pions);
 
     /**
+     * @brief Binding for zero particle pion multiplicity cut including FSI pions.
+     * @details Same as no_charged_pions but vetoes ALL final state charged pions
+     * regardless of whether they are primary or secondary (FSI products).
+     * @param obj the interaction to select on.
+     * @param params kinetic energy threshold, defaults to 25 MeV.
+     * @return true if the interaction has no final state charged pions above threshold.
+     */
+    template<class T>
+    bool no_charged_pions_fsi(const T & obj, std::vector<double> params={25.0,})
+    {
+        size_t count(0);
+        for(const auto & p : obj.particles)
+        {
+            if(pvars::pid(p) == 3 && pvars::ke(p) >= params[0])
+                ++count;
+            if(count > 0)
+                break;
+        }
+        return count == 0;
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::Both, no_charged_pions_fsi, no_charged_pions_fsi);
+
+    /**
      * @brief Binding for zero particle proton multiplicity cut (negation of
      * nonzero_particle_multiplicity).
      * @details This function binds the nonzero particle multiplicity cut for
