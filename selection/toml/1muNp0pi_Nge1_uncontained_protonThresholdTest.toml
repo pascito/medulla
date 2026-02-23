@@ -8,6 +8,7 @@ photon_threshold = 25.0
 electron_threshold = 25.0
 muon_threshold = 143.425
 pion_threshold = 25.0
+proton_threshold = 50.0
 proton_low_threshold = 50.0
 proton_high_threshold = 433.0
 flash_low_t = 0.0
@@ -133,7 +134,7 @@ cut = [
     { name = "no_electrons",              type = "reco",  parameters = [ "@electron_threshold"           ] },
     { name = "single_muon",               type = "reco",  parameters = [ "@muon_threshold"               ] },
     { name = "no_charged_pions",          type = "reco",  parameters = [ "@pion_threshold"               ] },
-    { name = "!no_protons",               type = "reco",  parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
+    { name = "!no_protons",               type = "reco",  parameters = [ "@proton_low_threshold"         ] },
     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
     { name = "data_quality_cut",          type = "event", decrements_exposure = true },
 ]
@@ -335,7 +336,7 @@ cut = [
     { name = "no_electrons",              type = "reco",  parameters = [ "@electron_threshold"           ] },
     { name = "single_muon",               type = "reco",  parameters = [ "@muon_threshold"               ] },
     { name = "!no_charged_pions",         type = "reco",  parameters = [ "@pion_threshold"               ] },
-    { name = "!no_protons",               type = "reco",  parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
+    { name = "!no_protons",               type = "reco",  parameters = [ "@proton_low_threshold"         ] },
     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
     { name = "data_quality_cut",          type = "event", decrements_exposure = true },
 ]
