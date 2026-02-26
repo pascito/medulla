@@ -357,6 +357,7 @@ int main(int argc, char * argv[])
                             // Parse tree cuts into true and mctruth functions
                             std::vector<CutFn<TType>> tree_true_fns;
                             std::vector<CutFn<MCTruth>> tree_mctruth_fns;
+                            std::vector<CutFn<RType>> tree_reco_fns;
                             for(const auto & tcut : cuts)
                             {
                                 std::string tname = tcut.get_string_field("name");
@@ -377,34 +378,98 @@ int main(int argc, char * argv[])
                                     if(tinvert) { auto fn = factory(tparams); tree_true_fns.push_back([fn](const TType & e){ return !fn(e); }); }
                                     else tree_true_fns.push_back(factory(tparams));
                                 }
-                                // else: event/spill/reco cuts are skipped — they don't apply in the dlp_true loop
+                                    else if(ttype == "reco")  // ADD THIS BLOCK
+                                {
+                                    auto factory = CutFactoryRegistry<RType>::instance().get("reco_" + tname);
+                                    if(tinvert) { auto fn = factory(tparams); tree_reco_fns.push_back([fn](const RType & e){ return !fn(e); }); }
+                                    else tree_reco_fns.push_back(factory(tparams));
+                                }
                             }
                             vars_map.try_emplace("true_category", ana::SpillMultiVar(
-                                [tree_true_fns, tree_mctruth_fns, category_cut_functions](const caf::Proxy<caf::StandardRecord> * sr) -> std::vector<double>
+                                [tree_true_fns, tree_mctruth_fns, tree_reco_fns, category_cut_functions, mode](const caf::Proxy<caf::StandardRecord> * sr) -> std::vector<double>
                                 {
                                     std::vector<double> values;
-                                    for(auto const& i : sr->dlp_true)
-                                    {
-                                        // Apply tree cuts first — only emit a value if this interaction passes
-                                        bool passes_tree = std::all_of(tree_true_fns.begin(), tree_true_fns.end(), [&i](auto & f){ return f(i); });
-                                        if(!passes_tree) continue;
-                                        bool passes_tree_mctruth = (i.nu_id < 0) || std::all_of(tree_mctruth_fns.begin(), tree_mctruth_fns.end(), [&](auto & f){ return f(sr->mc.nu[i.nu_id]); });
-                                        if(!passes_tree_mctruth) continue;
 
-                                        // Assign category
-                                        bool matched = false;
-                                        for(const auto & [category, cuts_pair] : category_cut_functions)
+                                    if(mode == "true")
+                                    {
+                                        // Iterate over true interactions (same as construct() in true mode)
+                                        for(auto const& i : sr->dlp_true)
                                         {
-                                            const auto & [true_cut, mctruth_cut] = cuts_pair;
-                                            if(true_cut(i) && ((i.nu_id < 0) || mctruth_cut(sr->mc.nu[i.nu_id])))
+                                            bool passes_tree = std::all_of(tree_true_fns.begin(), tree_true_fns.end(), [&i](auto & f){ return f(i); });
+                                            if(!passes_tree) continue;
+                                            size_t match_id = (i.match_ids.size() > 0) ? (size_t)i.match_ids[0] : kNoMatch;
+                                            if(!tree_reco_fns.empty())
                                             {
-                                                values.push_back(category);
-                                                matched = true;
-                                                break;
+                                                if(match_id == kNoMatch) continue;
+                                                bool passes_reco = std::all_of(tree_reco_fns.begin(), tree_reco_fns.end(), [&](auto & f){ return f(sr->dlp[match_id]); });
+                                                if(!passes_reco) continue;
                                             }
+                                            bool passes_mctruth = (i.nu_id < 0) || std::all_of(tree_mctruth_fns.begin(), tree_mctruth_fns.end(), [&](auto & f){ return f(sr->mc.nu[i.nu_id]); });
+                                            if(!passes_mctruth) continue;
+
+                                            bool matched = false;
+                                            for(const auto & [category, cuts_pair] : category_cut_functions)
+                                            {
+                                                const auto & [true_cut, mctruth_cut] = cuts_pair;
+                                                if(true_cut(i) && ((i.nu_id < 0) || mctruth_cut(sr->mc.nu[i.nu_id])))
+                                                {
+                                                    values.push_back(category);
+                                                    matched = true;
+                                                    break;
+                                                }
+                                            }
+                                            if(!matched) values.push_back(PLACEHOLDERVALUE);
                                         }
-                                        if(!matched)
-                                            values.push_back(PLACEHOLDERVALUE);
+                                    }
+                                    else if(mode == "reco")
+                                    {
+                                        // Iterate over reco interactions (same as construct() in reco mode)
+                                        for(auto const& i : sr->dlp)
+                                        {
+                                            bool passes_reco = std::all_of(tree_reco_fns.begin(), tree_reco_fns.end(), [&i](auto & f){ return f(i); });
+                                            if(!passes_reco) continue;
+
+                                            // Get matched true interaction
+                                            size_t match_id = (i.match_ids.size() > 0) ? (size_t)i.match_ids[0] : kNoMatch;
+
+                                            // Apply true complementary cuts on matched true interaction
+                                            if(!tree_true_fns.empty())
+                                            {
+                                                if(match_id == kNoMatch) continue;
+                                                bool passes_true = std::all_of(tree_true_fns.begin(), tree_true_fns.end(), [&](auto & f){ return f(sr->dlp_true[match_id]); });
+                                                if(!passes_true) continue;
+                                            }
+
+                                            // Apply mctruth cuts
+                                            if(match_id != kNoMatch)
+                                            {
+                                                int64_t nu_id = sr->dlp_true[match_id].nu_id;
+                                                if(nu_id >= 0)
+                                                {
+                                                    bool passes_mctruth = std::all_of(tree_mctruth_fns.begin(), tree_mctruth_fns.end(), [&](auto & f){ return f(sr->mc.nu[nu_id]); });
+                                                    if(!passes_mctruth) continue;
+                                                }
+                                            }
+
+                                            // Assign category using matched true interaction
+                                            bool matched = false;
+                                            if(match_id != kNoMatch)
+                                            {
+                                                const auto & ti = sr->dlp_true[match_id];
+                                                int64_t nu_id = ti.nu_id;
+                                                for(const auto & [category, cuts_pair] : category_cut_functions)
+                                                {
+                                                    const auto & [true_cut, mctruth_cut] = cuts_pair;
+                                                    if(true_cut(ti) && ((nu_id < 0) || mctruth_cut(sr->mc.nu[nu_id])))
+                                                    {
+                                                        values.push_back(category);
+                                                        matched = true;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            if(!matched) values.push_back(PLACEHOLDERVALUE);
+                                        }
                                     }
                                     return values;
                                 }
