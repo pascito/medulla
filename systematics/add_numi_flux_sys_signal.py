@@ -23,8 +23,8 @@ flux_beam_focus = file_flux[f'beam_focusing_uncertainties;1/{horn_current};1']
 flux_pca = file_flux['pca;1/principal_components;1']
 
 # Needed for PPFX correction
-ppfx_hweights_numu   = file_flux[f'ppfx_flux_weights/hweights_{horn_current}_numu;1']
-ppfx_hweights_numubar = file_flux[f'ppfx_flux_weights/hweights_{horn_current}_numubar;1']
+#ppfx_hweights_numu   = file_flux[f'ppfx_flux_weights/hweights_{horn_current}_numu;1']
+#ppfx_hweights_numubar = file_flux[f'ppfx_flux_weights/hweights_{horn_current}_numubar;1']
 
 nu_df = file_nu['events/full/signal;1']
 nu_df=nu_df.arrays(library='pd')
@@ -98,7 +98,7 @@ events =[]
 subrun = []
 
 # For PPFX correction
-ppfx_cv_weight = []
+#ppfx_cv_weight = []
 
 sigma = np.array([3,2,1,0,-1,-2,-3])
 abs_sigma = np.array([3,2,1,0,1,2,3])
@@ -428,6 +428,7 @@ for e,event in tqdm(nu_df.iterrows()):
         hpc_14_sigma.append(sigma)
 
     # Loop needed for PPFX correction
+    '''
     if int(pdg) == 14:
         ppfx_cv_weight.append(
             ppfx_hweights_numu.values()[
@@ -442,6 +443,7 @@ for e,event in tqdm(nu_df.iterrows()):
         )
     else:
         ppfx_cv_weight.append(float("nan"))  # nue/nuebar don't have ppfx numu weights
+    '''
 
 def ensure_dir(rootdir, path):
     cur = rootdir
@@ -468,7 +470,7 @@ spec = {
     "Run": ("i", run),
     "Subrun": ("i", subrun),
     "Evt": ("i", events),
-    "ppfx_cv_weight": ("f", ppfx_cv_weight), # For PPFX Correction
+    #"ppfx_cv_weight": ("f", ppfx_cv_weight), # For PPFX Correction
     "hysyst_beam_horn_2kA": ("f", hysyst_beam_horn_2kA),
     "hysyst_beam_horn1_x_3mm": ("f", hysyst_beam_horn1_x_3mm),
     "hysyst_beam_horn1_y_3mm": ("f", hysyst_beam_horn1_y_3mm),
@@ -540,7 +542,7 @@ for k in keys_1d:
 tdir = ensure_dir(f, "events/full")
 tdir.cd()
 
-t = ROOT.TTree("selected_NuMIfluxsimTree", "per-entry vectors (len=7) plus scalars")
+t = ROOT.TTree("signal_NuMIfluxsimTree", "per-entry vectors (len=7) plus scalars")
 branch_order = list(spec.keys())
 tdir.WriteObject(ROOT.TObjString(json.dumps(branch_order)), "branch_labels_json")
 
@@ -590,7 +592,8 @@ for i in range(N):
 
 tdir.WriteTObject(t, t.GetName(), "Overwrite")
 
-# --- write ppfx_cv_weight into the main selected tree ---
+# --- write ppfx_cv_weight into the main signal tree ---
+'''
 main_tree = f.Get("events/full/signal")
 existing_branch = main_tree.GetBranch("ppfx_cv_weight")
 if existing_branch:
@@ -602,5 +605,5 @@ for i in range(main_tree.GetEntries()):
     ppfx_branch.Fill()
 f.cd("events/full")
 main_tree.Write("", ROOT.TObject.kOverwrite)
-
+'''
 f.Close()

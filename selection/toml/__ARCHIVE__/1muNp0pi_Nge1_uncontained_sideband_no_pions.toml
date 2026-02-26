@@ -1,3 +1,5 @@
+# Wrong file: In here I completely ignore pions.
+
 [general]
 output = "/exp/icarus/data/users/rvizarr/medulla/1muNp0pi_uncontained_sideband_no_pions"
 primfn = "default_primary_classification"
