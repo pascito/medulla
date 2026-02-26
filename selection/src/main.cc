@@ -371,12 +371,13 @@ int main(int argc, char * argv[])
                                     if(tinvert) { auto fn = factory(tparams); tree_mctruth_fns.push_back([fn](const MCTruth & m){ return !fn(m); }); }
                                     else tree_mctruth_fns.push_back(factory(tparams));
                                 }
-                                else
+                                else if(ttype == "true")
                                 {
                                     auto factory = CutFactoryRegistry<TType>::instance().get("true_" + tname);
                                     if(tinvert) { auto fn = factory(tparams); tree_true_fns.push_back([fn](const TType & e){ return !fn(e); }); }
                                     else tree_true_fns.push_back(factory(tparams));
                                 }
+                                // else: event/spill/reco cuts are skipped — they don't apply in the dlp_true loop
                             }
                             vars_map.try_emplace("true_category", ana::SpillMultiVar(
                                 [tree_true_fns, tree_mctruth_fns, category_cut_functions](const caf::Proxy<caf::StandardRecord> * sr) -> std::vector<double>
