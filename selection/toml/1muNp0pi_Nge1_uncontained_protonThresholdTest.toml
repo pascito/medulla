@@ -20,11 +20,11 @@ cuts = [
     { name = "neutrino"        },
     { name = "!is_interaction_mode",    parameters = [ "@QE_parameter"       ] },
     { name = "fiducial_cut"    },
-    { name = "no_photons_srtruth",    type = "mctruth", parameters = [ "@photon_threshold"   ]  },
-    { name = "no_electrons_srtruth",  type = "mctruth", parameters = [ "@electron_threshold" ]  },
+    { name = "no_photons_srtruth",       type = "mctruth", parameters = [ "@photon_threshold"   ]  },
+    { name = "no_electrons_srtruth",     type = "mctruth", parameters = [ "@electron_threshold" ]  },
     { name = "no_charged_pions_srtruth", type = "mctruth", parameters = [ "@pion_threshold"  ]  },
-    { name = "single_muon_srtruth",   type = "mctruth", parameters = [ "@muon_threshold"     ]  },
-    { name = "single_proton",           parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
+    { name = "single_muon_srtruth",      type = "mctruth", parameters = [ "@muon_threshold"     ]  },
+    { name = "single_proton_srtruth",    type = "mctruth", parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
 ]
 
 [[category]] # 1 : Uncontained muon, fiducial, single proton, QE
@@ -32,21 +32,21 @@ cuts = [
     { name = "neutrino"        },
     { name = "is_interaction_mode",     parameters = [ "@QE_parameter"       ] },
     { name = "fiducial_cut"    },
-    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
-    { name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
-    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
-    { name = "single_proton",           parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
+    { name = "no_photons_srtruth",       type = "mctruth", parameters = [ "@photon_threshold"   ]  },
+    { name = "no_electrons_srtruth",     type = "mctruth", parameters = [ "@electron_threshold" ]  },
+    { name = "no_charged_pions_srtruth", type = "mctruth", parameters = [ "@pion_threshold"  ]  },
+    { name = "single_muon_srtruth",      type = "mctruth", parameters = [ "@muon_threshold"     ]  },
+    { name = "single_proton_srtruth",    type = "mctruth", parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
 ]
 
 [[category]] # 2 : Uncontained muon, single proton
 cuts = [
     { name = "neutrino" },
-    { name = "no_photons",       parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons",     parameters = [ "@electron_threshold" ] },
-    { name = "no_charged_pions", parameters = [ "@pion_threshold"     ] },
-    { name = "single_muon",      parameters = [ "@muon_threshold"     ] },
-    { name = "single_proton",    parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
+    { name = "no_photons_srtruth",       type = "mctruth", parameters = [ "@photon_threshold"   ]  },
+    { name = "no_electrons_srtruth",     type = "mctruth", parameters = [ "@electron_threshold" ]  },
+    { name = "no_charged_pions_srtruth", type = "mctruth", parameters = [ "@pion_threshold"  ]  },
+    { name = "single_muon_srtruth",      type = "mctruth", parameters = [ "@muon_threshold"     ]  },
+    { name = "single_proton_srtruth",    type = "mctruth", parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
 ]
 
 [[category]] # 3 : Uncontained muon, fiducial, multiple protons, not QE
@@ -54,11 +54,11 @@ cuts = [
     { name = "neutrino"        },
     { name = "fiducial_cut"    },
     { name = "!is_interaction_mode",    parameters = [ "@QE_parameter"       ] },
-    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
-    { name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
-    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
-    { name = "!no_protons",             parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
+    { name = "no_photons_srtruth",       type = "mctruth", parameters = [ "@photon_threshold"   ]  },
+    { name = "no_electrons_srtruth",     type = "mctruth", parameters = [ "@electron_threshold" ]  },
+    { name = "no_charged_pions_srtruth", type = "mctruth", parameters = [ "@pion_threshold"  ]  },
+    { name = "single_muon_srtruth",      type = "mctruth", parameters = [ "@muon_threshold"     ]  },
+    { name = "!no_protons_srtruth",      type = "mctruth", parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
 ]
 
 [[category]] # 4 : Uncontained muon, fiducial, multiple protons, QE
@@ -66,34 +66,34 @@ cuts = [
     { name = "neutrino"        },
     { name = "is_interaction_mode",     parameters = [ "@QE_parameter"       ] },
     { name = "fiducial_cut"    },
-    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
-    { name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
-    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
-    { name = "!no_protons",             parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
+    { name = "no_photons_srtruth",       type = "mctruth", parameters = [ "@photon_threshold"   ]  },
+    { name = "no_electrons_srtruth",     type = "mctruth", parameters = [ "@electron_threshold" ]  },
+    { name = "no_charged_pions_srtruth", type = "mctruth", parameters = [ "@pion_threshold"  ]  },
+    { name = "single_muon_srtruth",      type = "mctruth", parameters = [ "@muon_threshold"     ]  },
+    { name = "!no_protons_srtruth",      type = "mctruth", parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
 ]
 
 [[category]] # 5 : Uncontained muon, multiple protons
 cuts = [
     { name = "neutrino" },
-    { name = "no_photons",       parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons",     parameters = [ "@electron_threshold" ] },
-    { name = "no_charged_pions", parameters = [ "@pion_threshold"     ] },
-    { name = "single_muon",      parameters = [ "@muon_threshold"     ] },
-    { name = "!no_protons",      parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
+    { name = "no_photons_srtruth",       type = "mctruth", parameters = [ "@photon_threshold"   ]  },
+    { name = "no_electrons_srtruth",     type = "mctruth", parameters = [ "@electron_threshold" ]  },
+    { name = "no_charged_pions_srtruth", type = "mctruth", parameters = [ "@pion_threshold"  ]  },
+    { name = "single_muon_srtruth",      type = "mctruth", parameters = [ "@muon_threshold"     ]  },
+    { name = "!no_protons_srtruth",      type = "mctruth", parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
 ]
 
 [[category]] # 6 : Uncontained muon, fiducial
 cuts = [
     { name = "neutrino"        },
     { name = "fiducial_cut"    },
-    { name = "single_muon",             parameters = [ "@muon_threshold" ] },
+    { name = "single_muon_srtruth",      type = "mctruth", parameters = [ "@muon_threshold"     ]  },
 ]
 
 [[category]] # 7 : Uncontained muon
 cuts = [
     { name = "neutrino" },
-    { name = "single_muon", parameters = [ "@muon_threshold" ] },
+    { name = "single_muon_srtruth",      type = "mctruth", parameters = [ "@muon_threshold"     ]  },
 ]
 
 [[category]] # 8 : Neutrino, charged current

@@ -159,6 +159,45 @@ namespace mctruth
     REGISTER_CUT_SCOPE(RegistrationScope::MCTruth, has_proton_srtruth, has_proton_srtruth);
 
     /**
+     * @brief Cut for exactly one true final state proton above threshold.
+     */
+    template<typename T>
+    bool single_proton_srtruth(const T & obj, std::vector<double> params={50.0,})
+    {
+        int count = 0;
+        for(const auto & p : obj.prim)
+        {
+            if(p.pdg == 2212)
+            {
+                double ke = 1000. * (p.genE - (PROTON_MASS/1000.));
+                if(ke >= params[0])
+                    ++count;
+            }
+        }
+        return count == 1;
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::MCTruth, single_proton_srtruth, single_proton_srtruth);
+
+    /**
+     * @brief Cut for no true final state protons above threshold.
+     */
+    template<typename T>
+    bool no_protons_srtruth(const T & obj, std::vector<double> params={50.0,})
+    {
+        for(const auto & p : obj.prim)
+        {
+            if(p.pdg == 2212)
+            {
+                double ke = 1000. * (p.genE - (PROTON_MASS/1000.));
+                if(ke >= params[0])
+                    return false;
+            }
+        }
+        return true;
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::MCTruth, no_protons_srtruth, no_protons_srtruth);
+
+    /**
      * @brief Cut for zero true final state charged pions above threshold.
      * @param obj the SRTrueInteraction to apply the cut on.
      * @param params KE threshold in MeV, defaults to 25 MeV.
