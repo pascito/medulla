@@ -20,10 +20,10 @@ cuts = [
     { name = "neutrino"        },
     { name = "!is_interaction_mode",    parameters = [ "@QE_parameter"       ] },
     { name = "fiducial_cut"    },
-    { name = "no_photons",              parameters = [ "@photon_threshold"   ] },
-    { name = "no_electrons",            parameters = [ "@electron_threshold" ] },
-    { name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
-    { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
+    { name = "no_photons_srtruth",    type = "mctruth", parameters = [ "@photon_threshold"   ]  },
+    { name = "no_electrons_srtruth",  type = "mctruth", parameters = [ "@electron_threshold" ]  },
+    { name = "no_charged_pions_srtruth", type = "mctruth", parameters = [ "@pion_threshold"  ]  },
+    { name = "single_muon_srtruth",   type = "mctruth", parameters = [ "@muon_threshold"     ]  },
     { name = "single_proton",           parameters = [ "@proton_low_threshold", "@proton_high_threshold" ] },
 ]
 
@@ -116,8 +116,8 @@ cuts = [
 # SIMULATION ONLY
 [[sample]]
 name = "nominal"
-#path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_00.root"
-path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_0*.root"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_00.root"
+#path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_0*.root"
 ismc = true
 disable = false
 
