@@ -116,15 +116,15 @@ int main(int argc, char * argv[])
             ana::SpillMultiVar([](const caf::Proxy<caf::StandardRecord> * sr) -> std::vector<double> { return {}; })
         );
 
+        // Each category stores two cut functions — one applied to the SPINE true interaction (TType)
+        // and one applied to the GENIE MCTruth object. Before, only the TType cut existed.
+        std::map<double, std::pair<CutFn<TType>, CutFn<MCTruth>>> category_cut_functions;
 
         // Construct the category function.
         if(config.has_field("category"))
         {
             // Map of category enumeration to cut functions.
             //std::map<double, CutFn<TType>> category_cut_functions;
-            // Each category stores two cut functions — one applied to the SPINE true interaction (TType)
-            // and one applied to the GENIE MCTruth object. Before, only the TType cut existed.
-            std::map<double, std::pair<CutFn<TType>, CutFn<MCTruth>>> category_cut_functions;
 
             // Iterate over the categories and construct the cut functions.
             std::vector<cfg::ConfigurationTable> categories(config.get_subtables("category"));
@@ -354,7 +354,60 @@ int main(int argc, char * argv[])
                         // Intercept the category branch and use the SpillMultiVar directly.
                         if(var.get_string_field("name") == "category" && var.get_string_field("type") == "true")
                         {
-                            vars_map.try_emplace("true_category", category_multivar.second);
+                            // Parse tree cuts into true and mctruth functions
+                            std::vector<CutFn<TType>> tree_true_fns;
+                            std::vector<CutFn<MCTruth>> tree_mctruth_fns;
+                            for(const auto & tcut : cuts)
+                            {
+                                std::string tname = tcut.get_string_field("name");
+                                bool tinvert = (tname[0] == '!');
+                                if(tinvert) tname = tname.substr(1);
+                                std::vector<double> tparams;
+                                if(tcut.has_field("parameters")) tparams = tcut.get_double_vector("parameters");
+                                std::string ttype = tcut.has_field("type") ? tcut.get_string_field("type") : "true";
+                                if(ttype == "mctruth")
+                                {
+                                    auto factory = CutFactoryRegistry<MCTruth>::instance().get("mctruth_" + tname);
+                                    if(tinvert) { auto fn = factory(tparams); tree_mctruth_fns.push_back([fn](const MCTruth & m){ return !fn(m); }); }
+                                    else tree_mctruth_fns.push_back(factory(tparams));
+                                }
+                                else
+                                {
+                                    auto factory = CutFactoryRegistry<TType>::instance().get("true_" + tname);
+                                    if(tinvert) { auto fn = factory(tparams); tree_true_fns.push_back([fn](const TType & e){ return !fn(e); }); }
+                                    else tree_true_fns.push_back(factory(tparams));
+                                }
+                            }
+                            vars_map.try_emplace("true_category", ana::SpillMultiVar(
+                                [tree_true_fns, tree_mctruth_fns, category_cut_functions](const caf::Proxy<caf::StandardRecord> * sr) -> std::vector<double>
+                                {
+                                    std::vector<double> values;
+                                    for(auto const& i : sr->dlp_true)
+                                    {
+                                        // Apply tree cuts first — only emit a value if this interaction passes
+                                        bool passes_tree = std::all_of(tree_true_fns.begin(), tree_true_fns.end(), [&i](auto & f){ return f(i); });
+                                        if(!passes_tree) continue;
+                                        bool passes_tree_mctruth = (i.nu_id < 0) || std::all_of(tree_mctruth_fns.begin(), tree_mctruth_fns.end(), [&](auto & f){ return f(sr->mc.nu[i.nu_id]); });
+                                        if(!passes_tree_mctruth) continue;
+
+                                        // Assign category
+                                        bool matched = false;
+                                        for(const auto & [category, cuts_pair] : category_cut_functions)
+                                        {
+                                            const auto & [true_cut, mctruth_cut] = cuts_pair;
+                                            if(true_cut(i) && ((i.nu_id < 0) || mctruth_cut(sr->mc.nu[i.nu_id])))
+                                            {
+                                                values.push_back(category);
+                                                matched = true;
+                                                break;
+                                            }
+                                        }
+                                        if(!matched)
+                                            values.push_back(PLACEHOLDERVALUE);
+                                    }
+                                    return values;
+                                }
+                            ));
                         }
                         else
                         {
