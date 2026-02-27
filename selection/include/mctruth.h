@@ -254,7 +254,6 @@ namespace mctruth
         {
             if(p.pdg == 22)
             {
-                std::cout << "Photon genE = " << p.genE << ", threshold_check = " << 1000.*p.genE << std::endl;
                 double energy = 1000. * p.genE;
                 if(energy >= params[0])
                     return false;
