@@ -148,6 +148,28 @@ namespace cuts
             && !(obj.vertex[2] > -100 && obj.vertex[2] < 100);
     }
     REGISTER_CUT_SCOPE(RegistrationScope::Both, fiducial_cut, fiducial_cut);
+
+    /**
+     * @brief Veto interactions with true primary neutral pions.
+     * @details Counts the number of true primary neutral pions in the interaction
+     * using the pi0 utility function, which groups photon and electron daughters
+     * by parent track ID and reconstructs the pi0 kinetic energy from its daughters.
+     * Pi0 candidates with fewer than two daughters or with kinetic energy below
+     * the threshold defined by params[0] are discarded. This cut is applied at
+     * truth level only and is intended to align the signal definition with the
+     * NUISANCE ICARUS_1muNp0pi_IsSignal flag, which vetoes events containing
+     * neutral pions in the final state.
+     * @param obj the interaction to select on.
+     * @param params pi0 kinetic energy threshold in MeV (default 0.0, no threshold).
+     * @return true if no true primary neutral pions are present in the interaction.
+     */
+    template<class T>
+    bool no_pi0s(const caf::SRInteractionTruthDLPProxy & obj, std::vector<double> params = {0.0,})
+    {
+        double num_primary_pi0s = utilities_pi0ana::true_primary_pi0_multiplicity(obj, params);
+        return num_primary_pi0s == 0;
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::True, no_pi0s, no_pi0s);
     
     /**
      * @brief Apply a containment cut on the entire interaction.

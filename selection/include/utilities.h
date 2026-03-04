@@ -11,6 +11,9 @@
  */
 #ifndef UTILITIES_H
 #define UTILITIES_H
+
+#define PI0_MASS 134.9768
+
 #include <vector>
 #include <array>
 
@@ -164,6 +167,76 @@ namespace utilities
             }
         }
         return first_flash_index;
+    }
+
+    /**
+     * @brief Group true pi0 daughters by parent ID
+     * @param obj the interaction from which to count
+     * @return an unordered map with parent ID as key and daughter particle indices as value
+     */
+    std::unordered_map< int, std::vector<size_t> > get_true_pi0s(const caf::SRInteractionTruthDLPProxy & obj, bool primaries = true, std::vector<double> params = {0.0,})
+    {
+        std::unordered_map< int, std::vector<size_t> > true_pi0s;
+
+	/**
+	 * Loop over particles, grouping photons
+	 * and electrons that share a parent pi0.
+	 */
+	for(size_t i(0); i < obj.particles.size(); ++i)
+	{
+	    const auto & p = obj.particles[i];
+
+
+	    if(primaries == true and !p.is_primary) continue;
+	    if(primaries == false and p.is_primary) continue;
+
+	    if(p.parent_pdg_code == 111 && (p.pdg_code == 22 || p.pdg_code == 11 || p.pdg_code == -11))
+	    {
+	        true_pi0s[p.parent_track_id].push_back(i);
+	    }
+	}
+
+	/**
+	 * Remove pi0 candidates that are either
+	 * subthreshold or have fewer than two daughters.
+	 */
+	std::vector<size_t> bad_pi0_ids;
+        for(auto const & _pi0 : true_pi0s)
+        {
+
+	  int num_pi0_daughters(0);
+	  TVector3 pi0_momentum(0,0,0);
+	  double pi0_ke(0);
+	  for(auto & _pidx : _pi0.second)
+	    {
+	      const auto & _p = obj.particles[_pidx];
+	      TVector3 _p_momentum(_p.momentum[0], _p.momentum[1], _p.momentum[2]);
+	      pi0_momentum += _p_momentum;
+	      num_pi0_daughters++;
+	    }
+	    pi0_ke = std::sqrt(std::pow(PI0_MASS, 2) + std::pow(pi0_momentum.Mag(), 2)) - PI0_MASS;
+
+	    // TEST: RELAX SIGNAL DEFINITION
+	    //if (pi0_ke < params[0]) bad_pi0_ids.push_back(_pi0.first);
+            if(num_pi0_daughters < 2 || pi0_ke < params[0]) bad_pi0_ids.push_back(_pi0.first);
+	}
+	for(size_t i=0; i<bad_pi0_ids.size(); i++)
+	{
+            true_pi0s.erase(bad_pi0_ids[i]);
+	}
+	return true_pi0s;
+    }
+
+    /**
+     * @brief Count the number of true primary neutral pions in interaction.
+     * @param obj the interaction from which to count.
+     * @param params the neutral pion kinetic energy threshold to consider.
+     * @return the number of true primary neutral pions in interaction.
+     */
+    double true_primary_pi0_multiplicity(const caf::SRInteractionTruthDLPProxy & obj, std::vector<double> params={0.0,})
+    {
+        std::unordered_map< int, std::vector<size_t> > true_primary_pi0s = get_true_pi0s(obj, true, params);
+	return true_primary_pi0s.size();
     }
 }
 #endif // UTILITIES_H

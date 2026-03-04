@@ -324,6 +324,7 @@ cut = [
     { name = "single_muon",               type = "true",  parameters = [ "@muon_threshold"     ] },
     { name = "no_charged_pions",          type = "true",  parameters = [ "@pion_threshold"     ] },
     { name = "!no_protons",               type = "true",  parameters = [ "@proton_threshold"   ] },
+    { name = "no_pi0s",                   type = "true" },
     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
 ]
 branch = [
