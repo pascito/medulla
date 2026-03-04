@@ -285,5 +285,99 @@ namespace mctruth
     }
     REGISTER_CUT_SCOPE(RegistrationScope::MCTruth, no_electrons_srtruth, no_electrons_srtruth);
 
+    /**
+     * @brief Replicates NUISANCE ICARUS_1muNp0pi_IsSignal definition exactly.
+     * @details This variable is implemented using GENIE truth variables (obj.prim)
+     * to match the NUISANCE FlatTree signal definition for ICARUS_1muNp0pi.
+     * The selection requires:
+     *   - Exactly one muon with momentum > 226 MeV/c
+     *   - At least one proton with leading momentum > 310 MeV/c
+     *   - No charged pions with momentum > 87 MeV/c
+     *   - No neutral pions (no threshold)
+     *   - No photons with energy > 10 MeV
+     *   - No electrons with energy > 10 MeV
+     *   - No mesons (kaons, eta, neutral kaons, K*)
+     *   - No heavy baryons (strange, charmed)
+     * This is intended to be saved as a branch for direct comparison with
+     * NUISANCE cross-section predictions.
+     * @tparam T the type of the object to apply the variable on.
+     * @param obj the SRTrueInteraction to apply the variable on.
+     * @return 1 if the event passes the NUISANCE signal definition, 0 otherwise.
+     */
+    template<typename T>
+    double nuisance_is_signal(const T & obj)
+    {
+        unsigned int nMu(0), nP(0), nPi(0);
+        unsigned int nPhoton(0), nElectron(0), nMesons(0), nBaryons(0);
+        double maxMomentumP = -999.;
+        bool passProtonPCut = false;
+
+        for(const auto & p : obj.prim)
+        {
+            // Compute momentum magnitude in GeV/c from GENIE genp
+            double px = p.genp.x, py = p.genp.y, pz = p.genp.z;
+            double momentum = std::sqrt(px*px + py*py + pz*pz);  // GeV/c
+
+            int pdg = p.pdg;
+
+            // ── Muon ──────────────────────────────────────────────────────────
+            if(std::abs(pdg) == 13 && momentum > 0.226)
+                nMu++;
+
+            // ── Proton ────────────────────────────────────────────────────────
+            if(std::abs(pdg) == 2212)
+            {
+                nP++;
+                if(momentum > maxMomentumP)
+                {
+                    maxMomentumP   = momentum;
+                    passProtonPCut = (momentum > 0.310);
+                }
+            }
+
+            // ── Charged pion (with threshold) ─────────────────────────────────
+            if(std::abs(pdg) == 211 && momentum > 0.087)
+                nPi++;
+
+            // ── Photon (E > 10 MeV) ───────────────────────────────────────────
+            if(pdg == 22 && p.genE * 1000. > 10.0)
+                nPhoton++;
+
+            // ── Electron/positron (E > 10 MeV) ───────────────────────────────
+            if(std::abs(pdg) == 11 && p.genE * 1000. > 10.0)
+                nElectron++;
+
+            // ── Neutral pion (no threshold) ───────────────────────────────────
+            if(pdg == 111)
+                nPi++;
+
+            // ── Mesons (kaons, eta, K*, pi0 included) ─────────────────────────
+            if(std::abs(pdg) == 321  || std::abs(pdg) == 323  ||
+               pdg == 130            || pdg == 310            ||
+               pdg == 311            || pdg == 313            ||
+               std::abs(pdg) == 221  || std::abs(pdg) == 331)
+                nMesons++;
+
+            // ── Heavy baryons (strange, charmed) ──────────────────────────────
+            if(pdg == 3112 || pdg == 3122 || pdg == 3212 || pdg == 3222 ||
+               pdg == 4112 || pdg == 4122 || pdg == 4212 || pdg == 4222 ||
+               pdg == 411  || pdg == 421)
+                nBaryons++;
+        }
+
+        // ── Signal condition (exact NUISANCE logic) ───────────────────────────
+        if(nMu != 1)         return 0.;
+        if(nP  == 0)         return 0.;
+        if(!passProtonPCut)  return 0.;
+        if(nPi > 0)          return 0.;
+        if(nPhoton > 0)      return 0.;
+        if(nElectron > 0)    return 0.;
+        if(nMesons > 0)      return 0.;
+        if(nBaryons > 0)     return 0.;
+
+        return 1.;
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, nuisance_is_signal, nuisance_is_signal);
+
 } // namespace mctruth
 #endif

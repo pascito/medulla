@@ -1,5 +1,5 @@
 [general]
-output = "/exp/icarus/data/users/rvizarr/medulla/1muNp0pi_Nge1_uncontained_nopizeros"
+output = "/exp/icarus/data/users/rvizarr/medulla/1muNp0pi_Nge1_uncontained"
 primfn = "default_primary_classification"
 pidfn = "default_pid"
 
@@ -115,17 +115,17 @@ cuts = [
 # SIMULATION ONLY
 [[sample]]
 name = "nominal"
-path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_00.root"
-#path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_0*.root"
+#path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_00.root"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_0*.root"
 ismc = true
 disable = false
 
 # INCLUDE DATA
-#[[sample]]
-#name = "onbeam"
-#path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_data_flat_cafs_2/*.root"
-#ismc = false
-#disable = false
+[[sample]]
+name = "onbeam"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_data_flat_cafs_2/*.root"
+ismc = false
+disable = false
 #
 ## ADDING DETECTOR UNCERTAINTIES
 #[[sample]]
