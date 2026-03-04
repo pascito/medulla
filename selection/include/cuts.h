@@ -166,7 +166,7 @@ namespace cuts
     template<class T>
     bool no_pi0s(const caf::SRInteractionTruthDLPProxy & obj, std::vector<double> params = {0.0,})
     {
-        double num_primary_pi0s = utilities_pi0ana::true_primary_pi0_multiplicity(obj, params);
+        double num_primary_pi0s = utilities::true_primary_pi0_multiplicity(obj, params);
         return num_primary_pi0s == 0;
     }
     REGISTER_CUT_SCOPE(RegistrationScope::True, no_pi0s, no_pi0s);
