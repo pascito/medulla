@@ -129,6 +129,12 @@ mode = "true"
 cut = [
     { name = "neutrino",                  type = "true" },
     { name = "fiducial_cut",              type = "true" },
+    { name = "no_photons",                type = "true",  parameters = [ "@photon_threshold"   ] },
+    { name = "no_electrons",              type = "true",  parameters = [ "@electron_threshold" ] },
+    { name = "single_muon",               type = "true",  parameters = [ "@muon_threshold"     ] },
+    { name = "no_charged_pions",          type = "true",  parameters = [ "@pion_threshold"     ] },
+    { name = "!no_protons",               type = "true",  parameters = [ "@proton_threshold"   ] },
+    { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
 ]
 branch = [
     # Interaction-level truth branches
@@ -152,6 +158,7 @@ branch = [
     { name = "nuisance_nMu",       type = "mctruth" },
     { name = "nuisance_nP",        type = "mctruth" },
     { name = "nuisance_nPi",       type = "mctruth" },
+    { name = "nuisance_nPiZero",   type = "mctruth" },
     { name = "nuisance_nPhoton",   type = "mctruth" },
     { name = "nuisance_nElectron", type = "mctruth" },
     { name = "nuisance_nMesons",   type = "mctruth" },

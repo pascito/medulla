@@ -421,6 +421,18 @@ namespace mctruth
     REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, nuisance_nPi, nuisance_nPi);
 
     template<typename T>
+    double nuisance_nPiZero(const T & obj) {
+        unsigned int n = 0;
+        for(const auto & p : obj.prim) {
+            double px = p.genp.x, py = p.genp.y, pz = p.genp.z;
+            double momentum = std::sqrt(px*px + py*py + pz*pz);
+            if(p.pdg == 111) n++;
+        }
+        return n;
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, nuisance_nPiZero, nuisance_nPiZero);
+
+    template<typename T>
     double nuisance_nPhoton(const T & obj) {
         unsigned int n = 0;
         for(const auto & p : obj.prim)
