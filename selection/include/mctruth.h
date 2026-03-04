@@ -314,6 +314,8 @@ namespace mctruth
 
         for(const auto & p : obj.prim)
         {
+            if(p.start_process != 0) continue;
+
             // Compute momentum magnitude in GeV/c from GENIE genp
             double px = p.genp.x, py = p.genp.y, pz = p.genp.z;
             double momentum = std::sqrt(px*px + py*py + pz*pz);  // GeV/c
