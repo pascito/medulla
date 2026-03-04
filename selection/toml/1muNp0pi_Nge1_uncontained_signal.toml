@@ -149,6 +149,13 @@ branch = [
     { name = "visible_energy",         type = "both"    },
     { name = "visible_energy_calosub", type = "true"    },
     { name = "nuisance_is_signal", type = "mctruth" },
+    { name = "nuisance_nMu",       type = "mctruth" },
+    { name = "nuisance_nP",        type = "mctruth" },
+    { name = "nuisance_nPi",       type = "mctruth" },
+    { name = "nuisance_nPhoton",   type = "mctruth" },
+    { name = "nuisance_nElectron", type = "mctruth" },
+    { name = "nuisance_nMesons",   type = "mctruth" },
+    { name = "nuisance_nBaryons",  type = "mctruth" },
 
     # Interaction-level selection variables
     { name = "photon_multiplicity",   type = "reco", parameters = [ "@photon_threshold"   ]},

@@ -376,5 +376,103 @@ namespace mctruth
     }
     REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, nuisance_is_signal, nuisance_is_signal);
 
+    // ── Diagnostic counters for nuisance_is_signal debugging ─────────────────
+
+    template<typename T>
+    double nuisance_nMu(const T & obj) {
+        unsigned int n = 0;
+        for(const auto & p : obj.prim) {
+            double px = p.genp.x, py = p.genp.y, pz = p.genp.z;
+            double momentum = std::sqrt(px*px + py*py + pz*pz);
+            if(std::abs(p.pdg) == 13 && momentum > 0.226) n++;
+        }
+        return n;
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, nuisance_nMu, nuisance_nMu);
+
+    template<typename T>
+    double nuisance_nP(const T & obj) {
+        unsigned int n = 0;
+        bool pass = false;
+        double maxP = -999.;
+        for(const auto & p : obj.prim) {
+            double px = p.genp.x, py = p.genp.y, pz = p.genp.z;
+            double momentum = std::sqrt(px*px + py*py + pz*pz);
+            if(std::abs(p.pdg) == 2212) {
+                n++;
+                if(momentum > maxP) { maxP = momentum; pass = (momentum > 0.310); }
+            }
+        }
+        return pass ? n : -n;  // negative if leading proton fails threshold
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, nuisance_nP, nuisance_nP);
+
+    template<typename T>
+    double nuisance_nPi(const T & obj) {
+        unsigned int n = 0;
+        for(const auto & p : obj.prim) {
+            double px = p.genp.x, py = p.genp.y, pz = p.genp.z;
+            double momentum = std::sqrt(px*px + py*py + pz*pz);
+            if(std::abs(p.pdg) == 211 && momentum > 0.087) n++;
+            if(p.pdg == 111) n++;
+        }
+        return n;
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, nuisance_nPi, nuisance_nPi);
+
+    template<typename T>
+    double nuisance_nPhoton(const T & obj) {
+        unsigned int n = 0;
+        for(const auto & p : obj.prim)
+            if(p.pdg == 22 && p.genE * 1000. > 25.0) n++;
+        return n;
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, nuisance_nPhoton, nuisance_nPhoton);
+
+    template<typename T>
+    double nuisance_nElectron(const T & obj) {
+        unsigned int n = 0;
+        for(const auto & p : obj.prim) {
+            double px = p.genp.x, py = p.genp.y, pz = p.genp.z;
+            double momentum = std::sqrt(px*px + py*py + pz*pz);
+            if(std::abs(p.pdg) == 11 && momentum > 0.0255) n++;
+        }
+        return n;
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, nuisance_nElectron, nuisance_nElectron);
+
+    template<typename T>
+    double nuisance_nMesons(const T & obj) {
+        unsigned int n = 0;
+        for(const auto & p : obj.prim) {
+            double px = p.genp.x, py = p.genp.y, pz = p.genp.z;
+            double momentum = std::sqrt(px*px + py*py + pz*pz);
+            if(p.pdg == 22 && p.genE * 1000. > 25.0) continue;
+            else if(std::abs(p.pdg) == 11 && momentum > 0.0255) continue;
+            else if(std::abs(p.pdg) == 211 || std::abs(p.pdg) == 321 || std::abs(p.pdg) == 323 ||
+                    p.pdg == 111            || p.pdg == 130            || p.pdg == 310            ||
+                    p.pdg == 311            || p.pdg == 313            ||
+                    std::abs(p.pdg) == 221  || std::abs(p.pdg) == 331) n++;
+        }
+        return n;
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, nuisance_nMesons, nuisance_nMesons);
+
+    template<typename T>
+    double nuisance_nBaryons(const T & obj) {
+        unsigned int n = 0;
+        for(const auto & p : obj.prim) {
+            double px = p.genp.x, py = p.genp.y, pz = p.genp.z;
+            double momentum = std::sqrt(px*px + py*py + pz*pz);
+            if(p.pdg == 22 && p.genE * 1000. > 25.0) continue;
+            else if(std::abs(p.pdg) == 11 && momentum > 0.0255) continue;
+            else if(p.pdg == 3112 || p.pdg == 3122 || p.pdg == 3212 || p.pdg == 3222 ||
+                    p.pdg == 4112 || p.pdg == 4122 || p.pdg == 4212 || p.pdg == 4222 ||
+                    p.pdg == 411  || p.pdg == 421  || p.pdg == 111) n++;
+        }
+        return n;
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, nuisance_nBaryons, nuisance_nBaryons);
+
 } // namespace mctruth
 #endif
