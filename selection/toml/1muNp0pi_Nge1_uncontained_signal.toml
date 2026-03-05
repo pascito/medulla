@@ -163,6 +163,7 @@ branch = [
     { name = "nuisance_nElectron", type = "mctruth" },
     { name = "nuisance_nMesons",   type = "mctruth" },
     { name = "nuisance_nBaryons",  type = "mctruth" },
+    { name = "dpT_nuisance",       type = "mctruth" },
 
     # Interaction-level selection variables
     { name = "photon_multiplicity",   type = "reco", parameters = [ "@photon_threshold"   ]},
