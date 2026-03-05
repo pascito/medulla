@@ -116,7 +116,7 @@ cuts = [
 # SIMULATION ONLY
 [[sample]]
 name = "nominal"
-path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_00.root"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_07.root"
 #path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_0*.root"
 ismc = true
 disable = false
@@ -134,7 +134,7 @@ cut = [
     { name = "single_muon",               type = "true",  parameters = [ "@muon_threshold"     ] },
     { name = "no_charged_pions",          type = "true",  parameters = [ "@pion_threshold"     ] },
     { name = "!no_protons",               type = "true",  parameters = [ "@proton_threshold"   ] },
-    { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
+    #{ name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
 ]
 branch = [
     # Interaction-level truth branches
