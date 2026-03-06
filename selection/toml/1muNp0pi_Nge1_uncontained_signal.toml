@@ -116,8 +116,8 @@ cuts = [
 # SIMULATION ONLY
 [[sample]]
 name = "nominal"
-path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_00.root"
-#path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_0*.root"
+#path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_00.root"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_0*.root"
 ismc = true
 disable = false
 
