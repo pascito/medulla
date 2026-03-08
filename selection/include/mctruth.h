@@ -516,12 +516,25 @@ namespace mctruth
 
         if(max_mu_p < 0 || max_p_p < 0) return PLACEHOLDERVALUE;
 
-        utilities::three_vector mu_mom  = {mu_px, mu_py, mu_pz};
-        utilities::three_vector lp_mom  = {lp_px, lp_py, lp_pz};
-        utilities::three_vector vtx     = {obj.position.x, obj.position.y, obj.position.z};
+        // Use true neutrino momentum direction (consistent with NUISANCE)
+        double nu_mag = std::sqrt(obj.momentum.x*obj.momentum.x +
+                                  obj.momentum.y*obj.momentum.y +
+                                  obj.momentum.z*obj.momentum.z);
+        if(nu_mag == 0) return PLACEHOLDERVALUE;
 
-        utilities::three_vector mu_pt = utilities::transverse_momentum(mu_mom, vtx);
-        utilities::three_vector lp_pt = utilities::transverse_momentum(lp_mom, vtx);
+        utilities::three_vector nu_dir = {obj.momentum.x/nu_mag,
+                                          obj.momentum.y/nu_mag,
+                                          obj.momentum.z/nu_mag};
+
+        auto transverse = [&](utilities::three_vector v) {
+            double dot = v.x*nu_dir.x + v.y*nu_dir.y + v.z*nu_dir.z;
+            return utilities::three_vector{v.x - dot*nu_dir.x,
+                                           v.y - dot*nu_dir.y,
+                                           v.z - dot*nu_dir.z};
+        };
+
+        utilities::three_vector mu_pt = transverse({mu_px, mu_py, mu_pz});
+        utilities::three_vector lp_pt = transverse({lp_px, lp_py, lp_pz});
 
         return utilities::magnitude(utilities::add(mu_pt, lp_pt));
     }
