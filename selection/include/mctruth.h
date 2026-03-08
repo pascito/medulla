@@ -522,19 +522,21 @@ namespace mctruth
                                   obj.momentum.z*obj.momentum.z);
         if(nu_mag == 0) return PLACEHOLDERVALUE;
 
-        utilities::three_vector nu_dir = {obj.momentum.x/nu_mag,
-                                          obj.momentum.y/nu_mag,
-                                          obj.momentum.z/nu_mag};
+        utilities::three_vector nu_dir = std::make_tuple(obj.momentum.x/nu_mag,
+                                                          obj.momentum.y/nu_mag,
+                                                          obj.momentum.z/nu_mag);
 
         auto transverse = [&](utilities::three_vector v) {
-            double dot = v.x*nu_dir.x + v.y*nu_dir.y + v.z*nu_dir.z;
-            return utilities::three_vector{v.x - dot*nu_dir.x,
-                                           v.y - dot*nu_dir.y,
-                                           v.z - dot*nu_dir.z};
+            double dot = std::get<0>(v)*std::get<0>(nu_dir) +
+                         std::get<1>(v)*std::get<1>(nu_dir) +
+                         std::get<2>(v)*std::get<2>(nu_dir);
+            return std::make_tuple(std::get<0>(v) - dot*std::get<0>(nu_dir),
+                                   std::get<1>(v) - dot*std::get<1>(nu_dir),
+                                   std::get<2>(v) - dot*std::get<2>(nu_dir));
         };
 
-        utilities::three_vector mu_pt = transverse({mu_px, mu_py, mu_pz});
-        utilities::three_vector lp_pt = transverse({lp_px, lp_py, lp_pz});
+        utilities::three_vector mu_pt = transverse(std::make_tuple(mu_px, mu_py, mu_pz));
+        utilities::three_vector lp_pt = transverse(std::make_tuple(lp_px, lp_py, lp_pz));
 
         return utilities::magnitude(utilities::add(mu_pt, lp_pt));
     }
