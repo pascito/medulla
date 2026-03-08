@@ -262,6 +262,7 @@ branch = [
     { name = "dpL_lp",            type = "both" },
     { name = "pn",                type = "both" },
     { name = "pn_lp",             type = "both" },
+    { name = "dpT_lp_genie",      type = "mctruth" },
 
     # Fundamental kinematic variables
     { name = "Q2",            type = "both" },
@@ -324,7 +325,6 @@ cut = [
     { name = "single_muon",               type = "true",  parameters = [ "@muon_threshold"     ] },
     { name = "no_charged_pions",          type = "true",  parameters = [ "@pion_threshold"     ] },
     { name = "!no_protons",               type = "true",  parameters = [ "@proton_threshold"   ] },
-    { name = "no_pi0s",                   type = "true" },
     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
 ]
 branch = [
@@ -365,6 +365,7 @@ branch = [
     { name = "dpL_lp",            type = "both" },
     { name = "pn",                type = "both" },
     { name = "pn_lp",             type = "both" },
+    { name = "dpT_lp_genie",      type = "mctruth" },
 
     # Fundamental kinematic variables
     { name = "Q2",            type = "both" },
@@ -465,6 +466,7 @@ branch = [
     { name = "dpL_lp",            type = "both" },
     { name = "pn",                type = "both" },
     { name = "pn_lp",             type = "both" },
+    { name = "dpT_lp_genie",      type = "mctruth" },
 
     # Fundamental kinematic variables
     { name = "Q2",            type = "both" },
