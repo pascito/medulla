@@ -540,7 +540,7 @@ namespace mctruth
 
         return utilities::magnitude(utilities::add(mu_pt, lp_pt));
     }
-    REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, dpT_nuisance, dpT_nuisance);
+    REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, dpT_lp_genie, dpT_lp_genie);
 
 } // namespace mctruth
 #endif
