@@ -491,7 +491,7 @@ namespace mctruth
     REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, nuisance_nBaryons, nuisance_nBaryons);
 
     template<class T>
-    double dpT_nuisance(const T & obj)
+    double dpT_lp_genie(const T & obj)
     {
         double mu_px = 0, mu_py = 0, mu_pz = 0;
         double lp_px = 0, lp_py = 0, lp_pz = 0;
