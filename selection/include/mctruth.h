@@ -538,7 +538,7 @@ namespace mctruth
         utilities::three_vector mu_pt = transverse(std::make_tuple(mu_px, mu_py, mu_pz));
         utilities::three_vector lp_pt = transverse(std::make_tuple(lp_px, lp_py, lp_pz));
 
-        return utilities::magnitude(utilities::add(mu_pt, lp_pt));
+        return 1000.0 * utilities::magnitude(utilities::add(mu_pt, lp_pt));
     }
     REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, dpT_lp_genie, dpT_lp_genie);
 
