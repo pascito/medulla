@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
+import shutil
+import os
 
 import uproot
 from ROOT import TFile, TEfficiency, TH1D, TGraphAsymmErrors, RDataFrame, TCanvas
@@ -461,7 +463,11 @@ CAST = {"f": float, "d": float, "i": int, "l": int}
 LEAF = {"f": "F", "d": "D", "i": "I", "l": "L"}
 INT_SENTINEL = -9999
 
-f = ROOT.TFile(file_name, "UPDATE")
+# Copy original to new file, then update the copy
+output_file_name = os.path.join(os.path.dirname(file_name), '/Users/rvizarreta/Library/CloudStorage/GoogleDrive-rvizarreta14@gmail.com/My Drive/🏛 PhD Repository/🚀 Research/🤖 Experiments&Projects/ICARUS/ICARUS_CC0pi_Selection/data/icarus_numi_numu_mc_onbeam_offbeam_syst_ppfx.root')
+shutil.copy2(file_name, output_file_name)
+
+f = ROOT.TFile(output_file_name, "UPDATE")
 
 # -------- your existing spec (some keys might be 1D scalars, some 2D lists-of-7) --------
 spec = {
