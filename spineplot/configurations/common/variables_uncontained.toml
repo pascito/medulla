@@ -29,7 +29,7 @@ xlabel = "Reco Visible Energy [GeV]"
 ### dpT ------------------------------------
 
 [variables.reco_dpT_residual]
-key = "reco_dpT"
+key = "reco_dpT_lp"
 range = [0,1200]
 nbins = 100
 xlabel = 'Reco $\delta p_T$ [MeV/c]'
@@ -41,7 +41,7 @@ nbins = 100
 xlabel = 'True $\delta p_T$ [MeV/c]'
 
 [variables.reco_dpT_smearing]
-key = "reco_dpT"
+key = "reco_dpT_lp"
 range = [0,1000]
 nbins = 20
 xlabel = 'Reco $\delta p_T$ [MeV/c]'
@@ -59,7 +59,7 @@ nbins = 20
 xlabel = 'True $\delta p_T$ [MeV/c]'
 
 [variables.reco_dpT]
-key = "reco_dpT"
+key = "reco_dpT_lp"
 range = [0,1200]
 nbins = 20
 xlabel = 'Reco $\delta p_T$ [MeV/c]'

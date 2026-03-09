@@ -4,7 +4,7 @@ primfn = "default_primary_classification"
 pidfn = "default_pid"
 
 [parameters]
-photon_threshold = 25.0
+photon_threshold = 0.0
 electron_threshold = 25.0
 muon_threshold = 143.425
 pion_threshold = 25.0
