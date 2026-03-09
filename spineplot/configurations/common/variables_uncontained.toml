@@ -35,7 +35,7 @@ nbins = 100
 xlabel = 'Reco $\delta p_T$ [MeV/c]'
 
 [variables.true_dpT_residual]
-key = "true_dpT"
+key = "true_dpT_lp_genie"
 range = [0,1200]
 nbins = 100
 xlabel = 'True $\delta p_T$ [MeV/c]'
@@ -47,13 +47,13 @@ nbins = 20
 xlabel = 'Reco $\delta p_T$ [MeV/c]'
 
 [variables.true_dpT_smearing]
-key = "true_dpT"
+key = "true_dpT_lp_genie"
 range = [0,1000]
 nbins = 10
 xlabel = 'True $\delta p_T$ [MeV/c]'
 
 [variables.true_dpT]
-key = "true_dpT"
+key = "true_dpT_lp_genie"
 range = [0,1200]
 nbins = 20
 xlabel = 'True $\delta p_T$ [MeV/c]'

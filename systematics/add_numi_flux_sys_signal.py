@@ -470,7 +470,7 @@ spec = {
     "Run": ("i", run),
     "Subrun": ("i", subrun),
     "Evt": ("i", events),
-    "ppfx_cv_weight": ("f", ppfx_cv_weight), # For PPFX Correction
+    #"ppfx_cv_weight": ("f", ppfx_cv_weight), # For PPFX Correction
     "hysyst_beam_horn_2kA": ("f", hysyst_beam_horn_2kA),
     "hysyst_beam_horn1_x_3mm": ("f", hysyst_beam_horn1_x_3mm),
     "hysyst_beam_horn1_y_3mm": ("f", hysyst_beam_horn1_y_3mm),
