@@ -272,9 +272,9 @@ namespace mctruth
                 nMesons++;
         }
 
-        if(nMesons > 0) return 0.;
+        if(nMesons > 0) return false;
 
-        return 1.;
+        return true;
     }
     REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, no_extra_mesons, no_extra_mesons);
 
@@ -307,9 +307,9 @@ namespace mctruth
                 nBaryons++;
         }
 
-        if(nBaryons > 0) return 0.;
+        if(nBaryons > 0) return false;
 
-        return 1.;
+        return true;
     }
     REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, no_extra_baryons, no_extra_baryons);
 
