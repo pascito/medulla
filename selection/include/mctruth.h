@@ -226,16 +226,14 @@ namespace mctruth
      * @return true if no neutral pions above threshold.
      */
     template<typename T>
-    bool no_neutral_pions(const T & obj, std::vector<double> params={0.0,})
+    bool no_neutral_pions(const T & obj)
     {
         for(const auto & p : obj.prim)
         {
             if(p.start_process != 0) continue;
             if(p.pdg == 111)
             {
-                double ke = 1000. * p.genE - 134.977;
-                if(ke >= params[0])
-                    return false;
+                return false;
             }
         }
         return true;
