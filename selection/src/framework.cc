@@ -652,7 +652,7 @@ ana::SpillMultiVar spill_multivar_helper(
 
                 if constexpr(std::is_same_v<VarOn, RType>)
                 {
-                    if(cuts(i) && (!comps || (match_id != kNoMatch && (*comps)(sr->dlp[match_id])))
+                    if(cuts(i) && (!comps || (match_id != kNoMatch && match_id < sr->dlp.size() && (*comps)(sr->dlp[match_id])))
                        && (i.nu_id < 0 || (size_t)i.nu_id >= sr->mc.nu.size() || mctruth_cut(sr->mc.nu[i.nu_id])))
                     {
                         values.push_back(match_id != kNoMatch ? var(sr->dlp[match_id]) : kNoMatchValue);
@@ -660,14 +660,14 @@ ana::SpillMultiVar spill_multivar_helper(
                 }
                 else if constexpr(std::is_same_v<VarOn, TType>)
                 {
-                    if(cuts(i) && (!comps || (match_id != kNoMatch && (*comps)(sr->dlp[match_id]))) && (i.nu_id < 0 || (size_t)i.nu_id >= sr->mc.nu.size() || mctruth_cut(sr->mc.nu[i.nu_id])))
+                    if(cuts(i) && (!comps || (match_id != kNoMatch && match_id < sr->dlp.size() && (*comps)(sr->dlp[match_id]))) && (i.nu_id < 0 || (size_t)i.nu_id >= sr->mc.nu.size() || mctruth_cut(sr->mc.nu[i.nu_id])))
                     {
                         values.push_back(var(i));
                     }
                 }
                 else if constexpr(std::is_same_v<VarOn, MCTruth>)
                 {
-                    if(cuts(i) && (!comps || (match_id != kNoMatch && (*comps)(sr->dlp[match_id]))) && (i.nu_id < 0 || (size_t)i.nu_id >= sr->mc.nu.size() || mctruth_cut(sr->mc.nu[i.nu_id])))
+                    if(cuts(i) && (!comps || (match_id != kNoMatch && match_id < sr->dlp.size() && (*comps)(sr->dlp[match_id]))) && (i.nu_id < 0 || (size_t)i.nu_id >= sr->mc.nu.size() || mctruth_cut(sr->mc.nu[i.nu_id])))
                     {
                         if(i.nu_id >= 0 && (size_t)i.nu_id < sr->mc.nu.size())
                         {
@@ -681,7 +681,7 @@ ana::SpillMultiVar spill_multivar_helper(
                 }
                 else if constexpr(std::is_same_v<VarOn, TParticleType> || std::is_same_v<VarOn, RParticleType>)
                 {
-                    if(cuts(i) && (!comps || (match_id != kNoMatch && (*comps)(sr->dlp[match_id]))) && (i.nu_id < 0 || (size_t)i.nu_id >= sr->mc.nu.size() || mctruth_cut(sr->mc.nu[i.nu_id])))
+                    if(cuts(i) && (!comps || (match_id != kNoMatch && match_id < sr->dlp.size() && (*comps)(sr->dlp[match_id]))) && (i.nu_id < 0 || (size_t)i.nu_id >= sr->mc.nu.size() || mctruth_cut(sr->mc.nu[i.nu_id])))
                     {
                         for(auto const & j : i.particles)
                         {
@@ -729,7 +729,7 @@ ana::SpillMultiVar spill_multivar_helper(
 
                 if constexpr(std::is_same_v<VarOn, TType>)
                 {
-                    if(cuts(i) && (!comps || (match_id != kNoMatch && (*comps)(sr->dlp_true[match_id])) || !ismc)
+                    if(cuts(i) && (!comps || (match_id != kNoMatch && match_id < sr->dlp_true.size() && (*comps)(sr->dlp_true[match_id])) || !ismc)
                         && (match_id == kNoMatch || match_id >= sr->dlp_true.size() || sr->dlp_true[match_id].nu_id < 0 || (size_t)sr->dlp_true[match_id].nu_id >= sr->mc.nu.size() || mctruth_cut(sr->mc.nu[sr->dlp_true[match_id].nu_id])))
                     {
                         values.push_back(ismc && match_id != kNoMatch ? var(sr->dlp_true[match_id]) : kNoMatchValue);
@@ -737,7 +737,7 @@ ana::SpillMultiVar spill_multivar_helper(
                 }
                 else if constexpr(std::is_same_v<VarOn, RType>)
                 {
-                    if(cuts(i) && (!comps || (match_id != kNoMatch && (*comps)(sr->dlp_true[match_id])) || !ismc)
+                    if(cuts(i) && (!comps || (match_id != kNoMatch && match_id < sr->dlp_true.size() && (*comps)(sr->dlp_true[match_id])) || !ismc)
                         && (match_id == kNoMatch || match_id >= sr->dlp_true.size() || sr->dlp_true[match_id].nu_id < 0 || (size_t)sr->dlp_true[match_id].nu_id >= sr->mc.nu.size() || mctruth_cut(sr->mc.nu[sr->dlp_true[match_id].nu_id])))
                     {
                         values.push_back(var(i));
