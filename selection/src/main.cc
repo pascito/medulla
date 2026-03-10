@@ -416,7 +416,7 @@ int main(int argc, char * argv[])
                                             for(const auto & [category, cuts_pair] : category_cut_functions)
                                             {
                                                 const auto & [true_cut, mctruth_cut] = cuts_pair;
-                                                if(true_cut(i) && ((i.nu_id < 0) || mctruth_cut(sr->mc.nu[i.nu_id])))
+                                                if(true_cut(ti) && ((nu_id < 0 || (size_t)nu_id >= sr->mc.nu.size()) || mctruth_cut(sr->mc.nu[nu_id])))
                                                 {
                                                     values.push_back(category);
                                                     matched = true;
@@ -465,7 +465,7 @@ int main(int argc, char * argv[])
                                                 for(const auto & [category, cuts_pair] : category_cut_functions)
                                                 {
                                                     const auto & [true_cut, mctruth_cut] = cuts_pair;
-                                                    if(true_cut(i) && ((i.nu_id < 0 || (size_t)i.nu_id >= sr->mc.nu.size()) || mctruth_cut(sr->mc.nu[i.nu_id])))
+                                                    if(true_cut(ti) && ((nu_id < 0) || mctruth_cut(sr->mc.nu[nu_id])))
                                                     {
                                                         values.push_back(category);
                                                         matched = true;
