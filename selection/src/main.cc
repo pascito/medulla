@@ -368,7 +368,11 @@ int main(int argc, char * argv[])
                                 std::string ttype = tcut.has_field("type") ? tcut.get_string_field("type") : "true";
                                 if(ttype == "mctruth")
                                 {
+                                    std::string cut_name = "mctruth_" + name;
                                     auto factory = CutFactoryRegistry<MCTruth>::instance().get("mctruth_" + tname);
+                                    if(!factory)
+                                        throw std::runtime_error("MCTruth cut not found in category cuts: " + cut_name);
+                                    if(invert)
                                     if(tinvert) { auto fn = factory(tparams); tree_mctruth_fns.push_back([fn](const MCTruth & m){ return !fn(m); }); }
                                     else tree_mctruth_fns.push_back(factory(tparams));
                                 }
