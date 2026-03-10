@@ -370,7 +370,7 @@ int main(int argc, char * argv[])
                                 std::string ttype = tcut.has_field("type") ? tcut.get_string_field("type") : "true";
                                 if(ttype == "mctruth")
                                 {
-                                    std::string cut_name = "mctruth_" + name;
+                                    std::string cut_name = "mctruth_" + tname;
                                     auto factory = CutFactoryRegistry<MCTruth>::instance().get("mctruth_" + tname);
                                     if(!factory)
                                         throw std::runtime_error("MCTruth cut not found in category cuts: " + cut_name);
