@@ -230,6 +230,7 @@ namespace mctruth
     {
         for(const auto & p : obj.prim)
         {
+            if(p.start_process != 0) continue;
             if(p.pdg == 111)
             {
                 double ke = 1000. * p.genE - 134.977;
