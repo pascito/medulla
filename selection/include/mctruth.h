@@ -226,7 +226,7 @@ namespace mctruth
      * @return true if no neutral pions above threshold.
      */
     template<typename T>
-    bool no_neutral_pions_srtruth(const T & obj, std::vector<double> params={0.0,})
+    bool no_neutral_pions(const T & obj, std::vector<double> params={0.0,})
     {
         for(const auto & p : obj.prim)
         {
@@ -239,7 +239,79 @@ namespace mctruth
         }
         return true;
     }
-    REGISTER_CUT_SCOPE(RegistrationScope::MCTruth, no_neutral_pions_srtruth, no_neutral_pions_srtruth);
+    REGISTER_CUT_SCOPE(RegistrationScope::MCTruth, no_neutral_pions, no_neutral_pions);
+
+    /**
+     * @brief Returns 1 if no extra mesons are present in the event.
+     * @details Checks for the absence of:
+     *   - Kaons (charged and neutral)
+     *   - Eta mesons
+     *   - K* resonances
+     * Uses GENIE truth variables (obj.prim) to match the NUISANCE FlatTree
+     * signal definition for ICARUS_1muNp0pi.
+     * @tparam T the type of the object to apply the variable on.
+     * @param obj the SRTrueInteraction to apply the variable on.
+     * @return 1 if no extra mesons are found, 0 otherwise.
+     */
+    template<typename T>
+    double no_extra_mesons(const T & obj)
+    {
+        unsigned int nMesons(0);
+
+        for(const auto & p : obj.prim)
+        {
+            if(p.start_process != 0) continue;
+
+            int pdg = p.pdg;
+
+            // ── Mesons (kaons, eta, neutral kaons, K*) ────────────────────────
+            if(std::abs(pdg) == 321 || std::abs(pdg) == 323 ||
+               pdg == 130            || pdg == 310            ||
+               pdg == 311            || pdg == 313            ||
+               std::abs(pdg) == 221  || std::abs(pdg) == 331)
+                nMesons++;
+        }
+
+        if(nMesons > 0) return 0.;
+
+        return 1.;
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, no_extra_mesons, no_extra_mesons);
+
+    /**
+     * @brief Returns 1 if no heavy baryons are present in the event.
+     * @details Checks for the absence of:
+     *   - Strange baryons (Sigma+/-, Lambda, Sigma0)
+     *   - Charmed baryons and D mesons
+     * Uses GENIE truth variables (obj.prim) to match the NUISANCE FlatTree
+     * signal definition for ICARUS_1muNp0pi.
+     * @tparam T the type of the object to apply the variable on.
+     * @param obj the SRTrueInteraction to apply the variable on.
+     * @return 1 if no heavy baryons are found, 0 otherwise.
+     */
+    template<typename T>
+    double no_extra_baryons(const T & obj)
+    {
+        unsigned int nBaryons(0);
+
+        for(const auto & p : obj.prim)
+        {
+            if(p.start_process != 0) continue;
+
+            int pdg = p.pdg;
+
+            // ── Heavy baryons (strange, charmed) ──────────────────────────────
+            if(pdg == 3112 || pdg == 3122 || pdg == 3212 || pdg == 3222 ||
+               pdg == 4112 || pdg == 4122 || pdg == 4212 || pdg == 4222 ||
+               pdg == 411  || pdg == 421)
+                nBaryons++;
+        }
+
+        if(nBaryons > 0) return 0.;
+
+        return 1.;
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, no_extra_baryons, no_extra_baryons);
 
     /**
      * @brief Cut for zero true final state photons above threshold.
