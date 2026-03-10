@@ -253,7 +253,7 @@ int main(int argc, char * argv[])
                         {
                             const auto & [true_cut, mctruth_cut] = cuts;
                             bool passes_true = true_cut(i);
-                            bool passes_mctruth = (i.nu_id < 0 || (size_t)i.nu_id >= sr->mc.nu.size()) || mctruth_cut(sr->mc.nu[i.nu_id]);
+                            bool passes_mctruth = (i.nu_id < 0) || mctruth_cut(sr->mc.nu[i.nu_id]);
                             if(passes_true && passes_mctruth)
                             {
                                 values.push_back(category);
