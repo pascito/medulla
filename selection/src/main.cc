@@ -405,8 +405,7 @@ int main(int argc, char * argv[])
                                             size_t match_id = (i.match_ids.size() > 0) ? (size_t)i.match_ids[0] : kNoMatch;
                                             if(!tree_reco_fns.empty())
                                             {
-                                                //if(match_id == kNoMatch) continue;
-                                                if(match_id == kNoMatch || match_id >= sr->dlp.size()) continue;
+                                                if(match_id == kNoMatch) continue;
                                                 bool passes_reco = std::all_of(tree_reco_fns.begin(), tree_reco_fns.end(), [&](auto & f){ return f(sr->dlp[match_id]); });
                                                 if(!passes_reco) continue;
                                             }
@@ -459,8 +458,7 @@ int main(int argc, char * argv[])
 
                                             // Assign category using matched true interaction
                                             bool matched = false;
-                                            //if(match_id != kNoMatch)
-                                            if(match_id != kNoMatch && match_id < sr->dlp_true.size())
+                                            if(match_id != kNoMatch)
                                             {
                                                 const auto & ti = sr->dlp_true[match_id];
                                                 int64_t nu_id = ti.nu_id;
