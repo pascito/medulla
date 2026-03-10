@@ -256,7 +256,7 @@ int main(int argc, char * argv[])
                         {
                             const auto & [true_cut, mctruth_cut] = cuts;
                             bool passes_true = true_cut(i);
-                            bool passes_mctruth = (i.nu_id < 0 || (size_t)i.nu_id >= sr->mc.nu.size()) || mctruth_cut(sr->mc.nu[i.nu_id]);
+                            bool passes_mctruth = (i.nu_id < 0) || mctruth_cut(sr->mc.nu[i.nu_id]);
                             if(passes_true && passes_mctruth)
                             {
                                 values.push_back(category);
@@ -405,18 +405,19 @@ int main(int argc, char * argv[])
                                             size_t match_id = (i.match_ids.size() > 0) ? (size_t)i.match_ids[0] : kNoMatch;
                                             if(!tree_reco_fns.empty())
                                             {
-                                                if(match_id == kNoMatch) continue;
+                                                //if(match_id == kNoMatch) continue;
+                                                if(match_id == kNoMatch || match_id >= sr->dlp.size()) continue;
                                                 bool passes_reco = std::all_of(tree_reco_fns.begin(), tree_reco_fns.end(), [&](auto & f){ return f(sr->dlp[match_id]); });
                                                 if(!passes_reco) continue;
                                             }
-                                            bool passes_mctruth = (i.nu_id < 0 || (size_t)i.nu_id >= sr->mc.nu.size()) || std::all_of(tree_mctruth_fns.begin(), tree_mctruth_fns.end(), [&](auto & f){ return f(sr->mc.nu[i.nu_id]); });
+                                            bool passes_mctruth = (i.nu_id < 0) || std::all_of(tree_mctruth_fns.begin(), tree_mctruth_fns.end(), [&](auto & f){ return f(sr->mc.nu[i.nu_id]); });
                                             if(!passes_mctruth) continue;
 
                                             bool matched = false;
                                             for(const auto & [category, cuts_pair] : category_cut_functions)
                                             {
                                                 const auto & [true_cut, mctruth_cut] = cuts_pair;
-                                                if(true_cut(i) && ((i.nu_id < 0 || (size_t)i.nu_id >= sr->mc.nu.size()) || mctruth_cut(sr->mc.nu[i.nu_id])))
+                                                if(true_cut(i) && ((i.nu_id < 0) || mctruth_cut(sr->mc.nu[i.nu_id])))
                                                 {
                                                     values.push_back(category);
                                                     matched = true;
@@ -458,14 +459,15 @@ int main(int argc, char * argv[])
 
                                             // Assign category using matched true interaction
                                             bool matched = false;
-                                            if(match_id != kNoMatch)
+                                            //if(match_id != kNoMatch)
+                                            if(match_id != kNoMatch && match_id < sr->dlp_true.size())
                                             {
                                                 const auto & ti = sr->dlp_true[match_id];
                                                 int64_t nu_id = ti.nu_id;
                                                 for(const auto & [category, cuts_pair] : category_cut_functions)
                                                 {
                                                     const auto & [true_cut, mctruth_cut] = cuts_pair;
-                                                    if(true_cut(ti) && ((nu_id < 0 || (size_t)nu_id >= sr->mc.nu.size()) || mctruth_cut(sr->mc.nu[nu_id])))
+                                                    if(true_cut(ti) && ((nu_id < 0) || mctruth_cut(sr->mc.nu[nu_id])))
                                                     {
                                                         values.push_back(category);
                                                         matched = true;
