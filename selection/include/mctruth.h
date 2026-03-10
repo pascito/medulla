@@ -350,20 +350,20 @@ namespace mctruth
                 nPhoton++;
 
             // Electron — 25.5 MeV/c momentum threshold
-            //else if(std::abs(pdg) == 11 && momentum > 0.0255)
-            //    nElectron++;
+            else if(std::abs(pdg) == 11 && momentum > 0.0255)
+                nElectron++;
 
             // Mesons — only if NOT photon/electron (else if chain)
-//            else if(std::abs(pdg) == 211 || std::abs(pdg) == 321 || std::abs(pdg) == 323 ||
-//                    pdg == 111            || pdg == 130            || pdg == 310            ||
-//                    pdg == 311            || pdg == 313            ||
-//                    std::abs(pdg) == 221  || std::abs(pdg) == 331)
-//                nMesons++;
-//
-//            else if(pdg == 3112 || pdg == 3122 || pdg == 3212 || pdg == 3222 ||
-//                    pdg == 4112 || pdg == 4122 || pdg == 4212 || pdg == 4222 ||
-//                    pdg == 411  || pdg == 421  || pdg == 111)
-//                nBaryons++;
+            else if(std::abs(pdg) == 211 || std::abs(pdg) == 321 || std::abs(pdg) == 323 ||
+                    pdg == 111            || pdg == 130            || pdg == 310            ||
+                    pdg == 311            || pdg == 313            ||
+                    std::abs(pdg) == 221  || std::abs(pdg) == 331)
+                nMesons++;
+
+            else if(pdg == 3112 || pdg == 3122 || pdg == 3212 || pdg == 3222 ||
+                    pdg == 4112 || pdg == 4122 || pdg == 4212 || pdg == 4222 ||
+                    pdg == 411  || pdg == 421  || pdg == 111)
+                nBaryons++;
         }
 
         // ── Signal condition (exact NUISANCE logic) ───────────────────────────
