@@ -405,6 +405,10 @@ int main(int argc, char * argv[])
                                                 if(!passes_reco) continue;
                                             }
 
+                                            bool passes_mctruth = (i.nu_id < 0 || (size_t)i.nu_id >= sr->mc.nu.size())
+                                                || std::all_of(tree_mctruth_fns.begin(), tree_mctruth_fns.end(), [&](auto & f){ return f(sr->mc.nu[i.nu_id]); });
+                                            if(!passes_mctruth) continue;
+
                                             bool matched = false;
                                             for(const auto & [category, cuts_pair] : category_cut_functions)
                                             {
