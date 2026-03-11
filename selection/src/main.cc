@@ -385,6 +385,7 @@ int main(int argc, char * argv[])
                                     else tree_reco_fns.push_back(factory(tparams));
                                 }
                             }
+                            bool ismc = sample.get_bool_field("ismc");
                             vars_map.try_emplace("true_category", ana::SpillMultiVar(
                                 [tree_true_fns, tree_mctruth_fns, tree_reco_fns, category_cut_functions, mode, ismc](const caf::Proxy<caf::StandardRecord> * sr) -> std::vector<double>
                                 {
