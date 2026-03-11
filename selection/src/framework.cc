@@ -667,14 +667,10 @@ ana::SpillMultiVar spill_multivar_helper(
                 }
                 else if constexpr(std::is_same_v<VarOn, MCTruth>)
                 {
-                    if(cuts(i) && (!comps || (match_id != kNoMatch && (*comps)(sr->dlp[match_id]))) && (i.nu_id < 0 || mctruth_cut(sr->mc.nu[i.nu_id])))
+                    if(cuts(i) && (!comps || (match_id != kNoMatch && match_id < sr->dlp.size() && (*comps)(sr->dlp[match_id]))) && (i.nu_id < 0 || mctruth_cut(sr->mc.nu[i.nu_id])))
                     {
                         if(i.nu_id >= 0)
-                        {
-                            const MCTruth & nu = sr->mc.nu[i.nu_id];
-                            if(mctruth_cut(nu))
-                                values.push_back(var(nu));
-                        }
+                            values.push_back(var(sr->mc.nu[i.nu_id]));
                         else
                             values.push_back(kNoMatchValue);
                     }
