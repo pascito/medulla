@@ -435,7 +435,11 @@ int main(int argc, char * argv[])
                                             // Apply true complementary cuts on matched true interaction
                                             if(!tree_true_fns.empty())
                                             {
-                                                if(match_id == kNoMatch) continue;
+                                                if(match_id == kNoMatch)
+                                                {
+                                                    values.push_back(PLACEHOLDERVALUE);
+                                                    continue;
+                                                }
                                                 bool passes_true = std::all_of(tree_true_fns.begin(), tree_true_fns.end(), [&](auto & f){ return f(sr->dlp_true[match_id]); });
                                                 if(!passes_true) continue;
                                             }
@@ -453,7 +457,7 @@ int main(int argc, char * argv[])
 
                                             // Assign category using matched true interaction
                                             bool matched = false;
-                                            if(match_id != kNoMatch)
+                                            if(match_id != kNoMatch && match_id < sr->dlp_true.size())
                                             {
                                                 const auto & ti = sr->dlp_true[match_id];
                                                 int64_t nu_id = ti.nu_id;
