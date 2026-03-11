@@ -386,7 +386,7 @@ int main(int argc, char * argv[])
                                 }
                             }
                             vars_map.try_emplace("true_category", ana::SpillMultiVar(
-                                [tree_true_fns, tree_mctruth_fns, tree_reco_fns, category_cut_functions, mode](const caf::Proxy<caf::StandardRecord> * sr) -> std::vector<double>
+                                [tree_true_fns, tree_mctruth_fns, tree_reco_fns, category_cut_functions, mode, ismc](const caf::Proxy<caf::StandardRecord> * sr) -> std::vector<double>
                                 {
                                     std::vector<double> values;
 
@@ -442,8 +442,11 @@ int main(int argc, char * argv[])
                                                     values.push_back(PLACEHOLDERVALUE);
                                                     continue;
                                                 }
-                                                bool passes_true = std::all_of(tree_true_fns.begin(), tree_true_fns.end(), [&](auto & f){ return f(sr->dlp_true[match_id]); });
-                                                if(!passes_true) continue;
+                                                if(ismc)
+                                                {
+                                                    bool passes_true = std::all_of(tree_true_fns.begin(), tree_true_fns.end(), [&](auto & f){ return f(sr->dlp_true[match_id]); });
+                                                    if(!passes_true) continue;
+                                                }
                                             }
 
                                             // Apply mctruth cuts
