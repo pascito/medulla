@@ -313,6 +313,61 @@ namespace mctruth
     REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, no_extra_baryons, no_extra_baryons);
 
     /**
+     * @brief Returns 1 if no photons, extra mesons, or heavy baryons/pi0 are
+     *        present in the event, replicating the MINERvA-style signal definition.
+     * @details Checks (exclusively, in order) for the absence of:
+     *   - Photons with E > 10 MeV (PDG 22)
+     *   - Mesons: charged pions, kaons (charged/neutral), eta, pi0, K* (PDG 211,
+     *             321, 323, 111, 130, 310, 311, 313, 221, 331)
+     *   - Heavy baryons + pi0: strange/charmed baryons, D mesons, pi0 (PDG 3112,
+     *             3122, 3212, 3222, 4112, 4122, 4212, 4222, 411, 421, 111)
+     * Each particle increments at most one counter (else-if chain), matching the
+     * NUISANCE FlatTree signal definition for ICARUS_1muNp0pi.
+     * Inspired by MINERvA: https://github.com/NUISANCEMC/nuisance/blob/main/src/MINERvA/MINERvA_SignalDef.cxx#L469-L481
+     * @tparam T the type of the object to apply the variable on.
+     * @param obj the SRTrueInteraction to apply the variable on.
+     * @return 1 if none of the above are found, 0 otherwise.
+     */
+    template<typename T>
+    double no_extra_particles_minerva(const T & obj)
+    {
+        unsigned int nPhotons(0);
+        unsigned int nMesons(0);
+        unsigned int nBaryonsAndPi0(0);
+
+        for(const auto & p : obj.prim)
+        {
+            if(p.start_process != 0) continue;
+
+            int pdg = p.pdg;
+
+            // ── Photons with E > 10 MeV ───────────────────────────────────────
+            if(std::abs(pdg) == 22 && p.startE > 0.01)
+                nPhotons++;
+
+            // ── Mesons (charged pions, kaons, eta, pi0, K*) ───────────────────
+            else if(std::abs(pdg) == 211 || std::abs(pdg) == 321 || std::abs(pdg) == 323 ||
+                    pdg == 111           || pdg == 130            || pdg == 310            ||
+                    pdg == 311           || pdg == 313            ||
+                    std::abs(pdg) == 221 || std::abs(pdg) == 331)
+                nMesons++;
+
+            // ── Heavy baryons + pi0 (strange, charmed, D mesons) ─────────────
+            else if(pdg == 3112 || pdg == 3122 || pdg == 3212 || pdg == 3222 ||
+                    pdg == 4112 || pdg == 4122 || pdg == 4212 || pdg == 4222 ||
+                    pdg == 411  || pdg == 421  || pdg == 111)
+                nBaryonsAndPi0++;
+        }
+
+        if(nPhotons       > 0) return false;
+        if(nMesons        > 0) return false;
+        if(nBaryonsAndPi0 > 0) return false;
+
+        return true;
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::MCTruth, no_extra_particles_minerva, no_extra_particles_minerva);
+
+    /**
      * @brief Cut for zero true final state photons above threshold.
      * @param obj the SRTrueInteraction to apply the cut on.
      * @param params energy threshold in MeV, defaults to 25 MeV.

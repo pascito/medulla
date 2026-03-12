@@ -4,7 +4,7 @@ primfn = "default_primary_classification"
 pidfn = "default_pid"
 
 [parameters]
-photon_threshold = 25.0
+photon_threshold = 10.0
 electron_threshold = 25.0
 muon_threshold = 143.425
 pion_threshold = 25.0
@@ -24,9 +24,8 @@ cuts = [
     { name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
     { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
     { name = "single_proton",           parameters = [ "@proton_threshold"   ] },
-    { name = "no_neutral_pions",        type = "mctruth"                       },
-    { name = "no_extra_mesons",         type = "mctruth"                       },
-    { name = "no_extra_baryons",        type = "mctruth"                       },
+    { name = "no_neutral_pions",            type = "mctruth"                   },
+    { name = "no_extra_particles_minerva",  type = "mctruth"                   },
 ]
 
 [[category]] # 1 : Uncontained muon, fiducial, single proton, QE
@@ -39,9 +38,8 @@ cuts = [
     { name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
     { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
     { name = "single_proton",           parameters = [ "@proton_threshold"   ] },
-    { name = "no_neutral_pions",        type = "mctruth"                       },
-    { name = "no_extra_mesons",         type = "mctruth"                       },
-    { name = "no_extra_baryons",        type = "mctruth"                       },
+    { name = "no_neutral_pions",            type = "mctruth"                   },
+    { name = "no_extra_particles_minerva",  type = "mctruth"                   },
 ]
 
 [[category]] # 2 : Uncontained muon, single proton
@@ -52,9 +50,8 @@ cuts = [
     { name = "no_charged_pions", parameters = [ "@pion_threshold"     ] },
     { name = "single_muon",      parameters = [ "@muon_threshold"     ] },
     { name = "single_proton",    parameters = [ "@proton_threshold"   ] },
-    { name = "no_neutral_pions",        type = "mctruth"                },
-    { name = "no_extra_mesons",         type = "mctruth"                },
-    { name = "no_extra_baryons",        type = "mctruth"                },
+    { name = "no_neutral_pions",            type = "mctruth"            },
+    { name = "no_extra_particles_minerva",  type = "mctruth"            },
 ]
 
 [[category]] # 3 : Uncontained muon, fiducial, multiple protons, not QE
@@ -67,9 +64,8 @@ cuts = [
     { name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
     { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
     { name = "!no_protons",             parameters = [ "@proton_threshold"   ] },
-    { name = "no_neutral_pions",        type = "mctruth"                       },
-    { name = "no_extra_mesons",         type = "mctruth"                       },
-    { name = "no_extra_baryons",        type = "mctruth"                       },
+    { name = "no_neutral_pions",            type = "mctruth"                   },
+    { name = "no_extra_particles_minerva",  type = "mctruth"                   },
 ]
 
 [[category]] # 4 : Uncontained muon, fiducial, multiple protons, QE
@@ -82,9 +78,8 @@ cuts = [
     { name = "no_charged_pions",        parameters = [ "@pion_threshold"     ] },
     { name = "single_muon",             parameters = [ "@muon_threshold"     ] },
     { name = "!no_protons",             parameters = [ "@proton_threshold"   ] },
-    { name = "no_neutral_pions",        type = "mctruth"                       },
-    { name = "no_extra_mesons",         type = "mctruth"                       },
-    { name = "no_extra_baryons",        type = "mctruth"                       },
+    { name = "no_neutral_pions",            type = "mctruth"                   },
+    { name = "no_extra_particles_minerva",  type = "mctruth"                   },
 ]
 
 [[category]] # 5 : Uncontained muon, multiple protons
@@ -95,9 +90,8 @@ cuts = [
     { name = "no_charged_pions", parameters = [ "@pion_threshold"     ] },
     { name = "single_muon",      parameters = [ "@muon_threshold"     ] },
     { name = "!no_protons",      parameters = [ "@proton_threshold"   ] },
-    { name = "no_neutral_pions",        type = "mctruth"                       },
-    { name = "no_extra_mesons",         type = "mctruth"                       },
-    { name = "no_extra_baryons",        type = "mctruth"                       },
+    { name = "no_neutral_pions",            type = "mctruth"            },
+    { name = "no_extra_particles_minerva",  type = "mctruth"            },
 ]
 
 [[category]] # 6 : Uncontained muon, fiducial
@@ -343,9 +337,8 @@ cut = [
     { name = "single_muon",               type = "true",  parameters = [ "@muon_threshold"     ] },
     { name = "no_charged_pions",          type = "true",  parameters = [ "@pion_threshold"     ] },
     { name = "!no_protons",               type = "true",  parameters = [ "@proton_threshold"   ] },
-    { name = "no_neutral_pions",          type = "mctruth"                            },
-    { name = "no_extra_mesons",           type = "mctruth"                            },
-    { name = "no_extra_baryons",          type = "mctruth"                            },
+    { name = "no_neutral_pions",            type = "mctruth"                   },
+    { name = "no_extra_particles_minerva",  type = "mctruth"                   },
     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
 ]
 branch = [
