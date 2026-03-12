@@ -358,6 +358,7 @@ int main(int argc, char * argv[])
                             std::vector<CutFn<TType>> tree_true_fns;
                             std::vector<CutFn<MCTruth>> tree_mctruth_fns;
                             std::vector<CutFn<RType>> tree_reco_fns;
+                            std::vector<CutFn<EventType>> tree_event_fns;
                             for(const auto & tcut : cuts)
                             {
                                 std::string tname = tcut.get_string_field("name");
@@ -378,18 +379,26 @@ int main(int argc, char * argv[])
                                     if(tinvert) { auto fn = factory(tparams); tree_true_fns.push_back([fn](const TType & e){ return !fn(e); }); }
                                     else tree_true_fns.push_back(factory(tparams));
                                 }
-                                    else if(ttype == "reco")  // ADD THIS BLOCK
+                                    else if(ttype == "reco")
                                 {
                                     auto factory = CutFactoryRegistry<RType>::instance().get("reco_" + tname);
                                     if(tinvert) { auto fn = factory(tparams); tree_reco_fns.push_back([fn](const RType & e){ return !fn(e); }); }
                                     else tree_reco_fns.push_back(factory(tparams));
                                 }
+                                else if(ttype == "event")
+                                {
+                                    auto factory = CutFactoryRegistry<EventType>::instance().get("event_" + tname);
+                                    if(tinvert) { auto fn = factory(tparams); tree_event_fns.push_back([fn](const EventType & e){ return !fn(e); }); }
+                                    else tree_event_fns.push_back(factory(tparams));
+                                }
                             }
                             bool ismc = sample.get_bool_field("ismc");
                             vars_map.try_emplace("true_category", ana::SpillMultiVar(
-                                [tree_true_fns, tree_mctruth_fns, tree_reco_fns, category_cut_functions, mode, ismc](const caf::Proxy<caf::StandardRecord> * sr) -> std::vector<double>
+                                [tree_true_fns, tree_mctruth_fns, tree_reco_fns, tree_event_fns, category_cut_functions, mode, ismc](const caf::Proxy<caf::StandardRecord> * sr) -> std::vector<double>
                                 {
                                     std::vector<double> values;
+                                    if(!std::all_of(tree_event_fns.begin(), tree_event_fns.end(), [&sr](auto & f){ return f(*sr); }))
+                                        return values;
 
                                     if(mode == "true")
                                     {
