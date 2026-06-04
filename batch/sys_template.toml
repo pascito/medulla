@@ -1,12 +1,12 @@
 
 [input]
-path = '/exp/icarus/data/users/rvizarr/medulla/1muNp0pi_Nge1_uncontained.root'
-weights = '/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/*.root'
+path = 'output.root'
+weights = 'data/*flat*.root'
 
 use_additional_hash = true
 
 [output]
-path = '/exp/icarus/data/users/rvizarr/medulla/icarus_numi_numu_mc_onbeam_offbeam_syst_gundam.root'
+path = 'output_sys.root'
 histogram_destination = 'variations/'
 
 [[sysvar]]
