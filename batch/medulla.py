@@ -157,4 +157,87 @@ if __name__ == '__main__':
         tml=args.toml,
         batch_size=args.batch_size,
         systematic=args.systematic,
+    )if __name__ == '__main__':
+    p = ArgumentParser(description='Run medulla.')
+
+    # The project directory is always required.
+    p.add_argument(
+        '--project-dir', '-p', type=str, required=True,
+        help='Path to the base directory for the job directory.'
+    )
+
+    # The experiment is always required.
+    p.add_argument(
+        '--experiment', '-e', type=str, required=False, default='sbnd',
+        help='Experiment name (default: sbnd).'
+    )
+
+    # The --create-project flag indicates that a new project should be
+    # created. If this flag is set, then --toml and --batch-size are
+    # required.
+    p.add_argument(
+        '--create-project', '-c', action='store_true',
+        help='Create a new project for medulla job submission.'
+    )
+    p.add_argument(
+        '--toml', '-t', type=str,
+        help='Path to the TOML file containing the configuration.'
+    )
+    p.add_argument(
+        '--batch-size', '-b', type=int,
+        help='Number of files to process in each batch (only used when creating a new project).'
+    )
+
+    # The --systematic flag indicates the systematic template file to
+    # use. The default is the template file in the batch directory.
+    # This is used when creating a new project.
+    p.add_argument(
+        '--systematic', '-s', type=str, default=None,
+        help='Path to the systematic template file to use.'
+    )
+
+    # The --test-job flag indicates that a test job should be run. That
+    # is, launch a single job to test the configuration.
+    p.add_argument(
+        '--test-job', '-T', action='store_true',
+        help='Run a single test job to verify the configuration.'
+    )
+
+    # The --launch-jobs flag allows an (optional) number of jobs to be
+    # launched. If this flag is provided without a number, then all
+    # pending jobs will be launched.
+    p.add_argument(
+        '--launch-jobs', '-l', type=int, nargs='?', const=-1,
+        help='Launch the specified number of jobs. If no number is provided, '
+             'then all pending jobs will be launched.'
+    )
+
+    args = p.parse_args()
+
+    # Requirement: the experiment must be sbnd or icarus.
+    if args.experiment not in ['sbnd', 'icarus']:
+        p.error("Experiment must be either 'sbnd' or 'icarus'.")
+
+    # Conditional requirement: if --create-project is set, then --toml
+    # and --batch-size are required.
+    if args.create_project and args.toml is None:
+        p.error('--toml is required when --create-project is set.')
+    if args.create_project and args.batch_size is None:
+        p.error('--batch-size is required when --create-project is set.')
+
+    # Conditional requirement: flags --test-job and --launch-jobs are 
+    # mutually exclusive.
+    if args.test_job and args.launch_jobs is not None:
+        p.error('--test-job and --launch-jobs are mutually exclusive.')
+
+    # Run the main function.
+    main(
+        project_dir=args.project_dir,
+        experiment=args.experiment,
+        create_project=args.create_project,
+        launch_jobs=args.launch_jobs,
+        test_job=args.test_job,
+        tml=args.toml,
+        batch_size=args.batch_size,
+        systematic=args.systematic,
     )
