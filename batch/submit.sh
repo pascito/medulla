@@ -63,7 +63,7 @@ ups active
 # Build medulla
 git clone https://github.com/pascito/medulla.git
 cd medulla
-git checkout develop
+git checkout update-sys-template
 mkdir build && cd build
 export CC=$(which gcc)
 export CXX=$(which g++)
