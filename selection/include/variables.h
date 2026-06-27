@@ -446,6 +446,89 @@ namespace vars
     }
     REGISTER_VAR_SCOPE(RegistrationScope::Both, dpT_lp, dpT_lp);
 
+    // ------------------------------------------------------------------------
+    // delta pT in the x-direction (leading lepton + leading proton)
+    // ------------------------------------------------------------------------
+    template <typename T>
+    double dpT_lpx(const T & obj)
+    {
+        utilities::three_vector l_pt = {0, 0, 0};
+        utilities::three_vector p_pt = {0, 0, 0};
+        double l_ke(0), p_ke(0);
+        for(const auto & p : obj.particles)
+        {
+            if(pcuts::final_state_signal(p))
+            {
+                // Find the leading charged lepton
+                if((pvars::pid(p) == pvars::kElectron || pvars::pid(p) == pvars::kMuon) && pvars::ke(p) > l_ke)
+                {
+                    l_ke = pvars::ke(p);
+                    utilities::three_vector momentum = {pvars::px(p), pvars::py(p), pvars::pz(p)};
+                    utilities::three_vector vtx = {pvars::start_x(p), pvars::start_y(p), pvars::start_z(p)};
+                    l_pt = utilities::transverse_momentum(momentum, vtx);
+                }
+                // Find the leading proton
+                else if(pvars::pid(p) == pvars::kProton && pvars::ke(p) > p_ke)
+                {
+                    p_ke = pvars::ke(p);
+                    utilities::three_vector momentum = {pvars::px(p), pvars::py(p), pvars::pz(p)};
+                    utilities::three_vector vtx = {pvars::start_x(p), pvars::start_y(p), pvars::start_z(p)};
+                    p_pt = utilities::transverse_momentum(momentum, vtx);
+                }
+            }
+        }
+        if(l_ke == 0 || p_ke == 0)
+            return PLACEHOLDERVALUE;
+        else
+        {
+            utilities::three_vector sum_pt = utilities::add(l_pt, p_pt);
+            return std::get<0>(sum_pt); // 0 corresponds to the X component
+        }
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::Both, dpT_lpx, dpT_lpx);
+
+    // ------------------------------------------------------------------------
+    // delta pT in the y-direction (leading lepton + leading proton)
+    // ------------------------------------------------------------------------
+    template <typename T>
+    double dpT_lpy(const T & obj)
+    {
+        utilities::three_vector l_pt = {0, 0, 0};
+        utilities::three_vector p_pt = {0, 0, 0};
+        double l_ke(0), p_ke(0);
+        for(const auto & p : obj.particles)
+        {
+            if(pcuts::final_state_signal(p))
+            {
+                // Find the leading charged lepton
+                if((pvars::pid(p) == pvars::kElectron || pvars::pid(p) == pvars::kMuon) && pvars::ke(p) > l_ke)
+                {
+                    l_ke = pvars::ke(p);
+                    utilities::three_vector momentum = {pvars::px(p), pvars::py(p), pvars::pz(p)};
+                    utilities::three_vector vtx = {pvars::start_x(p), pvars::start_y(p), pvars::start_z(p)};
+                    l_pt = utilities::transverse_momentum(momentum, vtx);
+                }
+                // Find the leading proton
+                else if(pvars::pid(p) == pvars::kProton && pvars::ke(p) > p_ke)
+                {
+                    p_ke = pvars::ke(p);
+                    utilities::three_vector momentum = {pvars::px(p), pvars::py(p), pvars::pz(p)};
+                    utilities::three_vector vtx = {pvars::start_x(p), pvars::start_y(p), pvars::start_z(p)};
+                    p_pt = utilities::transverse_momentum(momentum, vtx);
+                }
+            }
+        }
+        if(l_ke == 0 || p_ke == 0)
+            return PLACEHOLDERVALUE;
+        else
+        {
+            utilities::three_vector sum_pt = utilities::add(l_pt, p_pt);
+            return std::get<1>(sum_pt); // 1 corresponds to the Y component
+        }
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::Both, dpT_lpy, dpT_lpy);
+
+
     /**
      * @brief Variable for dphi_T of the interaction.
      * @details dphi_T is a transverse kinematic imbalance variable defined
