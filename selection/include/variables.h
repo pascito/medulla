@@ -446,8 +446,9 @@ namespace vars
     }
     REGISTER_VAR_SCOPE(RegistrationScope::Both, dpT_lp, dpT_lp);
 
-    // ------------------------------------------------------------------------
-    // delta pT in the x-direction (leading lepton + leading proton)
+   // ------------------------------------------------------------------------
+    // delta pT in the x-direction (Perpendicular to lepton axis)
+    // Matches TKI convention: dpTx = dpT * sin(dalphaT)
     // ------------------------------------------------------------------------
     template <typename T>
     double dpT_lpx(const T & obj)
@@ -455,11 +456,11 @@ namespace vars
         utilities::three_vector l_pt = {0, 0, 0};
         utilities::three_vector p_pt = {0, 0, 0};
         double l_ke(0), p_ke(0);
+        
         for(const auto & p : obj.particles)
         {
             if(pcuts::final_state_signal(p))
             {
-                // Find the leading charged lepton
                 if((pvars::pid(p) == pvars::kElectron || pvars::pid(p) == pvars::kMuon) && pvars::ke(p) > l_ke)
                 {
                     l_ke = pvars::ke(p);
@@ -467,7 +468,6 @@ namespace vars
                     utilities::three_vector vtx = {pvars::start_x(p), pvars::start_y(p), pvars::start_z(p)};
                     l_pt = utilities::transverse_momentum(momentum, vtx);
                 }
-                // Find the leading proton
                 else if(pvars::pid(p) == pvars::kProton && pvars::ke(p) > p_ke)
                 {
                     p_ke = pvars::ke(p);
@@ -477,18 +477,43 @@ namespace vars
                 }
             }
         }
+        
         if(l_ke == 0 || p_ke == 0)
             return PLACEHOLDERVALUE;
         else
         {
             utilities::three_vector sum_pt = utilities::add(l_pt, p_pt);
-            return std::get<0>(sum_pt); // 0 corresponds to the X component
+            
+            double l_px = std::get<0>(l_pt);
+            double l_py = std::get<1>(l_pt);
+            double s_px = std::get<0>(sum_pt);
+            double s_py = std::get<1>(sum_pt);
+            
+            double l_pt_mag = std::sqrt(l_px * l_px + l_py * l_py);
+            double dpT = std::sqrt(s_px * s_px + s_py * s_py);
+            
+            if (l_pt_mag == 0 || dpT == 0) return 0.0;
+            
+            double dot_prod = (-l_px * s_px) + (-l_py * s_py);
+            double cos_dalphaT = dot_prod / (l_pt_mag * dpT);
+            
+            if (cos_dalphaT > 1.0) cos_dalphaT = 1.0;
+            if (cos_dalphaT < -1.0) cos_dalphaT = -1.0;
+            
+            double dalphaT = std::acos(cos_dalphaT);
+            
+            // Determine left/right sign for the perpendicular X component
+            double cross_prod_z = (l_py * s_px) - (l_px * s_py);
+            double sign = (cross_prod_z >= 0) ? 1.0 : -1.0;
+            
+            return sign * dpT * std::sin(dalphaT);
         }
     }
     REGISTER_VAR_SCOPE(RegistrationScope::Both, dpT_lpx, dpT_lpx);
 
     // ------------------------------------------------------------------------
-    // delta pT in the y-direction (leading lepton + leading proton)
+    // delta pT in the y-direction (Longitudinal to lepton axis)
+    // Matches TKI convention: dpTy = dpT * cos(dalphaT)
     // ------------------------------------------------------------------------
     template <typename T>
     double dpT_lpy(const T & obj)
@@ -496,11 +521,11 @@ namespace vars
         utilities::three_vector l_pt = {0, 0, 0};
         utilities::three_vector p_pt = {0, 0, 0};
         double l_ke(0), p_ke(0);
+        
         for(const auto & p : obj.particles)
         {
             if(pcuts::final_state_signal(p))
             {
-                // Find the leading charged lepton
                 if((pvars::pid(p) == pvars::kElectron || pvars::pid(p) == pvars::kMuon) && pvars::ke(p) > l_ke)
                 {
                     l_ke = pvars::ke(p);
@@ -508,7 +533,6 @@ namespace vars
                     utilities::three_vector vtx = {pvars::start_x(p), pvars::start_y(p), pvars::start_z(p)};
                     l_pt = utilities::transverse_momentum(momentum, vtx);
                 }
-                // Find the leading proton
                 else if(pvars::pid(p) == pvars::kProton && pvars::ke(p) > p_ke)
                 {
                     p_ke = pvars::ke(p);
@@ -518,16 +542,36 @@ namespace vars
                 }
             }
         }
+        
         if(l_ke == 0 || p_ke == 0)
             return PLACEHOLDERVALUE;
         else
         {
             utilities::three_vector sum_pt = utilities::add(l_pt, p_pt);
-            return std::get<1>(sum_pt); // 1 corresponds to the Y component
+            
+            double l_px = std::get<0>(l_pt);
+            double l_py = std::get<1>(l_pt);
+            double s_px = std::get<0>(sum_pt);
+            double s_py = std::get<1>(sum_pt);
+            
+            double l_pt_mag = std::sqrt(l_px * l_px + l_py * l_py);
+            double dpT = std::sqrt(s_px * s_px + s_py * s_py);
+            
+            if (l_pt_mag == 0 || dpT == 0) return 0.0;
+            
+            double dot_prod = (-l_px * s_px) + (-l_py * s_py);
+            double cos_dalphaT = dot_prod / (l_pt_mag * dpT);
+            
+            if (cos_dalphaT > 1.0) cos_dalphaT = 1.0;
+            if (cos_dalphaT < -1.0) cos_dalphaT = -1.0;
+            
+            double dalphaT = std::acos(cos_dalphaT);
+            
+            // Returns the component parallel to the -P_l axis
+            return dpT * std::cos(dalphaT); 
         }
     }
     REGISTER_VAR_SCOPE(RegistrationScope::Both, dpT_lpy, dpT_lpy);
-
 
     /**
      * @brief Variable for dphi_T of the interaction.

@@ -5,17 +5,17 @@ universe           = vanilla
 executable         = simple.sh
 arguments          = --project=/pnfs/icarus/scratch/users/aanilkum/1muNp0pi_uncontained_project
 
-output             = submit.sh2026_05_08_112739c3ad61c3-d2d1-419e-aaf4-679be3884eb8cluster.$(Cluster).$(Process).out
-error              = submit.sh2026_05_08_112739c3ad61c3-d2d1-419e-aaf4-679be3884eb8cluster.$(Cluster).$(Process).err
-log                = submit.sh2026_05_08_112739c3ad61c3-d2d1-419e-aaf4-679be3884eb8cluster.$(Cluster).$(Process).log
+output             = submit.sh2026_06_23_1044080b39237c-9d10-472b-b745-e3bc694ba50ccluster.$(Cluster).$(Process).out
+error              = submit.sh2026_06_23_1044080b39237c-9d10-472b-b745-e3bc694ba50ccluster.$(Cluster).$(Process).err
+log                = submit.sh2026_06_23_1044080b39237c-9d10-472b-b745-e3bc694ba50ccluster.$(Cluster).$(Process).log
 
 
 JOBSUBJOBSECTION=$(Process)
 
-TRACEPARENT="00-76e35cc54e4a3b3fd09d107e8cb9da38-71ad9103d7e4e127-01"
+TRACEPARENT="00-beb3a0477c392abf5b2cae06ad68ce91-f50122d72906846c-01"
 +TraceParent=$(TRACEPARENT)
 
-environment        = CM1=$(CM1);CM2=$(CM2);CLUSTER=$(Cluster);PROCESS=$(Process);JOBSUBJOBSECTION=$(JOBSUBJOBSECTION);CONDOR_TMP=/nashome/a/aanilkum/.cache/jobsub_lite/js_2026_05_08_112739_c3ad61c3-d2d1-419e-aaf4-679be3884eb8;BEARER_TOKEN_FILE=.condor_creds/icarus_1b78db904e.use;CONDOR_EXEC=/tmp;DAGMANJOBID=$(DAGManJobId);GRID_USER=aanilkum;JOBSUBJOBID=$(CLUSTER).$(PROCESS)@jobsub01.fnal.gov;EXPERIMENT=icarus;TRACEPARENT=00-76e35cc54e4a3b3fd09d107e8cb9da38-71ad9103d7e4e127-01;
+environment        = CM1=$(CM1);CM2=$(CM2);CLUSTER=$(Cluster);PROCESS=$(Process);JOBSUBJOBSECTION=$(JOBSUBJOBSECTION);CONDOR_TMP=/nashome/a/aanilkum/.cache/jobsub_lite/js_2026_06_23_104408_0b39237c-9d10-472b-b745-e3bc694ba50c;BEARER_TOKEN_FILE=.condor_creds/icarus_1b78db904e.use;CONDOR_EXEC=/tmp;DAGMANJOBID=$(DAGManJobId);GRID_USER=aanilkum;JOBSUBJOBID=$(CLUSTER).$(PROCESS)@jobsub05.fnal.gov;EXPERIMENT=icarus;TRACEPARENT=00-beb3a0477c392abf5b2cae06ad68ce91-f50122d72906846c-01;
 rank               = Mips / 2 + Memory
 job_lease_duration = 3600
 transfer_output    = True
@@ -27,15 +27,15 @@ transfer_output_files = .empty_file
 when_to_transfer_output = ON_EXIT_OR_EVICT
 
 
-request_memory = 1800.0
-request_disk = 26214400.0KB
+request_memory = 18000.0
+request_disk = 31457280.0KB
 
 
-+JobsubClientIpAddress="131.225.240.191"
-+JobsubServerVersion="jobsub_lite-v1.12"
-+JobsubClientVersion="jobsub_lite-v1.12"
++JobsubClientIpAddress="131.225.240.90"
++JobsubServerVersion="jobsub_lite-v1.13"
++JobsubClientVersion="jobsub_lite-v1.13"
 +JobsubClientKerberosPrincipal="aanilkum@FNAL.GOV"
-+JOB_EXPECTED_MAX_LIFETIME = 3600.0
++JOB_EXPECTED_MAX_LIFETIME = 7200.0
 notify_user = "aanilkum@fnal.gov"
 notification = Never
 
@@ -47,9 +47,9 @@ notification = Never
 
 
 +Jobsub_Group="icarus"
-+JobsubJobId="$(CLUSTER).$(PROCESS)@jobsub01.fnal.gov"
-+JobsubOutputURL="https://fndcadoor.fnal.gov:2880/fermigrid/jobsub/jobs/2026_05_08/c3ad61c3-d2d1-419e-aaf4-679be3884eb8"
-+JobsubUUID="c3ad61c3-d2d1-419e-aaf4-679be3884eb8"
++JobsubJobId="$(CLUSTER).$(PROCESS)@jobsub05.fnal.gov"
++JobsubOutputURL="https://fndcadoor.fnal.gov:2880/fermigrid/jobsub/jobs/2026_06_23/0b39237c-9d10-472b-b745-e3bc694ba50c"
++JobsubUUID="0b39237c-9d10-472b-b745-e3bc694ba50c"
 +Drain = False
 # default for remote submits is to keep completed jobs in the queue for 10 days
 +LeaveJobInQueue = False
@@ -58,7 +58,7 @@ notification = Never
 +DESIRED_SITES = ""
 
 
-+GeneratedBy ="jobsub_lite-v1.12 jobsub01.fnal.gov"
++GeneratedBy ="jobsub_lite-v1.13 jobsub05.fnal.gov"
 
 
 
