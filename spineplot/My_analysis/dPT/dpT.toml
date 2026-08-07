@@ -1,0 +1,157 @@
+[[this_includes]]
+# Only including styles to avoid ghost variables
+file = '/exp/icarus/app/users/aanilkum/medulla/spineplot/configurations/common/styles.toml'
+
+# --- VARIABLE DEFINITIONS ---
+[variables.reco_dpT]
+key = "reco_dpT"
+range = [0.0, 1200.0]
+nbins = 24
+xlabel = '$\delta p_T$ [MeV/c]'
+
+[variables.reco_dalphaT]
+key = "reco_dalphaT"
+range = [0.0, 3.1416]
+nbins = 20
+xlabel = '$\delta \alpha_T$ [rad]'
+[variables.reco_dpT_contained]
+key = "reco_dpT"
+range = [0.0, 1200.0]
+nbins = 24
+xlabel = 'Contained $\delta p_T$ [MeV/c]'
+mask = 'reco_leading_muon_containment == 1'
+
+[variables.reco_dpT_exiting]
+key = "reco_dpT"
+range = [0.0, 1200.0]
+nbins = 24
+xlabel = 'Exiting $\delta p_T$ [MeV/c]'
+mask = 'reco_leading_muon_containment == 0'
+
+[variables.reco_dalphaT_contained]
+key = "reco_dalphaT"
+range = [0.0, 3.1416]
+nbins = 30
+xlabel = 'Contained $\delta \alpha_T$ [rad]'
+mask = 'reco_leading_muon_containment == 1'
+
+[variables.reco_dalphaT_exiting]
+key = "reco_dalphaT"
+range = [0.0, 3.1416]
+nbins = 30
+xlabel = 'Exiting $\delta \alpha_T$ [rad]'
+mask = 'reco_leading_muon_containment == 0'
+
+
+# --- SIMULATION (MC) SAMPLES ---
+[samples]
+[samples.mc]
+key = "nominal"
+exposure_type = "pot"
+override_exposure = 7.178e20
+trees = ['selected']
+print_sys = true
+systematics = ['selected_multisimTree', 'selected_multisigmaTree']
+
+# --- DATA (ONBEAM) SAMPLE ---
+[samples.onbeam]
+key = "onbeam"
+exposure_type = "pot"
+override_exposure = 2.36124e19 
+override_category = -100
+trees = ['selected']
+
+[output]
+path = '.'
+
+# --- UNCERTAINTIES (Mapped to your specific extraction names) ---
+[[systematic_recipe]]
+name = 'stats'
+label = 'Stat.'
+pattern = 'mc_statistical'
+
+#[[systematic_recipe]]
+#name = 'flux'
+#label = 'Flux'
+#pattern = '.*_Flux$'
+
+[[systematic_recipe]]
+name = 'xsec'
+label = 'Cross-section'
+pattern = '\bGENIEReWeight_SBN_v1_(multisim|multisigma)_\w+\b'
+
+[[systematic_recipe]]
+name = 'MC_total'
+label = 'Stat and Interaction uncertainity'
+pattern = '^(xsec|stats)$'
+
+# --- YOUR CUSTOM CATEGORIES & COLORS ---
+[analysis]
+ordinate_sample = 'onbeam'
+category_branch = 'true_category'
+category_assignment = [[0], [1,3,5], [2], [4,6], [7],[8],[-100]]
+category_labels = ['$1\mu 1p 0\pi$', 'Out of FV', '$1\mu Np 0\pi, N>1$', 'Other CC', 'NC', 'Cosmic', 'Data']
+category_colors = ['C0', 'C6', 'C1', 'C3', 'C4', 'C5', 'black']
+category_types = ['histogram', 'histogram', 'histogram', 'histogram', 'histogram','histogram', 'scatter']
+
+# --- FIGURES ---
+[[figure]]
+name = 'dpT_reco'
+type = 'SimpleFigure'
+style = 'selected_icarus'
+figsize = [6, 5]
+[[figure.artists]]
+type = 'SpineSpectra1D'
+variable = 'reco_dpT'
+yrange = 1.7
+draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = true, 'normalize' = false, 'draw_error' = 'MC_total'}
+#[[figure]]
+#name = 'dalphaT_reco'
+#type = 'SimpleFigure'
+#style = 'selected_icarus'
+#figsize = [6, 5]
+#[[figure.artists]]
+#type = 'SpineSpectra1D'
+#variable = 'reco_dalphaT'
+#yrange = 1.7
+#draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = true, 'normalize' = false, 'draw_error' = 'MC_total'}
+
+#[[figure]]
+#name = 'dpT_reco_contained'
+#type = 'SimpleFigure'
+#style = 'selected_icarus'
+#[[figure.artists]]
+#type = 'SpineSpectra1D'
+#variable = 'reco_dpT_contained'
+#yrange = 1.7
+#draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = true, 'normalize' = false, 'draw_error' = 'MC_total'}
+
+#[[figure]]
+#name = 'dpT_reco_exiting'
+#type = 'SimpleFigure'
+#style = 'selected_icarus'
+#[[figure.artists]]
+#type = 'SpineSpectra1D'
+#variable = 'reco_dpT_exiting'
+#yrange = 1.7
+#draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = true, 'normalize' = false, 'draw_error' = 'MC_total'}
+
+#[[figure]]
+#name = 'dalphaT_reco_contained'
+#type = 'SimpleFigure'
+#style = 'selected_icarus'
+#[[figure.artists]]
+#type = 'SpineSpectra1D'
+#variable = 'reco_dalphaT_contained'
+#yrange = 1.7
+#draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = true, 'normalize' = false, 'draw_error' = 'MC_total'}
+
+#[[figure]]
+#name = 'dalphaT_reco_exiting'
+#type = 'SimpleFigure'
+#style = 'selected_icarus'
+#[[figure.artists]]
+#type = 'SpineSpectra1D'
+#variable = 'reco_dalphaT_exiting'
+#yrange = 1.7
+#draw_kwargs = {'show_component_number' = true, 'show_component_percentage' = true, 'invert_stack_order' = true, 'normalize' = false, 'draw_error' = 'MC_total'}

@@ -13,7 +13,7 @@ bins = [50, 0, 1000]  # Assuming MeV/c. Adjust the max range if your plots go hi
 
 [[sysvar]]
 name = 'reco_dalphaT'
-bins = [30, 0, 3.1416]  # Usually plotted from 0 to Pi (radians)
+bins = [30.0, 0.0, 3.1416]
 
 [[sys]]
 name = 'GENIEReWeight_SBN_v1_multisigma_ZExpA1CCQE'
