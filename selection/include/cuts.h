@@ -560,6 +560,38 @@ namespace cuts
         return count == 1;
     }
     REGISTER_CUT_SCOPE(RegistrationScope::Both, single_michel, single_michel);
+ /**
+     * @brief Cut to select interactions with contained protons only.
+     * @details This function applies a cut to select interactions where all
+     * primary protons above the energy threshold are contained within the detector
+     * volume. It utilizes the particle-level containment cut.
+     * @tparam T the type of interaction (true or reco).
+     * @param obj the interaction to select on.
+     * @param params the parameters for the cut. In this case, this sets the
+     * kinetic energy threshold for a proton to be considered in the selection.
+     * Defaults to 50.0 MeV.
+     * @return true if all primary protons above threshold in the interaction are contained.
+     */
+    template<class T>
+    bool contained_protons_only(const T & obj, const std::vector<double> & params = {50.0})
+    {
+        const double ke_threshold = params.empty() ? 50.0 : params[0];
+
+        for(const auto & p : obj.particles)
+        {
+            if(pvars::pid(p) == pvars::kProton &&
+               pvars::primary_classification(p) &&
+               pvars::ke(p) >= ke_threshold)
+            {
+                if(!pcuts::containment_cut(p))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::Both, contained_protons_only, contained_protons_only);   
 
 /**
      * @brief Cut to select interactions with contained muons only.
