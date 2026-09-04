@@ -599,6 +599,27 @@ namespace cuts
     }
     REGISTER_CUT_SCOPE(RegistrationScope::Both, contained_muons_only, contained_muons_only);
 
+    template<class T>
+    bool contained_protons_only(const T & obj, const std::vector<double> & params = {50.0})
+    {
+        const double ke_threshold = params.empty() ? 50.0 : params[0];
+
+        for(const auto & p : obj.particles)
+        {
+            if(pvars::pid(p) == pvars::kProton &&
+               pvars::primary_classification(p) &&
+               pvars::ke(p) >= ke_threshold)
+            {
+                if(!pcuts::containment_cut(p))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::Both, contained_protons_only, contained_protons_only);
+
     /**
      * @brief Apply a cut on the pion group code.
      * @details This function applies a cut to select interactions based on
