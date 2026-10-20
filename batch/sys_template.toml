@@ -1,6 +1,6 @@
 [input]
 path = 'output.root'
-weights = 'data/*flat*.root'
+weights = '/exp/icarus/data/users/rvizarr/medulla/NuMI_CV_ext_weights.txt'
 use_additional_hash = true
 
 [output]
@@ -12,32 +12,32 @@ name = 'reco_leading_muon_ke'
 bins = [25, 0, 5000]
 
 [[sys]]
-name = 'GENIEReWeight_SBN_v1_multisigma_ZExpA1CCQE'
-name_short = 'ZExpA1CCQE'
-type = 'multisigma'
-index = 0
-nsigma = [-1,1,-2,2,-3,3]
+name = "ZExpPCAWeighter_SBNNuSyst_ZExpPCA_multisigma_b1"
+name_short = 'ZExpPCAB1CCQE'
+type = "multisigma"
+nsigma = [-3,-2,-1,0,1,2,3]
+index = 130
 
 [[sys]]
-name = 'GENIEReWeight_SBN_v1_multisigma_ZExpA2CCQE'
-name_short = 'ZExpA2CCQE'
-type = 'multisigma'
-index = 1
-nsigma = [-1,1,-2,2,-3,3]
+name = "ZExpPCAWeighter_SBNNuSyst_ZExpPCA_multisigma_b2"
+name_short = 'ZExpPCAB2CCQE'
+type = "multisigma"
+nsigma = [-3,-2,-1,0,1,2,3]
+index = 131
 
 [[sys]]
-name = 'GENIEReWeight_SBN_v1_multisigma_ZExpA3CCQE'
-name_short = 'ZExpA3CCQE'
-type = 'multisigma'
-index = 2
-nsigma = [-1,1,-2,2,-3,3]
+name = "ZExpPCAWeighter_SBNNuSyst_ZExpPCA_multisigma_b3"
+name_short = 'ZExpPCAB3CCQE'
+type = "multisigma"
+nsigma = [-3,-2,-1,0,1,2,3]
+index = 132
 
 [[sys]]
-name = 'GENIEReWeight_SBN_v1_multisigma_ZExpA4CCQE'
-name_short = 'ZExpA4CCQE'
-type = 'multisigma'
-index = 3
-nsigma = [-1,1,-2,2,-3,3]
+name = "ZExpPCAWeighter_SBNNuSyst_ZExpPCA_multisigma_b4"
+name_short = 'ZExpPCAB4CCQE'
+type = "multisigma"
+nsigma = [-3,-2,-1,0,1,2,3]
+index = 133
 
 [[sys]]
 name = 'GENIEReWeight_SBN_v1_multisigma_VecFFCCQEshape'
