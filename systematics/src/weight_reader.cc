@@ -30,6 +30,8 @@
 #include "TTreeReader.h"
 #include "TTreeReaderValue.h"
 #include "TTreeReaderArray.h"
+#include "TLeaf.h"
+#include "TBranch.h"
 
 #include "sbnanaobj/StandardRecord/SRTrueInteraction.h"
 
@@ -247,6 +249,8 @@ sys::WeightReader::WeightReader(const std::string & input)
         << "[DEBUG] Creating TTreeReader..."
         << std::endl;
 
+    if(chain.GetEntries() <= 0)
+        throw std::runtime_error("WeightReader: zero entries in input chain");
     reader = std::make_unique<TTreeReader>(&chain);
 
 
@@ -410,6 +414,9 @@ sys::WeightReader::WeightReader(const std::string & input)
             << std::endl;
     }
 
+    // Initialization probes entry zero; restart so next() includes it.
+    reader->Restart();
+
     std::cout
         << "[DEBUG] WeightReader constructor finished."
         << std::endl;
@@ -422,32 +429,14 @@ sys::WeightReader::WeightReader(const std::string & input)
 
 bool sys::WeightReader::next()
 {
-    Long64_t total_entries = chain.GetEntries();
-
-    this->progress_bar(
-        entry + 1,
-        total_entries
-    );
-
-
-    // Check reader and tree
-    if(!chain.GetTree() || !reader)
-        return false;
-
-
-    // Check entry range
-    if(entry >= static_cast<size_t>(total_entries))
-        return false;
-
-
-    // Advance reader
-    if(!reader->Next())
-        return false;
-
-
-    // Load next entry
-    chain.GetEntry(++entry);
-
+    const Long64_t total_entries = chain.GetEntries();
+    if(entry >= static_cast<size_t>(total_entries)) return false;
+    if(!reader || !reader->Next())
+        throw std::runtime_error("WeightReader stopped before the expected end at entry " + std::to_string(entry));
+    if(chain.GetEntry(entry) <= 0)
+        throw std::runtime_error("WeightReader failed to read entry " + std::to_string(entry));
+    ++entry;
+    this->progress_bar(entry, total_entries);
     return true;
 }
 
@@ -535,6 +524,31 @@ float sys::WeightReader::get_weight(
 // ============================================================
 // 12. Get neutrino energy
 // ============================================================
+
+std::array<double, 3> sys::WeightReader::get_vertex(size_t idn) const
+{
+    if(idn >= get_nnu())
+        throw std::out_of_range("WeightReader: neutrino index out of range in get_vertex()");
+    if(!isflat)
+    {
+        const auto & position = (*mc)[idn].position;
+        return {position.x, position.y, position.z};
+    }
+    std::array<double, 3> result;
+    const char * names[] = {"rec.mc.nu.position.x", "rec.mc.nu.position.y", "rec.mc.nu.position.z"};
+    for(size_t axis = 0; axis < result.size(); ++axis)
+    {
+        // next() has loaded this entry with TChain::GetEntry. Read the leaf
+        // from the current underlying tree, including after file transitions.
+        auto * branch = chain.GetTree()->GetBranch(names[axis]);
+        auto * leaf = branch && branch->GetListOfLeaves()->GetEntriesFast() == 1
+            ? static_cast<TLeaf *>(branch->GetListOfLeaves()->At(0)) : nullptr;
+        if(!leaf || idn >= static_cast<size_t>(leaf->GetNdata()))
+            throw std::runtime_error(std::string("WeightReader: missing vertex coordinate ") + names[axis]);
+        result[axis] = leaf->GetValue(idn);
+    }
+    return result;
+}
 
 float sys::WeightReader::get_energy(size_t idn) const
 {

@@ -11,6 +11,7 @@
 #ifndef WEIGHT_READER_H
 #define WEIGHT_READER_H
 #include <chrono>
+#include <array>
 
 #include "TChain.h"
 #include "TTreeReader.h"
@@ -147,6 +148,10 @@ namespace sys
          * @return The neutrino energy for the specified neutrino.
          */
         float get_energy(size_t idn) const;
+
+        // True interaction position in detector coordinates (cm).
+        std::array<double, 3> get_vertex(size_t idn) const;
+        Long64_t get_entry() const { return static_cast<Long64_t>(entry) - 1; }
 
         private:
 

@@ -119,23 +119,33 @@ int main(int argc, char * argv[])
         std::cout << "No trees found in the configuration file." << std::endl;
     }
 
-    for(cfg::ConfigurationTable & table : tables)
+    try
     {
-        std::cout << "Processing tree: " << table.get_string_field("origin") << std::endl;
-
-        // Check if the tree exists in the input file.
-        //input->Get(table.get_string_field("origin").c_str());
-        if(input->Get(table.get_string_field("origin").c_str()) == nullptr)
+        for(cfg::ConfigurationTable & table : tables)
         {
-            std::cerr << "Info: Tree " << table.get_string_field("origin") << " not found in input file. Skipping..." << std::endl;
-            continue;
-        }
+            std::cout << "Processing tree: " << table.get_string_field("origin") << std::endl;
 
-        std::string type(table.get_string_field("action"));
-        if(type == "copy")
-            sys::trees::copy_tree(table, output, input);
-        else if(type == "add_weights")
-            sys::trees::copy_with_weight_systematics(config, table, output, input, calc);
+            // Check if the tree exists in the input file.
+            //input->Get(table.get_string_field("origin").c_str());
+            if(input->Get(table.get_string_field("origin").c_str()) == nullptr)
+            {
+                std::cerr << "Info: Tree " << table.get_string_field("origin") << " not found in input file. Skipping..." << std::endl;
+                continue;
+            }
+
+            std::string type(table.get_string_field("action"));
+            if(type == "copy")
+                sys::trees::copy_tree(table, output, input);
+            else if(type == "add_weights")
+                sys::trees::copy_with_weight_systematics(config, table, output, input, calc);
+        }
+    }
+    catch(const std::exception & error)
+    {
+        std::cerr << "[FATAL] " << error.what() << std::endl;
+        input->Close();
+        output->Close();
+        return 2;
     }
 
     input->Close();
