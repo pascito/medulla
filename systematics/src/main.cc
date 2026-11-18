@@ -14,6 +14,9 @@
  */
 #include <iostream>
 #include <string>
+#include <memory>
+#include <filesystem>
+#include <stdexcept>
 
 #include "configuration.h"
 #include "trees.h"
@@ -21,135 +24,127 @@
 
 #include "TROOT.h"
 #include "TFile.h"
-#include "TDirectory.h"
-#include "TInterpreter.h"
+#include "TTree.h"
+#include "TH1.h"
+
+namespace
+{
+    // Check required selection objects before creating or replacing output.
+    void validate_input(cfg::ConfigurationTable & config, TFile * input)
+    {
+        if(!input || input->IsZombie())
+            throw std::runtime_error("Cannot open selection input ROOT file: " +
+                config.get_string_field("input.path"));
+        if(input->TestBit(TFile::kRecovered))
+            throw std::runtime_error("Selection input ROOT file required recovery: " +
+                config.get_string_field("input.path"));
+        if(config.has_field("variations"))
+        {
+            const std::string origin = config.get_string_field("variations.origin");
+            const std::string tree = config.get_string_field("variations.tree");
+            const std::string variable = config.get_string_field("variations.variable");
+            for(const std::string & key : config.get_string_vector("variations.keys"))
+            {
+                const std::string name = origin + key + "/" + tree;
+                auto * selected = input->Get<TTree>(name.c_str());
+                if(!selected)
+                    throw std::runtime_error("Missing detector-variation TTree: " + name +
+                        " in " + input->GetName() + ". input.path must point to the merged selection file.");
+                if(!selected->GetBranch(variable.c_str()))
+                    throw std::runtime_error("Missing detector-variation branch " + variable + " in " + name);
+                const std::string exposure_name = name + "_exposure";
+                auto * exposure_object = input->Get(exposure_name.c_str());
+                if(exposure_object)
+                {
+                    auto * exposure = dynamic_cast<TTree *>(exposure_object);
+                    if(!exposure || !exposure->GetBranch("pot"))
+                        throw std::runtime_error("Invalid POT exposure TTree: " + exposure_name);
+                }
+                else
+                {
+                    const std::string pot_name = origin + key + "/POT";
+                    auto * pot = dynamic_cast<TH1 *>(input->Get(pot_name.c_str()));
+                    if(!pot || pot->GetDimension() != 1 || pot->GetNbinsX() < 1)
+                        throw std::runtime_error("Missing POT exposure TTree or histogram for " + name);
+                }
+            }
+        }
+        for(auto & table : config.get_subtables("tree"))
+        {
+            if(table.get_string_field("action") != "add_weights") continue;
+            const std::string origin = table.get_string_field("origin");
+            if(!input->Get<TTree>(origin.c_str()))
+                throw std::runtime_error("Missing selection TTree for weights: " + origin);
+        }
+    }
+
+    bool same_file(const std::string & input, const std::string & output)
+    {
+        if(input == output) return true;
+        if(input.find("://") != std::string::npos || output.find("://") != std::string::npos)
+            return false;
+        std::error_code error;
+        if(std::filesystem::equivalent(input, output, error) && !error) return true;
+        return std::filesystem::weakly_canonical(input) == std::filesystem::weakly_canonical(output);
+    }
+}
 
 int main(int argc, char * argv[])
 {
-    /**
-     * @brief Ignore ROOT warnings.
-     * @details This block ignores ROOT warnings. Sometimes there are
-     * mismatches in the dictionary for the StandardRecord object, which
-     * causes ROOT to print warnings. These warnings can be safely ignored.
-     */
     gErrorIgnoreLevel = kError;
-
-    /**
-     * @brief Check the number of arguments. The code expects the configuration
-     * file as the only argument.
-     * @details This block checks the number of arguments. The code expects the
-     * configuration file as the only argument. If the number of arguments is not
-     * correct, the code prints the usage and exits with an error code.
-     */
-    if(argc != 2)
+    const bool check_only = argc == 3 && std::string(argv[1]) == "--check-input";
+    if(argc != 2 && !check_only)
     {
-        std::cerr << "Usage: " << argv[0] << " <configuration.toml>" << std::endl;
+        std::cerr << "Usage: " << argv[0] << " [--check-input] <configuration.toml>" << std::endl;
         return 1;
     }
-
-    /**
-     * @brief Read the configuration file.
-     * @details This block reads the configuration file by using the
-     * @ref cfg::Configuration class. The configuration
-     * file is read using the toml++ library. If the configuration file is not
-     * found or if there is an error in parsing the configuration file, the
-     * code prints an error message and exits with an error code. Each requisite
-     * field in the configuration file is checked for validity by the 
-     * @ref cfg::validate() function
-     * @see cfg::Configuration
-     * @see cfg::ConfigurationError
-     * @see cfg::validate()
-     */
-    cfg::ConfigurationTable config;
     try
     {
-        config.set_config(argv[1]);
-    }
-    catch(const cfg::ConfigurationError & e)
-    {
-        std::cerr << "Error: " << e.what() << std::endl;
-        return 1;
-    }
-
-    /**
-     * @brief Open the input and output ROOT files.
-     * @details This block opens the input and output ROOT files. The input
-     * ROOT file is the file that contains the TTrees produced by the CAFAna
-     * analysis framework. The output ROOT file is the file that will contain
-     * the TTrees that are produced by this code.
-     */
-    TFile * input = TFile::Open(config.get_string_field("input.path").c_str(), "READ");
-    TFile * output = TFile::Open(config.get_string_field("output.path").c_str(), "RECREATE");
-
-    /**
-     * @brief Load the DetsysCalculator, if configured.
-     * @details This block loads the DetsysCalculator if it is configured in
-     * the configuration file. The DetsysCalculator is used to calculate the
-     * detector systematics weights using a spline interpolation of the ratio
-     * of the nominal and sample histograms.
-     * @see sys::detsys::DetsysCalculator
-     */
-    sys::detsys::DetsysCalculator calc;
-    if(config.has_field("variations"))
-    {
-        calc = sys::detsys::DetsysCalculator(config, output, input);
-        calc.write();
-    }
-
-    /**
-     * @brief Begin main loop over trees in the configuration file.
-     * @details This block begins the main loop over the trees in the
-     * configuration file. Each tree is a sub-table in the configuration file,
-     * and can be fetched as a vector of sub-tables using the function
-     * @ref cfg::get_subtables(). The main body of the loop then reads
-     * delegates the handling of the tree to the appropriate function.
-     * @see cfg::get_subtables()
-     * @see cfg::ConfigurationTable
-     */
-    std::vector<cfg::ConfigurationTable> tables;
-    try
-    {
-       tables = config.get_subtables("tree");
-    }
-    catch(const cfg::ConfigurationError & e)
-    {
-        /**
-         * @TODO reconsider if this should cause the code to exit.
-         */
-        std::cout << "No trees found in the configuration file." << std::endl;
-    }
-
-    try
-    {
-        for(cfg::ConfigurationTable & table : tables)
+        cfg::ConfigurationTable config;
+        config.set_config(argv[argc - 1]);
+        const std::string input_path = config.get_string_field("input.path");
+        const std::string output_path = config.get_string_field("output.path");
+        if(same_file(input_path, output_path))
+            throw std::runtime_error("Input and output ROOT paths refer to the same file; refusing to overwrite selection input.");
+        std::unique_ptr<TFile> input(TFile::Open(input_path.c_str(), "READ"));
+        validate_input(config, input.get());
+        std::cout << "[INPUT] Selection input validated: " << input_path << std::endl;
+        if(check_only)
         {
-            std::cout << "Processing tree: " << table.get_string_field("origin") << std::endl;
-
-            // Check if the tree exists in the input file.
-            //input->Get(table.get_string_field("origin").c_str());
-            if(input->Get(table.get_string_field("origin").c_str()) == nullptr)
+            std::cout << "[INPUT] Check complete; no output file created or modified." << std::endl;
+            return 0;
+        }
+        std::unique_ptr<TFile> output(TFile::Open(output_path.c_str(), "RECREATE"));
+        if(!output || output->IsZombie() || !output->IsWritable())
+            throw std::runtime_error("Cannot create output ROOT file: " + output_path);
+        sys::detsys::DetsysCalculator calc;
+        if(config.has_field("variations"))
+        {
+            calc = sys::detsys::DetsysCalculator(config, output.get(), input.get());
+            calc.write();
+        }
+        for(auto & table : config.get_subtables("tree"))
+        {
+            const std::string origin = table.get_string_field("origin");
+            std::cout << "Processing tree: " << origin << std::endl;
+            if(!input->Get(origin.c_str()))
             {
-                std::cerr << "Info: Tree " << table.get_string_field("origin") << " not found in input file. Skipping..." << std::endl;
+                std::cerr << "Info: Tree " << origin << " not found in input file. Skipping..." << std::endl;
                 continue;
             }
-
-            std::string type(table.get_string_field("action"));
+            const std::string type = table.get_string_field("action");
             if(type == "copy")
-                sys::trees::copy_tree(table, output, input);
+                sys::trees::copy_tree(table, output.get(), input.get());
             else if(type == "add_weights")
-                sys::trees::copy_with_weight_systematics(config, table, output, input, calc);
+                sys::trees::copy_with_weight_systematics(config, table, output.get(), input.get(), calc);
         }
+        output->Close();
+        input->Close();
     }
     catch(const std::exception & error)
     {
         std::cerr << "[FATAL] " << error.what() << std::endl;
-        input->Close();
-        output->Close();
         return 2;
     }
-
-    input->Close();
-    output->Close();
-
     return 0;
 }
